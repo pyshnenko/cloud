@@ -1,0 +1,54 @@
+require('dotenv').config();
+const MongoClient = require("mongodb").MongoClient;
+
+let mongoClient: any;
+let db: any;
+let collection: any;
+let usersCollection: any;
+const url = process.env.MONGO_URL;
+const username = process.env.MONGO_USERNAME;
+const password = process.env.MONGO_PASS;
+const authMechanism = "DEFAULT";
+const uri =`mongodb://${username}:${password}@${url}/?authMechanism=${authMechanism}`;
+
+class mongoFunc {
+    constructor() {
+        mongoClient = new MongoClient(uri);
+        db = mongoClient.db("gf");
+        collection = db.collection("gfUsers");
+        usersCollection = db.collection("cloudUsers");
+    }
+
+    async find(obj: any) {
+        let extBuf:any[] = [];
+        try {
+            await mongoClient.connect();
+            if (obj) {
+                extBuf = await collection.find(obj).toArray();
+            }
+            else {
+                extBuf = await collection.find().toArray();
+            }
+        }catch(err) {
+            extBuf=[];
+        } finally {
+            await mongoClient.close();
+            return extBuf;
+        }
+    }
+
+    async updateOne(oldObj:any , obj: any) {
+        let userLogin;
+        try {
+            await mongoClient.connect();
+            await collection.updateOne(oldObj, {$set: obj});
+        }catch(err) {
+            console.log(err)
+        } finally {
+            await mongoClient.close();
+            return userLogin
+        }
+    }
+}
+
+module.exports = mongoFunc;
