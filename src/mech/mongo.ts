@@ -49,6 +49,31 @@ class mongoFunc {
             return userLogin
         }
     }
+
+    async incertOne(obj: any) {
+        try {
+            await mongoClient.connect();
+            await collection.insertOne(obj);
+        }catch(err) {
+            console.log(err)
+        } finally {
+            await mongoClient.close();
+        }
+    }
+
+    async id() {
+        try {
+            await mongoClient.connect();
+            const count: number = await collection.countDocuments();
+            await mongoClient.close();
+            console.log('Записей: ' + count)
+            return count
+        }
+        catch(e) {
+            console.log(e);
+            await mongoClient.close();
+        }
+    }
 }
 
 module.exports = mongoFunc;

@@ -1,15 +1,10 @@
 const mongo = require('./../../src/mech/mongo');
+import  {loginType} from './../../src/types/api/types';
 const fs = require('fs');
 let jwt = require('jsonwebtoken');
 import NextCors from 'nextjs-cors';
 const mongoS = new mongo();
 const bcrypt = require('bcrypt');
-
-interface logData {
-    email?: string,
-    login?: string,
-    password: string
-}
 
 const log4js = require("log4js");
 
@@ -33,7 +28,7 @@ export default async function handler(req: any, res: any) {
     });
     if (req.method==='POST'){
         logger.info(req.body);
-        let buf: logData;
+        let buf: loginType;
         if (typeof(req.body)==='string') {
             buf = JSON.parse(req.body)
         }
@@ -44,7 +39,7 @@ export default async function handler(req: any, res: any) {
             if (login.length!==0) buf.login = login[0].login;
         }
         if (buf.login) {
-            const atoken = await bcrypt.hash((buf.password+buf.login.trim()), '$2b$10$1'+String(process.env.SALT_CRYPT))
+            const atoken = await bcrypt.hash((buf.pass+buf.login.trim()), '$2b$10$1'+String(process.env.SALT_CRYPT))
             let dat = await mongoS.find({password: atoken});
             logger.debug('Записей: ' + dat.length);
             if (dat.length) {

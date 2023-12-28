@@ -1,12 +1,17 @@
 import { loginApi, privateApi, getApi } from "./httpserv";
-import {login} from './../types/api/types'
+import {loginType, RegisterReqData} from './../types/api/types'
 
-const login = (data: login) => {
+const login = (data: loginType) => {
     return loginApi().post('/login', data);
 }
 
+const register = (data: RegisterReqData) => {
+    return loginApi().post('/register', data);
+}
+
 const Api = {
-    login
+    login,
+    register
 }
 
 export default Api;
