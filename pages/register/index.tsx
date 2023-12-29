@@ -81,6 +81,7 @@ export default function Registration () {
                 console.log(res);
                 setOpen(false);
                 localStorage.setItem('cloudToken', res.data.token);
+                localStorage.setItem('cloudAToken', res.data.atoken);
                 window.location.href='/';
             })
             .catch((e)=>{

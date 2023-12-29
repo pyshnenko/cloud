@@ -39,9 +39,12 @@ export default function Login () {
         const password: string = String(form.get('password'));
         Api.login({pass: password, email: email.includes('@') ? email: undefined, login: email.includes('@') ? undefined: email})
         .then((res)=> {
-            console.log('res');
+            console.log(res);
+            localStorage.setItem('cloudToken', res.data.token);
+            localStorage.setItem('cloudAToken', res.data.atoken);
             setError(false);
             setOpen(false);
+            window.location.href='/';
         })
         .catch((e)=>{
             console.log(e.response.status);

@@ -74,3 +74,12 @@
 }
 [2023-12-28T15:09:27.348] [DEBUG] cApi - Записей: 0
 [2023-12-28T15:09:28.243] [INFO] mailer - Новый пользователь:  user
+[2023-12-29T10:06:07.082] [INFO] cApi - {
+  email: 'spamigor',
+  login: 'spamigor',
+  password: 'ugD6s2xz',
+  first_name: 'spamigor',
+  last_name: 'spamigor'
+}
+[2023-12-29T10:06:07.790] [DEBUG] cApi - Записей: 0
+[2023-12-29T10:06:09.236] [INFO] mailer - Новый пользователь:  spamigor
