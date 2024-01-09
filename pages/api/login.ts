@@ -47,7 +47,7 @@ export default async function handler(req: any, res: any) {
                 const token = dat[0].token;
                 delete(dat[0].token);
                 delete(dat[0].password);
-                const nTok = await jwt.sign(dat[0], atoken);//String(process.env.SALT_CRYPT));
+                const nTok = await jwt.sign(dat[0], atoken.slice(8), { expiresIn: 60 * 60 });//String(process.env.SALT_CRYPT));
                 if (nTok!==token) {
                     mongoS.updateOne({login: dat[0].login}, {token: nTok});
                     dat[0].token=nTok;

@@ -42,10 +42,10 @@ export default async function handler(req: any, res: any) {
         else {
             let atoken = await bcrypt.hash((buf.password+buf.login.trim()), '$2b$10$1'+String(process.env.SALT_CRYPT))
             let id = await mongoS.id() + 1;
-            const saveData = {...buf, id, gold: 0};
-            let token = await jwt.sign(saveData, atoken);//String(process.env.SALT_CRYPT));
+            const saveData = {...buf, id, gold: 0, password: atoken};
+            let token = await jwt.sign(saveData, atoken.slice(8));//String(process.env.SALT_CRYPT));
             if (!(req.headers?.make==='example')) mongoS.incertOne({...saveData, token, password: atoken});
-            const reqSucc: RegisterReqSucc = { atoken, token, first_name: buf.first_name, last_name: buf.last_name, id, login: buf.login, email: buf.email };
+            const reqSucc: RegisterReqSucc = { atoken: atoken.slice(8), token, first_name: buf.first_name, last_name: buf.last_name, id, login: buf.login, email: buf.email };
             res.status(200).json(reqSucc)
             console.log('MAIL');
             //mail.sendMail(buf.email, buf.login);

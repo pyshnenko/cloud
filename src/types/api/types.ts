@@ -21,3 +21,13 @@ export interface RegisterReqSucc {
     login: String, 
     email: String 
 }
+
+export interface TokenLocalData {
+    email: string,
+    first_name: string,
+    gold: number,
+    iat: number,
+    id: number,
+    last_name: string,
+    login: string
+}
