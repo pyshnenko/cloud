@@ -13,8 +13,8 @@ const tokenUPD = (data: string) => {
     return privateApi(data).post('/tokenUpd');
 }
 
-const askLS = (data: string, location: string = '/') => {
-    return privateApi(data).post('/fs', {location});
+const askLS = (data: string, location: string = '/', action: string = 'ls', name: string = '') => {
+    return privateApi(data).post('/fs', {location, action, name});
 }
 
 const Api = {

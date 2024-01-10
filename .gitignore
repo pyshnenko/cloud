@@ -2,6 +2,7 @@
 .env*
 /uploads*
 /data*
+/log*
 # dependencies
 /node_modules
 /.pnp
