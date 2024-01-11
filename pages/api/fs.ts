@@ -53,6 +53,38 @@ export default async function handler(req: any, res: any) {
                     res.status(500).json({message: 'folder not created'})
                 }
             }
+            else if (buf?.name && buf.action === 'rm' && buf?.name!=='') {
+                let folders: {dir: string[], files: string[]} = {dir: [], files: []};
+                fs.readdirSync(path.join(dir, 'data', dat[0].login, path.normalize(buf.location))).filter((d: any)=> {
+                    if (d.isDirectory()) folders.dir.push(d.name)
+                    else folders.files.push(d.name)
+                });
+                if (folders.dir.includes(buf.name)) {
+                    try {
+                        fs.rmdirSync(path.join(dir, 'data', dat[0].login, path.normalize(buf.location), buf.name), {recursive:true});
+                        logger.info(`Directory ${buf.location}/${buf.name} deleted by ${dat[0].login}`);
+                        res.status(200).json({});
+                    }
+                    catch (e: any) {
+                        logger.error(`directory ${buf.location}/${buf.name} not deleted by ${dat[0].login}`)
+                        logger.debug(e);
+                        res.status(500).json({message: 'directory not deleted'})
+                    }
+                }
+                else if (folders.files.includes(buf.name)) {
+                    try {
+                        fs.unlinkSync(path.join(dir, 'data', dat[0].login, path.normalize(buf.location), buf.name));
+                        logger.info(`File ${buf.location}/${buf.name} deleted by ${dat[0].login}`);
+                        res.status(200).json({});
+                    }
+                    catch (e: any) {
+                        logger.error(`file ${buf.location}/${buf.name} not deleted by ${dat[0].login}`)
+                        logger.debug(e);
+                        res.status(500).json({message: 'file not deleted'})
+                    }
+                }
+                else res.status(404).json({message: 'no such file or directory'});
+            }
             else if (buf.action === 'ls') {
                 const files: string[] = fs.readdirSync(path.join(dir, 'data'));
                 if (files.includes(dat[0].login)) {
@@ -74,8 +106,9 @@ export default async function handler(req: any, res: any) {
                     }
                 }
             }
+
         }
-        res.status(401)
+        else res.status(401)
     }
 
 }
