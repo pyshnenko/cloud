@@ -1,6 +1,7 @@
 import axios from 'axios';
+const path = require('path');
 
-const baseURL = "http://127.0.0.1:8799/api";//"https://cloud.spamigor.ru/api";
+const baseURL = path.sep!=='/'?"http://127.0.0.1:8799/api":"https://cloud.spamigor.ru/api";
 const jsonHeader = {
   "Content-type": "application/json"
 };
