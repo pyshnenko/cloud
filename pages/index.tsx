@@ -123,8 +123,9 @@ export default function Index() {
                 console.log(action + ' ' + path + (index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length]));
                 const cookies = new Cookies(null, {path: '/'});
                 cookies.set('token', User.getToken());
-                get_file_url(encodeURI(`http://localhost:8800/data${path==='/'?'':path}/${index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length]}`))
-                console.log(encodeURI(`http://localhost:8800/data${path==='/'?'':path}/${index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length]}`))
+                const fileAddr: string = encodeURI(`https://cloud.spamigor.ru/data${path==='/'?'':path}/${index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length]}`);
+                get_file_url(fileAddr);
+                console.log(fileAddr);
             }
             menuClose();
         }
