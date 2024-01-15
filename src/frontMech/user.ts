@@ -15,6 +15,7 @@ const getToken = () => {
 
 const setToken = (token: string, atoken: string, decr?: any) => {
     localStorage.setItem('cloudToken', token);
+    localStorage.setItem('cloudAToken', atoken);
     stoken = token;
     satoken = atoken;
     auth = true;
@@ -22,7 +23,8 @@ const setToken = (token: string, atoken: string, decr?: any) => {
 }
 
 const exit = () => {
-    localStorage.clear();
+    localStorage.setItem('cloudToken', '');
+    localStorage.setItem('cloudAToken', '');
     stoken = '';
     satoken = '';
     auth = false;

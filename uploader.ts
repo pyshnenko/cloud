@@ -1,0 +1,79 @@
+const express = require("express");
+const multer  = require("multer");
+const cors = require('cors');
+const fs = require('fs');
+process.title='APIServerCloud';
+const app = express();
+const cookieParser = require('cookie-parser');
+const path = require('path');
+const mongo = require('./src/mech/mongo');
+const mongoS = new mongo();
+export {};
+
+app.use(cors());
+
+app.use(cookieParser('secret key'));
+
+app.get("/data*", async function (request: any, response: any) {
+    var filePath = '';
+    if (request?.cookies && request.cookies?.token !== '') {
+        var dat = await mongoS.find({ token: request.cookies.token });
+        if (dat.length)
+            filePath = path.normalize('data/' + dat[0].login + '/' + decodeURI(request.url.substr(6)))
+        else {
+            response.statusCode = 404;
+            response.end("Resourse not found!");
+        }
+    }
+    else console.log('smth wrong');
+    console.log(filePath);
+    fs.readFile(filePath, function (error: any, data: any) {
+        if (error) {
+            response.statusCode = 404;
+            response.end("Resourse not found!");
+        }
+        else {
+            response.end(data);
+        }
+    });
+});
+
+const storage = multer.diskStorage({
+  destination: function (req: Request, file: Response, cb: any) {
+    cb(null, 'uploads')
+  },
+  filename: function (req: any, file: any, cb: any) {
+    cb(null, `${decodeURI(req.headers.user)}-${decodeURI(req.headers.fname)}`);
+    //global.name = file.fieldname + '-' + uniqueSuffix;
+  }
+})
+
+const upload = multer({ storage: storage })
+  
+app.use(express.static(__dirname));
+
+app.use(upload.single("file"));
+app.post("/upload", function (req: any, res: any, next: any) {
+    console.log('im here');
+    let filedata = req.body;
+    if(!filedata)
+        res.send({res: 'error'});
+    else
+    {
+        let ddir: string[] = [];
+        try {
+            fs.readdirSync(path.normalize(`data/${req.headers.folder}`), { withFileTypes: true });
+            console.log('Папка найдена');
+        } catch (e: any) {
+            fs.mkdirSync(path.normalize(`data/${req.headers.folder}`));
+            console.log('Папка успешно создана');
+        }
+        fs.rename(path.normalize(`uploads/${decodeURI(req.headers.user)}-${decodeURI(req.headers.fname)}`), path.normalize(`data/${req.headers.folder}/${decodeURI(req.headers.fname)}`), (err: any) => {
+          if(err) throw err; // не удалось переместить файл
+            console.log('Файл успешно перемещён');
+        });
+        res.send({res: 'ok', addr: `data/${decodeURI(req.headers.fname)}`});
+    }
+});
+
+app.listen(8800, ()=>console.log('start'));

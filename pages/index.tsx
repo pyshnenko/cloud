@@ -17,6 +17,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddButton from '../src/frontDesign/addButton'
+import Cookies from 'universal-cookie';
 
 const options = [
     'Открыть',
@@ -57,8 +58,9 @@ export default function Index() {
                 const date = new Date(e.expiredAt);
                 const days: number = (Number(new Date())- Number(date))/(1000*60*60*24);
                 console.log(`days: ${days}`);
-                if (days > 3) window.location.href='/';
+                if (days > 5) window.location.href='/login';
                 else {
+                    console.log('hello')
                     Api.tokenUPD(saved)
                     .then((res)=>{
                         console.log(res);
@@ -67,7 +69,7 @@ export default function Index() {
                         delete(usData.atoken);
                         User.setToken(res.data.token, res.data.atoken, usData);
                         folder();
-                        setDatal(decr.login)
+                        setDatal(usData.login)
                     })
                     .catch((e)=>{
                         console.log(e);
@@ -117,8 +119,26 @@ export default function Index() {
             const objName = index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length];
             if (action === 'Открыть') setPath(path + '/' + objName);
             else if (action === 'Удалить') console.log('Удалить ' + objName)
+            else if (action === 'Скачать' && index>=files.directs.length) {
+                console.log(action + ' ' + path + (index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length]));
+                const cookies = new Cookies(null, {path: '/'});
+                cookies.set('token', User.getToken());
+                get_file_url(encodeURI(`http://localhost:8800/data${path==='/'?'':path}/${index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length]}`))
+                console.log(encodeURI(`http://localhost:8800/data${path==='/'?'':path}/${index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length]}`))
+            }
             menuClose();
         }
+    }
+
+    function get_file_url(url: string) {
+	
+        var link_url: any = document.createElement("a");
+        
+        link_url.download = true;
+        link_url.href = url;
+        document.body.appendChild(link_url);
+        link_url.click();
+        document.body.removeChild(link_url);    
     }
  
     async function handleClick(event: any) {
@@ -153,7 +173,7 @@ export default function Index() {
                         <Box sx={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', alignItems: 'flex-start'}} key={item}>
                             <Button                                  
                                 onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{setAnchorEl({elem: event.currentTarget, index: index}); event.preventDefault()}}
-                                onDoubleClick={()=>setPath(path+'/'+item)} 
+                                onDoubleClick={()=>setPath((path==='/'?'':path) +'/'+item)} 
                                 sx={{display: 'column-flex', maxWidth: '100px', maxHeight: '120px', overflowWrap: 'anywhere'}}
                             >
                                 <FolderIcon sx={{zoom: 2.5}} />

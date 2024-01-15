@@ -52,7 +52,44 @@ export default function SpeedDialTooltipOpen({path, setPath, files}: {path: stri
             setDialogResult({ready: false});
             setDialogOpen(true);
         }
-    }  
+        else if (action === actions[0].name) {
+            attFile();
+            handleClose();
+        }
+    }      
+
+    const attFile = async () => {
+        let input = document.createElement('input');
+        input.type = 'file';
+        input.multiple = true;
+        input.onchange = async (e: any) => {
+            let files = e.target.files;
+            console.log(files)
+            for (let i = 0; i<files.length; i++) {
+                console.log(files)
+                let data = new FormData();
+                data.append('file', files[i]);
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        folder: encodeURI(userData.login+'/'+(path==='/'?'':path)),
+                        fname: encodeURI(files[i].name),
+                        user: encodeURI(userData.login),
+                        token: encodeURI(User.getToken())
+                    },
+                    body: data,
+                }                
+                const response = await fetch('/upload', options);//http://localhost:8800/upload
+                const res = await response.json();
+                console.log(res);
+            }
+            const oPath = path;
+            setPath('');
+            setPath(path);
+        }
+        
+        input.click();
+    }
 
     const createFolder = (name: string) => {
         Api.askLS(User.getToken(), path, 'mkdir', name)

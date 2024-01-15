@@ -3,7 +3,6 @@ const path = require('path');
 let jwt = require('jsonwebtoken');
 import NextCors from 'nextjs-cors';
 const dir = process.cwd();
-const sep = path.sep;
 const mongo = require('./../../src/mech/mongo');
 const mongoS = new mongo();
 

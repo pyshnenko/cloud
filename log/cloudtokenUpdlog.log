@@ -50,3 +50,35 @@
 [2024-01-11T16:04:05.119] [DEBUG] cApi - Записей: 1
 [2024-01-11T16:04:36.592] [INFO] cApi - 
 [2024-01-11T16:04:37.588] [DEBUG] cApi - Записей: 0
+[2024-01-15T10:45:34.793] [INFO] cApi - 
+[2024-01-15T10:45:35.350] [DEBUG] cApi - Записей: 1
+[2024-01-15T10:47:13.138] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-15T10:47:13.163] [INFO] cApi - 
+[2024-01-15T10:47:13.793] [DEBUG] cApi - Записей: 0
+[2024-01-15T10:47:13.800] [INFO] cApi - 0
+[2024-01-15T10:47:13.802] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data
+[2024-01-15T10:47:13.803] [DEBUG] cApi - \
+[2024-01-15T12:57:20.936] [INFO] cApi - { location: '/wwwww/kkk', action: 'ls', name: '' }
+[2024-01-15T12:57:20.945] [INFO] cApi - 
+[2024-01-15T12:57:21.274] [DEBUG] cApi - Записей: 0
+[2024-01-15T12:57:21.277] [INFO] cApi - 1
+[2024-01-15T12:57:21.278] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data
+[2024-01-15T12:57:21.278] [DEBUG] cApi - \wwwww\kkk
+[2024-01-15T12:58:37.798] [INFO] cApi - 
+[2024-01-15T12:58:38.125] [DEBUG] cApi - Записей: 1
+[2024-01-15T15:14:20.300] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-15T15:14:20.311] [INFO] cApi - 
+[2024-01-15T15:14:20.748] [DEBUG] cApi - Записей: 0
+[2024-01-15T15:14:20.751] [INFO] cApi - 1
+[2024-01-15T15:14:20.752] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data
+[2024-01-15T15:14:20.753] [DEBUG] cApi - \
+[2024-01-15T15:17:04.583] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-15T15:17:04.591] [INFO] cApi - 
+[2024-01-15T15:17:05.777] [DEBUG] cApi - Записей: 0
+[2024-01-15T15:17:05.780] [INFO] cApi - 1
+[2024-01-15T15:17:05.781] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data
+[2024-01-15T15:17:05.782] [DEBUG] cApi - \
+[2024-01-15T15:20:50.941] [INFO] cApi - 
+[2024-01-15T15:20:51.249] [DEBUG] cApi - Записей: 1
+[2024-01-15T15:20:58.629] [INFO] cApi - 
+[2024-01-15T15:20:59.058] [DEBUG] cApi - Записей: 0
