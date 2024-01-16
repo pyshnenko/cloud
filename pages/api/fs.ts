@@ -1,4 +1,6 @@
 const fs = require('fs');
+const zlib = require('zlib');
+const archiver = require('archiver');
 const path = require('path');
 let jwt = require('jsonwebtoken');
 import NextCors from 'nextjs-cors';
@@ -105,9 +107,39 @@ export default async function handler(req: any, res: any) {
                     }
                 }
             }
-
+            else if (buf.action === 'tar') {
+                const folderToGet = path.join(dir, 'data', dat[0].login, path.normalize(buf.location));
+                const output = fs.createWriteStream(folderToGet + '/' + dat[0].login + '-archive.zip');
+                await output.on('close', function() {
+                    console.log(archive.pointer() + ' total bytes');
+                    console.log('archiver has been finalized and the output file descriptor has closed.');
+                });
+                const files = await fs.readdirSync(folderToGet);
+                files.forEach((file: any) => {
+                    const filePath = folderToGet + '/' + file;
+                    archive.file(filePath, { name: file });
+                });
+                await archive.finalize();
+                await archive.pipe(output);
+                //res.setHeader('Content-disposition', 'attachment; filename=archive.zip');
+                //res.setHeader('Content-type', 'application/zip');
+                //archive.pipe(res);
+                res.status(200).json({addr: 'oneTime/' + buf.location + '/' + dat[0].login + '-archive.zip' })
+            }
         }
         else res.status(401)
     }
 
 }
+
+const archive = archiver('zip', { zlib: { level: 9 } });
+    archive.on('warning', (err: any) => {
+        if (err.code === 'ENOENT') {
+            console.warn('Warning:', err.message);
+        } else {
+            throw err;
+        }
+    });
+    archive.on('error', (err: any) => {
+        throw err;
+});

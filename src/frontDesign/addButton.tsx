@@ -52,6 +52,13 @@ export default function SpeedDialTooltipOpen({path, setPath, files}: {path: stri
             setDialogResult({ready: false});
             setDialogOpen(true);
         }
+        else if (action === actions[1].name) {
+            Api.askLS(User.getToken(), path, 'tar')
+            .then((res: any)=>{
+                console.log(res.data.addr);
+                window.open((window.location.href==='http://localhost:8799/'?'http://localhost:8800/':'/') + res.data.addr)
+            }).catch((e: any)=>console.log(e))
+        }
         else if (action === actions[0].name) {
             attFile();
             handleClose();
@@ -79,7 +86,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files}: {path: stri
                     },
                     body: data,
                 }                
-                const response = await fetch('/upload', options);//http://localhost:8800/upload
+                const response = await fetch(window.location.href==='http://localhost:8799/'?'http://localhost:8800/upload':'/upload', options);//http://localhost:8800/upload
                 const res = await response.json();
                 console.log(res);
             }

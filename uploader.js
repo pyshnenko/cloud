@@ -48,6 +48,47 @@ var mongo = require('./src/mech/mongo');
 var mongoS = new mongo();
 app.use(cors());
 app.use(cookieParser('secret key'));
+app.get("/oneTime*", function (req, res) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function () {
+        var filePath, dat;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    filePath = '';
+                    if (!((req === null || req === void 0 ? void 0 : req.cookies) && ((_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token) !== '')) return [3 /*break*/, 2];
+                    return [4 /*yield*/, mongoS.find({ token: req.cookies.token })];
+                case 1:
+                    dat = _b.sent();
+                    if (dat.length)
+                        filePath = path.normalize('data/' + dat[0].login + '/' + decodeURI(req.url.substr(9)));
+                    else {
+                        res.statusCode = 404;
+                        res.end("Resourse not found!");
+                    }
+                    return [3 /*break*/, 3];
+                case 2:
+                    console.log('smth wrong');
+                    _b.label = 3;
+                case 3:
+                    console.log(filePath);
+                    fs.readFile(filePath, function (error, data) {
+                        if (error) {
+                            res.statusCode = 404;
+                            res.end("Resourse not found!");
+                        }
+                        else {
+                            console.log('send');
+                            res.end(data);
+                            console.log('prog work');
+                            fs.unlinkSync(filePath);
+                        }
+                    });
+                    return [2 /*return*/];
+            }
+        });
+    });
+});
 app.get("/data*", function (request, response) {
     var _a;
     return __awaiter(this, void 0, void 0, function () {

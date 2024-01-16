@@ -14,6 +14,33 @@ app.use(cors());
 
 app.use(cookieParser('secret key'));
 
+app.get("/oneTime*", async function (req: any, res: any) {
+    var filePath = '';
+    if (req?.cookies && req.cookies?.token !== '') {
+        var dat = await mongoS.find({ token: req.cookies.token });
+        if (dat.length)
+            filePath = path.normalize('data/' + dat[0].login + '/' + decodeURI(req.url.substr(9)))
+        else {
+            res.statusCode = 404;
+            res.end("Resourse not found!");
+        }
+    }
+    else console.log('smth wrong');
+    console.log(filePath);
+    fs.readFile(filePath, function (error: any, data: any) {
+        if (error) {
+            res.statusCode = 404;
+            res.end("Resourse not found!");
+        }
+        else {
+            console.log('send');
+            res.end(data);
+            console.log('prog work');
+            fs.unlinkSync(filePath);
+        }
+    });
+})
+
 app.get("/data*", async function (request: any, response: any) {
     var filePath = '';
     if (request?.cookies && request.cookies?.token !== '') {

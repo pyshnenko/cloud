@@ -1,4 +1,5 @@
 require('dotenv').config();
+let FileSaver = require('file-saver');
 import jwt from 'jsonwebtoken';
 import React, { useEffect, useState, useRef } from 'react';
 import {TokenLocalData} from '../src/types/api/types';
@@ -61,13 +62,16 @@ export default function Index() {
                 if (days > 5) window.location.href='/login';
                 else {
                     console.log('hello')
-                    Api.tokenUPD(saved)
+                    console.log(saved)
+                    Api.tokenUPD(saved, crypt)
                     .then((res)=>{
                         console.log(res);
                         let usData = res.data;
+                        const token = res.data.token;
+                        const atoken = res.data.atoken;
                         delete(usData.token);
                         delete(usData.atoken);
-                        User.setToken(res.data.token, res.data.atoken, usData);
+                        User.setToken(token, atoken, usData);
                         folder();
                         setDatal(usData.login)
                     })
@@ -117,15 +121,27 @@ export default function Index() {
     const menuClick = (action: string, index: number, path: string) => {
         if (files) {
             const objName = index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length];
-            if (action === 'Открыть') setPath(path + '/' + objName);
+            if (action === 'Открыть') setPath(path + objName + '/');
             else if (action === 'Удалить') console.log('Удалить ' + objName)
             else if (action === 'Скачать' && index>=files.directs.length) {
                 console.log(action + ' ' + path + (index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length]));
                 const cookies = new Cookies(null, {path: '/'});
                 cookies.set('token', User.getToken());
-                const fileAddr: string = encodeURI(`https://cloud.spamigor.ru/data${path==='/'?'':path}/${index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length]}`);
+                const fileAddr: string = encodeURI(`${window.location.href==='http://localhost:8799/'?'http://localhost:8800':''}/data/${path}${index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length]}`);
                 get_file_url(fileAddr);
                 console.log(fileAddr);
+            }
+            else if (action === 'Скачать' && index < files.directs.length) {const cookies = new Cookies(null, {path: '/'});
+                cookies.set('token', User.getToken());
+                Api.askLS(User.getToken(), path + '/' + files.directs[index], 'tar')
+                .then(async (res: any)=>{
+                    console.log(res.data);
+                    console.log(window.location.href);
+                    window.open(encodeURI((window.location.href==='http://localhost:8799/')? ('http://localhost:8800/'+res.data.addr) : ('/'+res.data.addr)))
+                    /*let file = new Blob([res.data], {type: "application/zip"});
+                    FileSaver.saveAs(file, "hello world.zip");*/
+                })
+                .catch((e: any)=> console.log(e));
             }
             menuClose();
         }
@@ -174,7 +190,7 @@ export default function Index() {
                         <Box sx={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', alignItems: 'flex-start'}} key={item}>
                             <Button                                  
                                 onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{setAnchorEl({elem: event.currentTarget, index: index}); event.preventDefault()}}
-                                onDoubleClick={()=>setPath((path==='/'?'':path) +'/'+item)} 
+                                onDoubleClick={()=>setPath((path==='/'?'':path) +item+'/')} 
                                 sx={{display: 'column-flex', maxWidth: '100px', maxHeight: '120px', overflowWrap: 'anywhere'}}
                             >
                                 <FolderIcon sx={{zoom: 2.5}} />
@@ -247,4 +263,10 @@ export default function Index() {
             </div>
         </Box>
     )
+}
+
+function b64DecodeUnicode(str: any) {
+    return decodeURIComponent(Array.prototype.map.call(str, function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+    }).join(''));
 }

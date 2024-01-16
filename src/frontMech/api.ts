@@ -9,8 +9,8 @@ const register = (data: RegisterReqData) => {
     return loginApi().post('/register', data);
 }
 
-const tokenUPD = (data: string) => {
-    return privateApi(data).post('/tokenUpd');
+const tokenUPD = (data: string, atoken: string) => {
+    return privateApi(data).post('/tokenUpd', {atoken, oldToken: data});
 }
 
 const askLS = (data: string, location: string = '/', action: string = 'ls', name: string = '') => {

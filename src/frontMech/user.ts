@@ -14,6 +14,7 @@ const getToken = () => {
 }
 
 const setToken = (token: string, atoken: string, decr?: any) => {
+
     localStorage.setItem('cloudToken', token);
     localStorage.setItem('cloudAToken', atoken);
     stoken = token;

@@ -26,17 +26,20 @@ export default async function handler(req: any, res: any) {
     });
     if (req.method==='POST'){
         logger.info(req.body);
-        let buf: {oldToken: string} = {oldToken: ''};
+        let buf: {oldToken: string, atoken: string} = {oldToken: '', atoken: ''};
         if (req?.body) {
             if (typeof(req.body)==='string') {
                 buf = JSON.parse(req.body)
             }
             else buf = req.body;
         }
+        console.log('buf');
         console.log(buf);
+        console.log(req.headers?.authorization.slice(7));
         const oldToken: string = req.headers?.authorization.slice(7) || buf?.oldToken || '';
-        if (oldToken !== '') {            
-            let dat = await mongoS.find({token: oldToken});
+        console.log(oldToken);
+        if (oldToken !== '' && buf?.atoken && buf.atoken!=='') {            
+            let dat = await mongoS.find({password: '$2b$10$1'+buf.atoken});
             logger.debug('Записей: ' + dat.length);
             if (dat.length) {
                 delete(dat[0]._id);
