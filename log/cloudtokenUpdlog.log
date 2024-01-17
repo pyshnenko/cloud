@@ -196,3 +196,80 @@
   oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsInBhc3N3b3JkIjoiJDJiJDEwJDFLblN3bmFFUm9jNG5YenN5dVBjcGVMOVNRaTdwaTA4ZEVIWDJnaEZ0amJ2aWdyTHd6UDR5IiwiZmlyc3RfbmFtZSI6InNwYW1pZ29yIiwibGFzdF9uYW1lIjoic3BhbWlnb3IiLCJpZCI6MTEsImdvbGQiOjAsImlhdCI6MTcwNTQwNDg4NiwiZXhwIjoxNzA1NDA4NDg2fQ.Nmnm57bs6tz5LoWvAyX_5X3GTlq2PvJn-sEi4NVEvjA'
 }
 [2024-01-16T15:54:06.333] [DEBUG] cApi - Записей: 1
+[2024-01-17T08:57:42.717] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsImZpcnN0X25hbWUiOiJzcGFtaWdvciIsImxhc3RfbmFtZSI6InNwYW1pZ29yIiwiaWQiOjExLCJnb2xkIjowLCJpYXQiOjE3MDU0MDk3MDAsImV4cCI6MTcwNTQxMzMwMH0.Tv0tYI0ebbzexYpfkKdoy5r8JPhId9ynl0TZp8wPsHQ'
+}
+[2024-01-17T08:57:45.535] [DEBUG] cApi - Записей: 1
+[2024-01-17T09:58:20.117] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsInBhc3N3b3JkIjoiJDJiJDEwJDFLblN3bmFFUm9jNG5YenN5dVBjcGVMOVNRaTdwaTA4ZEVIWDJnaEZ0amJ2aWdyTHd6UDR5IiwiZmlyc3RfbmFtZSI6InNwYW1pZ29yIiwibGFzdF9uYW1lIjoic3BhbWlnb3IiLCJpZCI6MTEsImdvbGQiOjAsImlhdCI6MTcwNTQ3MTA2NSwiZXhwIjoxNzA1NDc0NjY1fQ.OsaRgiQGkKLEQq6H78_KooEhfySINs_bYV6qzH6QBZA'
+}
+[2024-01-17T09:58:20.801] [DEBUG] cApi - Записей: 1
+[2024-01-17T11:23:35.025] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsInBhc3N3b3JkIjoiJDJiJDEwJDFLblN3bmFFUm9jNG5YenN5dVBjcGVMOVNRaTdwaTA4ZEVIWDJnaEZ0amJ2aWdyTHd6UDR5IiwiZmlyc3RfbmFtZSI6InNwYW1pZ29yIiwibGFzdF9uYW1lIjoic3BhbWlnb3IiLCJpZCI6MTEsImdvbGQiOjAsImlhdCI6MTcwNTQ3NDcwMCwiZXhwIjoxNzA1NDc4MzAwfQ.1CYFePAUTaO5H5hlBi9axgu4OmhXhFUnd9gaWrk53hQ'
+}
+[2024-01-17T11:23:36.110] [DEBUG] cApi - Записей: 1
+[2024-01-17T11:23:38.914] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsInBhc3N3b3JkIjoiJDJiJDEwJDFLblN3bmFFUm9jNG5YenN5dVBjcGVMOVNRaTdwaTA4ZEVIWDJnaEZ0amJ2aWdyTHd6UDR5IiwiZmlyc3RfbmFtZSI6InNwYW1pZ29yIiwibGFzdF9uYW1lIjoic3BhbWlnb3IiLCJpZCI6MTEsImdvbGQiOjAsImlhdCI6MTcwNTQ3NDcwMCwiZXhwIjoxNzA1NDc4MzAwfQ.1CYFePAUTaO5H5hlBi9axgu4OmhXhFUnd9gaWrk53hQ'
+}
+[2024-01-17T11:23:39.947] [DEBUG] cApi - Записей: 1
+[2024-01-17T13:12:43.693] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-17T13:12:43.700] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsInBhc3N3b3JkIjoiJDJiJDEwJDFLblN3bmFFUm9jNG5YenN5dVBjcGVMOVNRaTdwaTA4ZEVIWDJnaEZ0amJ2aWdyTHd6UDR5IiwiZmlyc3RfbmFtZSI6InNwYW1pZ29yIiwibGFzdF9uYW1lIjoic3BhbWlnb3IiLCJpZCI6MTEsImdvbGQiOjAsImlhdCI6MTcwNTQ3OTgxOSwiZXhwIjoxNzA1NDgzNDE5fQ.1B6CiOI17BZpHwizno1UseGxVelbHhljOb_dQv6943M'
+}
+[2024-01-17T13:12:44.539] [DEBUG] cApi - Записей: 0
+[2024-01-17T13:12:44.543] [INFO] cApi - 1
+[2024-01-17T13:12:44.544] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data
+[2024-01-17T13:12:44.545] [DEBUG] cApi - \
+[2024-01-17T13:14:27.254] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-17T13:14:27.259] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsInBhc3N3b3JkIjoiJDJiJDEwJDFLblN3bmFFUm9jNG5YenN5dVBjcGVMOVNRaTdwaTA4ZEVIWDJnaEZ0amJ2aWdyTHd6UDR5IiwiZmlyc3RfbmFtZSI6InNwYW1pZ29yIiwibGFzdF9uYW1lIjoic3BhbWlnb3IiLCJpZCI6MTEsImdvbGQiOjAsImlhdCI6MTcwNTQ3OTgxOSwiZXhwIjoxNzA1NDgzNDE5fQ.1B6CiOI17BZpHwizno1UseGxVelbHhljOb_dQv6943M'
+}
+[2024-01-17T13:14:29.021] [DEBUG] cApi - Записей: 0
+[2024-01-17T13:14:29.025] [INFO] cApi - 1
+[2024-01-17T13:14:29.026] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data
+[2024-01-17T13:14:29.027] [DEBUG] cApi - \
+[2024-01-17T13:14:38.501] [INFO] cApi - { location: '/', action: 'rm', name: '' }
+[2024-01-17T13:14:39.495] [INFO] cApi - 1
+[2024-01-17T13:14:39.495] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data
+[2024-01-17T13:14:39.496] [DEBUG] cApi - \
+[2024-01-17T13:17:04.098] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-17T13:17:04.105] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsInBhc3N3b3JkIjoiJDJiJDEwJDFLblN3bmFFUm9jNG5YenN5dVBjcGVMOVNRaTdwaTA4ZEVIWDJnaEZ0amJ2aWdyTHd6UDR5IiwiZmlyc3RfbmFtZSI6InNwYW1pZ29yIiwibGFzdF9uYW1lIjoic3BhbWlnb3IiLCJpZCI6MTEsImdvbGQiOjAsImlhdCI6MTcwNTQ3OTgxOSwiZXhwIjoxNzA1NDgzNDE5fQ.1B6CiOI17BZpHwizno1UseGxVelbHhljOb_dQv6943M'
+}
+[2024-01-17T13:17:05.750] [DEBUG] cApi - Записей: 0
+[2024-01-17T13:17:05.753] [INFO] cApi - 1
+[2024-01-17T13:17:05.754] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data
+[2024-01-17T13:17:05.755] [DEBUG] cApi - \
+[2024-01-17T13:17:08.829] [INFO] cApi - { location: '/', action: 'rm', name: '' }
+[2024-01-17T13:17:10.185] [INFO] cApi - 1
+[2024-01-17T13:17:10.186] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data
+[2024-01-17T13:17:10.186] [DEBUG] cApi - \
+[2024-01-17T13:17:34.791] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsInBhc3N3b3JkIjoiJDJiJDEwJDFLblN3bmFFUm9jNG5YenN5dVBjcGVMOVNRaTdwaTA4ZEVIWDJnaEZ0amJ2aWdyTHd6UDR5IiwiZmlyc3RfbmFtZSI6InNwYW1pZ29yIiwibGFzdF9uYW1lIjoic3BhbWlnb3IiLCJpZCI6MTEsImdvbGQiOjAsImlhdCI6MTcwNTQ3OTgxOSwiZXhwIjoxNzA1NDgzNDE5fQ.1B6CiOI17BZpHwizno1UseGxVelbHhljOb_dQv6943M'
+}
+[2024-01-17T13:17:49.298] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsInBhc3N3b3JkIjoiJDJiJDEwJDFLblN3bmFFUm9jNG5YenN5dVBjcGVMOVNRaTdwaTA4ZEVIWDJnaEZ0amJ2aWdyTHd6UDR5IiwiZmlyc3RfbmFtZSI6InNwYW1pZ29yIiwibGFzdF9uYW1lIjoic3BhbWlnb3IiLCJpZCI6MTEsImdvbGQiOjAsImlhdCI6MTcwNTQ3OTgxOSwiZXhwIjoxNzA1NDgzNDE5fQ.1B6CiOI17BZpHwizno1UseGxVelbHhljOb_dQv6943M'
+}
+[2024-01-17T13:18:14.534] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsInBhc3N3b3JkIjoiJDJiJDEwJDFLblN3bmFFUm9jNG5YenN5dVBjcGVMOVNRaTdwaTA4ZEVIWDJnaEZ0amJ2aWdyTHd6UDR5IiwiZmlyc3RfbmFtZSI6InNwYW1pZ29yIiwibGFzdF9uYW1lIjoic3BhbWlnb3IiLCJpZCI6MTEsImdvbGQiOjAsImlhdCI6MTcwNTQ3OTgxOSwiZXhwIjoxNzA1NDgzNDE5fQ.1B6CiOI17BZpHwizno1UseGxVelbHhljOb_dQv6943M'
+}
+[2024-01-17T13:18:15.078] [DEBUG] cApi - Записей: 1
+[2024-01-17T14:24:52.361] [INFO] cApi - { location: '//папка 2', action: 'ls', name: '' }
+[2024-01-17T14:24:52.370] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsImZpcnN0X25hbWUiOiJzcGFtaWdvciIsImxhc3RfbmFtZSI6InNwYW1pZ29yIiwiaWQiOjExLCJnb2xkIjowLCJpYXQiOjE3MDU0ODcwODgsImV4cCI6MTcwNTQ5MDY4OH0.1m3LqC8S1u-lz8wxZJO4KIC_bHv3UbuNeKRbiYyFx0o'
+}
+[2024-01-17T14:24:52.998] [DEBUG] cApi - Записей: 0
+[2024-01-17T14:24:53.002] [INFO] cApi - 1
+[2024-01-17T14:24:53.003] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data
+[2024-01-17T14:24:53.004] [DEBUG] cApi - \папка 2

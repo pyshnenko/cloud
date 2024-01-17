@@ -1,7 +1,7 @@
 require('dotenv').config();
 let FileSaver = require('file-saver');
 import jwt from 'jsonwebtoken';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, createContext, useContext } from 'react';
 import {TokenLocalData} from '../src/types/api/types';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -23,6 +23,7 @@ import Cookies from 'universal-cookie';
 const options = [
     'Открыть',
     'Скачать',
+    'Поделиться',
     'Переименовать',
     'Переместить',
     'Удалить'
@@ -77,8 +78,8 @@ export default function Index() {
                     })
                     .catch((e)=>{
                         console.log(e);
-                        //User.exit();
-                        //window.location.href='/login';
+                        User.exit();
+                        window.location.href='/login';
                     });
                 }
             }
@@ -93,7 +94,6 @@ export default function Index() {
     useEffect(()=>{
         console.log(path);
         if (User.getAuth()) {
-            console.log('upd');
             folder(path);
         }
     }, [path])
@@ -122,12 +122,11 @@ export default function Index() {
         if (files) {
             const objName = index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length];
             if (action === 'Открыть') setPath(path + objName + '/');
-            else if (action === 'Удалить') console.log('Удалить ' + objName)
             else if (action === 'Скачать' && index>=files.directs.length) {
-                console.log(action + ' ' + path + (index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length]));
+                console.log(action + ' ' + path + (objName));
                 const cookies = new Cookies(null, {path: '/'});
                 cookies.set('token', User.getToken());
-                const fileAddr: string = encodeURI(`${window.location.href==='http://localhost:8799/'?'http://localhost:8800':''}/data/${path}${index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length]}`);
+                const fileAddr: string = encodeURI(`${window.location.href==='http://localhost:8799/'?'http://localhost:8800':''}/data/${path}${objName}`);
                 get_file_url(fileAddr);
                 console.log(fileAddr);
             }
@@ -137,11 +136,26 @@ export default function Index() {
                 .then(async (res: any)=>{
                     console.log(res.data);
                     console.log(window.location.href);
-                    window.open(encodeURI((window.location.href==='http://localhost:8799/')? ('http://localhost:8800/'+res.data.addr) : ('/'+res.data.addr)))
+                    setTimeout((href: string, addr: string)=>
+                        {window.open(encodeURI((href==='http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr)))}, 
+                        3000, 
+                        window.location.href, 
+                        res.data.addr) 
                     /*let file = new Blob([res.data], {type: "application/zip"});
                     FileSaver.saveAs(file, "hello world.zip");*/
                 })
                 .catch((e: any)=> console.log(e));
+            }
+            else if (action === 'Удалить') {
+                console.log(objName)
+                Api.askLS(User.getToken(), path, 'rm', objName)
+                .then((res: any)=>folder(path))
+                .catch((e: any)=>console.log(e))
+            }
+            else if (action === 'Поделиться') {
+                Api.askLS(User.getToken(), (index<files.directs.length?path+objName:path), 'chmod', (index<files.directs.length?'/':objName))
+                .then((res: any)=>console.log(res))
+                .catch((e: any)=>console.log(e))
             }
             menuClose();
         }
@@ -165,7 +179,7 @@ export default function Index() {
 
     return (
         <Box sx={{display: 'flex', flexDirection: 'column'}}>
-            {files&&<AddButton path={path} setPath={setPath} files={files} />}
+            {files&&<AddButton path={path} setPath={setPath} files={files} folder={folder}/>}
             <h1>{datal}</h1>        
             <ButtonGroup variant="text" aria-label="text button group">
                 <Button onClick={()=>window.location.href='/login'}>Войти</Button>
@@ -245,7 +259,7 @@ export default function Index() {
                     onClose={menuClose}
                     PaperProps={{
                         style: {
-                            maxHeight: 45 * 4.5,
+                            maxHeight: 45 * 7,
                             width: '20ch',
                         },
                     }}
@@ -263,10 +277,4 @@ export default function Index() {
             </div>
         </Box>
     )
-}
-
-function b64DecodeUnicode(str: any) {
-    return decodeURIComponent(Array.prototype.map.call(str, function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-    }).join(''));
 }

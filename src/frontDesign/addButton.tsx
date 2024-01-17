@@ -19,7 +19,14 @@ const actions = [
   { icon: <ShareIcon />, name: 'Поделиться' },
 ];
 
-export default function SpeedDialTooltipOpen({path, setPath, files}: {path: string, setPath: (d: string)=>void, files: {directs: string[], files: string[]}}) {
+interface props {
+    path: string, 
+    setPath: (d: string)=>void, 
+    files: {directs: string[], files: string[]}, 
+    folder: (p: string)=>void
+}
+
+export default function SpeedDialTooltipOpen({path, setPath, files, folder}: props) {
     const [open, setOpen] = React.useState(false);
     const [dialogResult, setDialogResult] = React.useState<{ready: boolean, text?: string, numb?: number}>({ready: false});
     const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
@@ -89,6 +96,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files}: {path: stri
                 const response = await fetch(window.location.href==='http://localhost:8799/'?'http://localhost:8800/upload':'/upload', options);//http://localhost:8800/upload
                 const res = await response.json();
                 console.log(res);
+                folder(path);
             }
             const oPath = path;
             setPath('');
@@ -102,9 +110,9 @@ export default function SpeedDialTooltipOpen({path, setPath, files}: {path: stri
         Api.askLS(User.getToken(), path, 'mkdir', name)
         .then((res: any)=>{
             console.log(res);
+            setPath(path+'/'+name);
         }).catch((e: any)=>console.log(e));
         setDialogOpen(false);
-        setPath(path+'/'+name);
     }
 
   return (
