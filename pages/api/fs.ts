@@ -111,6 +111,14 @@ export default async function handler(req: any, res: any) {
             }
             else if ((buf.action === 'chmod')&&(buf?.name)&&(buf.name!=='')) {
                 const fileAddr = path.join(dir, 'data', dat[0].login, path.normalize(buf.location));
+                const directs:string[] = fs.readdirSync(
+                    path.join(
+                        dir, 
+                        'data', 
+                        dat[0].login, 
+                        path.normalize(buf.location)), 
+                    { withFileTypes: true })
+                    .filter((d: any) => d.isDirectory()).map((d: any)=> d.name)
                 let openData: any = {};
                 try {
                     let openData: any = {};
@@ -119,7 +127,11 @@ export default async function handler(req: any, res: any) {
                     }
                     openData[buf.name] = true;
                     fs.writeFileSync(path.join(fileAddr, '%%%ssystemData.json'), JSON.stringify(openData));
-                    res.status(200).json({tok: jwt.sign({addr: path.normalize(buf.location+'/+buf.name')}, String(process.env.SIMPLETOK))})
+                    res.status(200).json({
+                            tok: jwt.sign({addr: path.normalize('/'+dat[0].login+'/'+buf.location), 
+                            type: (directs.includes(buf.name)||buf.name==='/')?true: false,
+                            name: buf.name
+                        }, String(process.env.SIMPLETOK))})
                 } catch(err) {
                     console.error(err)
                     res.status(500).json({message: 'some error'})

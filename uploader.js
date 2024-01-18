@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require('dotenv').config();
 var express = require("express");
 var multer = require("multer");
 var cors = require('cors');
@@ -46,8 +47,39 @@ var cookieParser = require('cookie-parser');
 var path = require('path');
 var mongo = require('./src/mech/mongo');
 var mongoS = new mongo();
+var jwt = require('jsonwebtoken');
+var dir = process.cwd();
 app.use(cors());
 app.use(cookieParser('secret key'));
+app.get("/openLinc*", function (req, res) {
+    var _a, _b;
+    return __awaiter(this, void 0, void 0, function () {
+        var filePath, folderPath, subPath, secureJson, folderAccess;
+        return __generator(this, function (_c) {
+            filePath = '';
+            folderPath = '';
+            if ((req === null || req === void 0 ? void 0 : req.query) && ((_a = req.query) === null || _a === void 0 ? void 0 : _a.tok) && ((_b = req.query) === null || _b === void 0 ? void 0 : _b.tok) !== '') {
+                subPath = jwt.verify(decodeURI(req.query.tok), String(process.env.SIMPLETOK));
+                console.log(subPath);
+                filePath = path.join(dir, path.normalize('data/' + subPath.addr), subPath.name);
+                folderPath = path.join(dir, path.normalize('data/' + subPath.addr));
+                if (fs.existsSync(path.join(folderPath, '%%%ssystemData.json'))) {
+                    secureJson = JSON.parse(fs.readFileSync(path.normalize(folderPath + '/' + '%%%ssystemData.json')));
+                    folderAccess = secureJson === null || secureJson === void 0 ? void 0 : secureJson[subPath.name];
+                    res.send("<h4>\u0410\u0434\u0440\u0435\u0441: ".concat(filePath, "</h4><h4>\u0422\u0438\u043F: ").concat(subPath.type, "</h4><h4>\u0418\u043C\u044F \u0444\u0430\u0439\u043B\u0430 \u0438\u043B\u0438 \u043F\u0430\u043F\u043A\u0438: ").concat(subPath.name, "</h4><h4>\u0414\u043E\u0441\u0442\u0443\u043F ").concat(folderAccess ? 'Разрешен' : 'Запрещен', "</h4>"));
+                }
+                else {
+                    res.statusCode = 401;
+                    res.end('go out');
+                }
+            }
+            else
+                console.log('smth wrong');
+            console.log(filePath);
+            return [2 /*return*/];
+        });
+    });
+});
 app.get("/oneTime*", function (req, res) {
     var _a;
     return __awaiter(this, void 0, void 0, function () {

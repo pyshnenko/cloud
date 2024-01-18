@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const multer  = require("multer");
 const cors = require('cors');
@@ -8,11 +9,47 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const mongo = require('./src/mech/mongo');
 const mongoS = new mongo();
+const jwt = require('jsonwebtoken');
 export {};
+const dir = process.cwd();
 
 app.use(cors());
 
 app.use(cookieParser('secret key'));
+
+app.get("/openLinc*", async function (req: any, res: any) {
+    var filePath = '';
+    var folderPath = '';
+    if (req?.query && req.query?.tok && req.query?.tok !== '') {
+        const subPath = jwt.verify(decodeURI(req.query.tok), String(process.env.SIMPLETOK));
+        console.log(subPath);
+        filePath = path.join(dir, path.normalize('data/' + subPath.addr), subPath.name);
+        folderPath = path.join(dir, path.normalize('data/' + subPath.addr));
+        if (fs.existsSync(path.join(folderPath, '%%%ssystemData.json'))) {
+            const secureJson = JSON.parse(fs.readFileSync(path.normalize(folderPath+'/'+'%%%ssystemData.json')));
+            const folderAccess = secureJson?.[subPath.name];
+            res.send(`<h4>Адрес: ${filePath}</h4><h4>Тип: ${subPath.type}</h4><h4>Имя файла или папки: ${subPath.name}</h4><h4>Доступ ${folderAccess?'Разрешен':'Запрещен'}</h4>`);
+        }
+        else {
+            res.statusCode=401;
+            res.end('go out')
+        }
+    }
+    else console.log('smth wrong');
+    console.log(filePath);
+    /*fs.readFile(filePath, function (error: any, data: any) {
+        if (error) {
+            res.statusCode = 404;
+            res.end("Resourse not found!");
+        }
+        else {
+            console.log('send');
+            res.end(data);
+            console.log('prog work');
+            fs.unlinkSync(filePath);
+        }
+    });*/
+})
 
 app.get("/oneTime*", async function (req: any, res: any) {
     var filePath = '';
