@@ -55,7 +55,7 @@ app.get("/openLinc*", async function (req: any, res: any) {
                         res.end("Resourse not found!");
                     }
                     else {
-                        res.end(dataB);
+                        res.sendFile(dataB);
                     }
                 });
             }
