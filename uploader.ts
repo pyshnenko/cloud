@@ -16,8 +16,6 @@ const dir = process.cwd();
 app.use(cors());
 
 app.use(cookieParser('secret key'));
-  
-app.use(express.static(__dirname));
 
 app.get("/openLinc*", async function (req: any, res: any) {
     var filePath = '';
@@ -120,6 +118,8 @@ app.get("/data*", async function (request: any, response: any) {
         }
     });
 });
+  
+app.use(express.static(__dirname));
 
 const storage = multer.diskStorage({
   destination: function (req: Request, file: Response, cb: any) {
