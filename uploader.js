@@ -51,22 +51,56 @@ var jwt = require('jsonwebtoken');
 var dir = process.cwd();
 app.use(cors());
 app.use(cookieParser('secret key'));
+app.use(express.static(__dirname));
 app.get("/openLinc*", function (req, res) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var filePath, folderPath, subPath, secureJson, folderAccess;
+        var filePath, folderPath, subPath, addrArr, access, i, middlPath, j, secureJson;
         return __generator(this, function (_c) {
             filePath = '';
             folderPath = '';
             if ((req === null || req === void 0 ? void 0 : req.query) && ((_a = req.query) === null || _a === void 0 ? void 0 : _a.tok) && ((_b = req.query) === null || _b === void 0 ? void 0 : _b.tok) !== '') {
                 subPath = jwt.verify(decodeURI(req.query.tok), String(process.env.SIMPLETOK));
                 console.log(subPath);
-                filePath = path.join(dir, path.normalize('data/' + subPath.addr), subPath.name);
+                filePath = path.normalize(path.join(dir, path.normalize('data/' + decodeURI(subPath.addr)), subPath.name));
                 folderPath = path.join(dir, path.normalize('data/' + subPath.addr));
-                if (fs.existsSync(path.join(folderPath, '%%%ssystemData.json'))) {
-                    secureJson = JSON.parse(fs.readFileSync(path.normalize(folderPath + '/' + '%%%ssystemData.json')));
-                    folderAccess = secureJson === null || secureJson === void 0 ? void 0 : secureJson[subPath.name];
-                    res.send("<h4>\u0410\u0434\u0440\u0435\u0441: ".concat(filePath, "</h4><h4>\u0422\u0438\u043F: ").concat(subPath.type, "</h4><h4>\u0418\u043C\u044F \u0444\u0430\u0439\u043B\u0430 \u0438\u043B\u0438 \u043F\u0430\u043F\u043A\u0438: ").concat(subPath.name, "</h4><h4>\u0414\u043E\u0441\u0442\u0443\u043F ").concat(folderAccess ? 'Разрешен' : 'Запрещен', "</h4>"));
+                addrArr = (path.normalize(subPath.addr)).split(path.sep);
+                addrArr[0] = 'data';
+                addrArr.pop();
+                access = false;
+                for (i = addrArr.length; i > 1; i--) {
+                    middlPath = '';
+                    for (j = 0; j < i; j++)
+                        middlPath += '/' + addrArr[j];
+                    middlPath = path.join(dir, middlPath, '/%%%ssystemData.json');
+                    if (fs.existsSync(middlPath)) {
+                        secureJson = JSON.parse(fs.readFileSync(middlPath));
+                        if ((secureJson === null || secureJson === void 0 ? void 0 : secureJson['/']) || (i === addrArr.length && (secureJson === null || secureJson === void 0 ? void 0 : secureJson[subPath.name]))) {
+                            console.log('access denied');
+                            access = true;
+                            break;
+                        }
+                    }
+                    console.log(middlPath);
+                }
+                console.log(addrArr);
+                if (access) {
+                    if (subPath.type)
+                        res.send("<h4>\u0410\u0434\u0440\u0435\u0441: ".concat(filePath, "</h4><h4>\u0422\u0438\u043F: '\u041F\u0430\u043F\u043A\u0430'</h4><h4>\u0418\u043C\u044F \u0444\u0430\u0439\u043B\u0430 \u0438\u043B\u0438 \u043F\u0430\u043F\u043A\u0438: ").concat(subPath.name, "</h4><h4>\u0414\u043E\u0441\u0442\u0443\u043F ").concat(access ? 'Разрешен' : 'Запрещен', "</h4>"));
+                    else {
+                        console.log('выдаем');
+                        console.log(filePath);
+                        fs.readFile(decodeURI(encodeURI(filePath)), function (error, dataB) {
+                            if (error) {
+                                res.statusCode = 404;
+                                res.end("Resourse not found!");
+                            }
+                            else {
+                                console.log(dataB);
+                                res.end(dataB);
+                            }
+                        });
+                    }
                 }
                 else {
                     res.statusCode = 401;
@@ -75,7 +109,6 @@ app.get("/openLinc*", function (req, res) {
             }
             else
                 console.log('smth wrong');
-            console.log(filePath);
             return [2 /*return*/];
         });
     });
@@ -169,24 +202,24 @@ var storage = multer.diskStorage({
     }
 });
 var upload = multer({ storage: storage });
-app.use(express.static(__dirname));
 app.use(upload.single("file"));
 app.post("/upload", function (req, res, next) {
     console.log('im here');
+    var folder = decodeURI(req.headers.folder);
     var filedata = req.body;
     if (!filedata)
         res.send({ res: 'error' });
     else {
         var ddir = [];
         try {
-            fs.readdirSync(path.normalize("data/".concat(req.headers.folder)), { withFileTypes: true });
+            fs.readdirSync(path.normalize("data/".concat(folder)), { withFileTypes: true });
             console.log('Папка найдена');
         }
         catch (e) {
-            fs.mkdirSync(path.normalize("data/".concat(req.headers.folder)));
+            fs.mkdirSync(path.normalize("data/".concat(folder)));
             console.log('Папка успешно создана');
         }
-        fs.rename(path.normalize("uploads/".concat(decodeURI(req.headers.user), "-").concat(decodeURI(req.headers.fname))), path.normalize("data/".concat(req.headers.folder, "/").concat(decodeURI(req.headers.fname))), function (err) {
+        fs.rename(path.normalize("uploads/".concat(decodeURI(req.headers.user), "-").concat(decodeURI(req.headers.fname))), path.normalize("data/".concat(folder, "/").concat(decodeURI(req.headers.fname))), function (err) {
             if (err)
                 throw err; // не удалось переместить файл
             console.log('Файл успешно перемещён');

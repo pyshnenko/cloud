@@ -16,6 +16,8 @@ const dir = process.cwd();
 app.use(cors());
 
 app.use(cookieParser('secret key'));
+  
+app.use(express.static(__dirname));
 
 app.get("/openLinc*", async function (req: any, res: any) {
     var filePath = '';
@@ -23,12 +25,42 @@ app.get("/openLinc*", async function (req: any, res: any) {
     if (req?.query && req.query?.tok && req.query?.tok !== '') {
         const subPath = jwt.verify(decodeURI(req.query.tok), String(process.env.SIMPLETOK));
         console.log(subPath);
-        filePath = path.join(dir, path.normalize('data/' + subPath.addr), subPath.name);
+        filePath = path.normalize(path.join(dir, path.normalize('data/' + decodeURI(subPath.addr)), subPath.name));
         folderPath = path.join(dir, path.normalize('data/' + subPath.addr));
-        if (fs.existsSync(path.join(folderPath, '%%%ssystemData.json'))) {
-            const secureJson = JSON.parse(fs.readFileSync(path.normalize(folderPath+'/'+'%%%ssystemData.json')));
-            const folderAccess = secureJson?.[subPath.name];
-            res.send(`<h4>Адрес: ${filePath}</h4><h4>Тип: ${subPath.type}</h4><h4>Имя файла или папки: ${subPath.name}</h4><h4>Доступ ${folderAccess?'Разрешен':'Запрещен'}</h4>`);
+        let addrArr: string[] = (path.normalize(subPath.addr)).split(path.sep);
+        addrArr[0] = 'data';
+        addrArr.pop();
+        let access = false;
+        for (let i = addrArr.length; i>1; i--) {
+            let middlPath = '';
+            for (let j = 0; j<i; j++) middlPath+='/'+addrArr[j];
+            middlPath = path.join(dir, middlPath, '/%%%ssystemData.json');
+            if (fs.existsSync(middlPath)) {
+                const secureJson = JSON.parse(fs.readFileSync(middlPath));
+                if ((secureJson?.['/'])||(i===addrArr.length&&secureJson?.[subPath.name])){
+                    console.log('access denied');
+                    access = true;
+                    break;
+                }
+            }
+            console.log(middlPath);
+        }
+        console.log(addrArr);
+        if (access) {
+            if (subPath.type) res.send(`<h4>Адрес: ${filePath}</h4><h4>Тип: 'Папка'</h4><h4>Имя файла или папки: ${subPath.name}</h4><h4>Доступ ${access?'Разрешен':'Запрещен'}</h4>`);
+            else {    
+                console.log('выдаем')
+                console.log(filePath);
+                fs.readFile(decodeURI(encodeURI(filePath)), function (error: any, dataB: any) {
+                    if (error) {
+                        res.statusCode = 404;
+                        res.end("Resourse not found!");
+                    }
+                    else {
+                        res.end(dataB);
+                    }
+                });
+            }
         }
         else {
             res.statusCode=401;
@@ -36,19 +68,6 @@ app.get("/openLinc*", async function (req: any, res: any) {
         }
     }
     else console.log('smth wrong');
-    console.log(filePath);
-    /*fs.readFile(filePath, function (error: any, data: any) {
-        if (error) {
-            res.statusCode = 404;
-            res.end("Resourse not found!");
-        }
-        else {
-            console.log('send');
-            res.end(data);
-            console.log('prog work');
-            fs.unlinkSync(filePath);
-        }
-    });*/
 })
 
 app.get("/oneTime*", async function (req: any, res: any) {
@@ -113,12 +132,11 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage: storage })
-  
-app.use(express.static(__dirname));
 
 app.use(upload.single("file"));
 app.post("/upload", function (req: any, res: any, next: any) {
     console.log('im here');
+    const folder = decodeURI(req.headers.folder);
     let filedata = req.body;
     if(!filedata)
         res.send({res: 'error'});
@@ -126,13 +144,13 @@ app.post("/upload", function (req: any, res: any, next: any) {
     {
         let ddir: string[] = [];
         try {
-            fs.readdirSync(path.normalize(`data/${req.headers.folder}`), { withFileTypes: true });
+            fs.readdirSync(path.normalize(`data/${folder}`), { withFileTypes: true });
             console.log('Папка найдена');
         } catch (e: any) {
-            fs.mkdirSync(path.normalize(`data/${req.headers.folder}`));
+            fs.mkdirSync(path.normalize(`data/${folder}`));
             console.log('Папка успешно создана');
         }
-        fs.rename(path.normalize(`uploads/${decodeURI(req.headers.user)}-${decodeURI(req.headers.fname)}`), path.normalize(`data/${req.headers.folder}/${decodeURI(req.headers.fname)}`), (err: any) => {
+        fs.rename(path.normalize(`uploads/${decodeURI(req.headers.user)}-${decodeURI(req.headers.fname)}`), path.normalize(`data/${folder}/${decodeURI(req.headers.fname)}`), (err: any) => {
           if(err) throw err; // не удалось переместить файл
             console.log('Файл успешно перемещён');
         });
