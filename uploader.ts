@@ -49,7 +49,8 @@ app.get("/openLinc*", async function (req: any, res: any) {
             else {    
                 console.log('выдаем')
                 console.log(filePath);
-                fs.readFile(decodeURI(encodeURI(filePath)), function (error: any, dataB: any) {
+                res.sendFile(filePath);
+                /*fs.readFile(decodeURI(encodeURI(filePath)), function (error: any, dataB: any) {
                     if (error) {
                         res.statusCode = 404;
                         res.end("Resourse not found!");
@@ -57,7 +58,7 @@ app.get("/openLinc*", async function (req: any, res: any) {
                     else {
                         res.sendFile(dataB);
                     }
-                });
+                });*/
             }
         }
         else {
