@@ -137,19 +137,7 @@ app.get("/oneTime*", function (req, res) {
                     _b.label = 3;
                 case 3:
                     console.log(filePath);
-                    fs.readFile(filePath, function (error, data) {
-                        if (error) {
-                            res.statusCode = 404;
-                            res.end("Resourse not found!");
-                        }
-                        else {
-                            console.log('send');
-                            res.sendFile(filePath);
-                            //res.end(data);
-                            console.log('prog work');
-                            fs.unlinkSync(filePath);
-                        }
-                    });
+                    res.sendFile(filePath);
                     return [2 /*return*/];
             }
         });
@@ -168,7 +156,7 @@ app.get("/data*", function (request, response) {
                 case 1:
                     dat = _b.sent();
                     if (dat.length)
-                        filePath = path.normalize('data/' + dat[0].login + '/' + decodeURI(request.url.substr(6)));
+                        filePath = path.normalize(dir + '/data/' + dat[0].login + '/' + decodeURI(request.url.substr(6)));
                     else {
                         response.statusCode = 404;
                         response.end("Resourse not found!");
@@ -179,16 +167,7 @@ app.get("/data*", function (request, response) {
                     _b.label = 3;
                 case 3:
                     console.log(filePath);
-                    fs.readFile(filePath, function (error, data) {
-                        if (error) {
-                            response.statusCode = 404;
-                            response.end("Resourse not found!");
-                        }
-                        else {
-                            response.sendFile(filePath);
-                            //response.end(data);
-                        }
-                    });
+                    response.sendFile(filePath);
                     return [2 /*return*/];
             }
         });

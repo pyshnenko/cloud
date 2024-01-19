@@ -83,7 +83,8 @@ app.get("/oneTime*", async function (req: any, res: any) {
     }
     else console.log('smth wrong');
     console.log(filePath);
-    fs.readFile(filePath, function (error: any, data: any) {
+    res.sendFile(filePath)
+    /*fs.readFile(filePath, function (error: any, data: any) {
         if (error) {
             res.statusCode = 404;
             res.end("Resourse not found!");
@@ -95,7 +96,7 @@ app.get("/oneTime*", async function (req: any, res: any) {
             console.log('prog work');
             fs.unlinkSync(filePath);
         }
-    });
+    });*/
 })
 
 app.get("/data*", async function (request: any, response: any) {
@@ -103,7 +104,7 @@ app.get("/data*", async function (request: any, response: any) {
     if (request?.cookies && request.cookies?.token !== '') {
         var dat = await mongoS.find({ token: request.cookies.token });
         if (dat.length)
-            filePath = path.normalize('data/' + dat[0].login + '/' + decodeURI(request.url.substr(6)))
+            filePath = path.normalize(dir+'/data/' + dat[0].login + '/' + decodeURI(request.url.substr(6)))
         else {
             response.statusCode = 404;
             response.end("Resourse not found!");
@@ -111,7 +112,8 @@ app.get("/data*", async function (request: any, response: any) {
     }
     else console.log('smth wrong');
     console.log(filePath);
-    fs.readFile(filePath, function (error: any, data: any) {
+    response.sendFile(filePath)
+    /*fs.readFile(filePath, function (error: any, data: any) {
         if (error) {
             response.statusCode = 404;
             response.end("Resourse not found!");
@@ -120,7 +122,7 @@ app.get("/data*", async function (request: any, response: any) {
             response.sendFile(filePath)
             //response.end(data);
         }
-    });
+    });*/
 });
   
 
