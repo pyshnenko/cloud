@@ -126,7 +126,7 @@ app.get("/oneTime*", function (req, res) {
                 case 1:
                     dat = _b.sent();
                     if (dat.length)
-                        filePath = path.normalize('data/' + dat[0].login + '/' + decodeURI(req.url.substr(9)));
+                        filePath = path.normalize(dir + '/data/' + dat[0].login + '/' + decodeURI(req.url.substr(9)));
                     else {
                         res.statusCode = 404;
                         res.end("Resourse not found!");

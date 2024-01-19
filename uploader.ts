@@ -75,7 +75,7 @@ app.get("/oneTime*", async function (req: any, res: any) {
     if (req?.cookies && req.cookies?.token !== '') {
         var dat = await mongoS.find({ token: req.cookies.token });
         if (dat.length)
-            filePath = path.normalize('data/' + dat[0].login + '/' + decodeURI(req.url.substr(9)))
+            filePath = path.normalize(dir+'/data/' + dat[0].login + '/' + decodeURI(req.url.substr(9)))
         else {
             res.statusCode = 404;
             res.end("Resourse not found!");
