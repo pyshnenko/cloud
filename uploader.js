@@ -183,7 +183,7 @@ app.get("/data*", function (request, response) {
                             response.end("Resourse not found!");
                         }
                         else {
-                            response.sendFile(data);
+                            response.end(data);
                         }
                     });
                     return [2 /*return*/];

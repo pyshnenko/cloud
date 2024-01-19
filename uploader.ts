@@ -116,7 +116,7 @@ app.get("/data*", async function (request: any, response: any) {
             response.end("Resourse not found!");
         }
         else {
-            response.sendFile(data);
+            response.end(data);
         }
     });
 });
