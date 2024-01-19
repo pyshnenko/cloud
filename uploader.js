@@ -95,7 +95,7 @@ app.get("/openLinc*", function (req, res) {
                                 res.end("Resourse not found!");
                             }
                             else {
-                                res.end(dataB);
+                                res.sendFile(dataB);
                             }
                         });
                     }
