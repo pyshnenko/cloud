@@ -96,7 +96,6 @@ app.get("/openLinc*", function (req, res) {
                                 res.end("Resourse not found!");
                             }
                             else {
-                                console.log(dataB);
                                 res.end(dataB);
                             }
                         });
@@ -184,7 +183,7 @@ app.get("/data*", function (request, response) {
                             response.end("Resourse not found!");
                         }
                         else {
-                            response.end(data);
+                            response.sendFile(data);
                         }
                     });
                     return [2 /*return*/];
