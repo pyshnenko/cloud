@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = "https://cloud.spamigor.ru/api";//"http://localhost:8799/api";//"https://cloud.spamigor.ru/api";//
+const baseURL = "/api";//"http://localhost:8799/api";//"https://cloud.spamigor.ru/api";//
 console.log(baseURL)
 const jsonHeader = {
   "Content-type": "application/json"
