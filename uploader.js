@@ -51,6 +51,7 @@ var jwt = require('jsonwebtoken');
 var dir = process.cwd();
 app.use(cors());
 app.use(cookieParser('secret key'));
+app.use(express.static(__dirname));
 app.get("/openLinc*", function (req, res) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
@@ -143,7 +144,8 @@ app.get("/oneTime*", function (req, res) {
                         }
                         else {
                             console.log('send');
-                            res.end(data);
+                            res.sendFile(filePath);
+                            //res.end(data);
                             console.log('prog work');
                             fs.unlinkSync(filePath);
                         }
@@ -183,7 +185,8 @@ app.get("/data*", function (request, response) {
                             response.end("Resourse not found!");
                         }
                         else {
-                            response.end(data);
+                            response.sendFile(data);
+                            //response.end(data);
                         }
                     });
                     return [2 /*return*/];
@@ -191,7 +194,6 @@ app.get("/data*", function (request, response) {
         });
     });
 });
-app.use(express.static(__dirname));
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads');

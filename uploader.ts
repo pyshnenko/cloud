@@ -16,6 +16,7 @@ const dir = process.cwd();
 app.use(cors());
 
 app.use(cookieParser('secret key'));
+app.use(express.static(__dirname));
 
 app.get("/openLinc*", async function (req: any, res: any) {
     var filePath = '';
@@ -89,7 +90,8 @@ app.get("/oneTime*", async function (req: any, res: any) {
         }
         else {
             console.log('send');
-            res.end(data);
+            res.sendFile(filePath)
+            //res.end(data);
             console.log('prog work');
             fs.unlinkSync(filePath);
         }
@@ -115,12 +117,12 @@ app.get("/data*", async function (request: any, response: any) {
             response.end("Resourse not found!");
         }
         else {
-            response.end(data);
+            response.sendFile(data)
+            //response.end(data);
         }
     });
 });
   
-app.use(express.static(__dirname));
 
 const storage = multer.diskStorage({
   destination: function (req: Request, file: Response, cb: any) {
