@@ -185,7 +185,7 @@ app.get("/data*", function (request, response) {
                             response.end("Resourse not found!");
                         }
                         else {
-                            response.sendFile(data);
+                            response.sendFile(filePath);
                             //response.end(data);
                         }
                     });
