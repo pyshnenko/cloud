@@ -1,103 +1,24 @@
-[2023-12-25T15:59:22.256] [INFO] cApi - { pass: null, login: '', email: '' }
-[2023-12-25T16:00:58.431] [INFO] cApi - { pass: null, login: '', email: '' }
-[2023-12-25T16:00:59.504] [DEBUG] cApi - Записей: 0
-[2023-12-25T16:05:09.107] [INFO] cApi - { pass: '1111', email: '222' }
-[2023-12-25T16:05:09.668] [DEBUG] cApi - Записей: 0
-[2023-12-25T16:06:22.397] [INFO] cApi - { pass: '1111', email: '222' }
-[2023-12-25T16:06:23.094] [DEBUG] cApi - Записей: 0
-[2023-12-25T16:06:44.049] [INFO] cApi - { pass: '1111', email: '222' }
-[2023-12-25T16:06:44.751] [DEBUG] cApi - Записей: 0
-[2023-12-25T16:06:59.567] [INFO] cApi - { pass: '1111', email: '222' }
-[2023-12-25T16:07:00.059] [DEBUG] cApi - Записей: 0
-[2023-12-25T16:07:14.898] [INFO] cApi - { pass: '1111', email: '222' }
-[2023-12-25T16:07:15.974] [DEBUG] cApi - Записей: 0
-[2023-12-25T16:09:10.127] [INFO] cApi - { pass: '333', email: '222' }
-[2023-12-25T16:09:10.873] [DEBUG] cApi - Записей: 0
-[2023-12-25T16:12:17.959] [INFO] cApi - { pass: '222', email: '222' }
-[2023-12-25T16:12:19.309] [DEBUG] cApi - Записей: 0
-[2023-12-25T16:16:08.690] [INFO] cApi - { pass: '222', login: '222' }
-[2023-12-25T16:21:20.682] [INFO] cApi - { pass: '222', login: '222' }
-[2023-12-25T16:21:21.123] [DEBUG] cApi - Записей: 0
-[2023-12-25T16:22:05.081] [INFO] cApi - { pass: '222@', login: '222' }
-[2023-12-25T16:22:05.653] [DEBUG] cApi - Записей: 0
-[2023-12-25T16:22:38.747] [INFO] cApi - { pass: '222', email: '222@' }
-[2023-12-25T16:23:35.890] [INFO] cApi - { pass: '222', email: '222@' }
-[2023-12-25T16:23:52.645] [INFO] cApi - { pass: '222', email: '222@' }
-[2023-12-25T16:24:10.822] [INFO] cApi - { pass: '222', email: '222@' }
-[2023-12-28T10:40:06.558] [INFO] cApi - { pass: '312', login: '123' }
-[2023-12-28T10:40:08.656] [DEBUG] cApi - Записей: 0
-[2023-12-28T10:40:34.178] [INFO] cApi - { pass: '54353', login: '345325' }
-[2023-12-28T10:40:35.419] [DEBUG] cApi - Записей: 0
-[2023-12-29T10:16:48.904] [INFO] cApi - { pass: 'spamigor', login: 'spamigor' }
-[2023-12-29T10:16:49.432] [DEBUG] cApi - Записей: 0
-[2023-12-29T10:16:58.588] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2023-12-29T10:16:59.046] [DEBUG] cApi - Записей: 1
-[2023-12-29T10:18:22.106] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2023-12-29T10:18:22.552] [DEBUG] cApi - Записей: 1
-[2023-12-29T10:19:40.679] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2023-12-29T10:19:41.207] [DEBUG] cApi - Записей: 1
-[2023-12-29T10:20:48.453] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2023-12-29T10:20:48.901] [DEBUG] cApi - Записей: 1
-[2023-12-29T10:21:42.997] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2023-12-29T10:21:43.712] [DEBUG] cApi - Записей: 1
-[2023-12-29T10:23:22.078] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2023-12-29T10:23:22.524] [DEBUG] cApi - Записей: 1
-[2023-12-29T10:38:56.131] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2023-12-29T10:38:56.761] [DEBUG] cApi - Записей: 1
-[2024-01-09T11:17:35.888] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-09T11:17:38.974] [DEBUG] cApi - Записей: 1
-[2024-01-09T11:20:21.978] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-09T11:20:23.336] [DEBUG] cApi - Записей: 1
-[2024-01-09T11:22:08.492] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-09T11:22:09.167] [DEBUG] cApi - Записей: 1
-[2024-01-09T11:38:47.508] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-09T11:38:48.129] [DEBUG] cApi - Записей: 1
-[2024-01-09T14:12:18.924] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-09T14:12:19.601] [DEBUG] cApi - Записей: 1
-[2024-01-09T16:27:48.532] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-09T16:27:48.941] [DEBUG] cApi - Записей: 1
-[2024-01-10T09:24:42.767] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-10T09:24:43.415] [DEBUG] cApi - Записей: 1
-[2024-01-10T10:26:28.729] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-10T10:26:29.591] [DEBUG] cApi - Записей: 1
-[2024-01-10T11:27:10.407] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-10T11:27:10.986] [DEBUG] cApi - Записей: 1
-[2024-01-10T12:35:29.802] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-10T12:35:31.023] [DEBUG] cApi - Записей: 1
-[2024-01-10T13:41:34.770] [INFO] cApi - { pass: '', login: 'spamigor.ru' }
-[2024-01-10T13:41:44.649] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-10T13:41:50.883] [DEBUG] cApi - Записей: 0
-[2024-01-10T13:42:04.916] [DEBUG] cApi - Записей: 0
-[2024-01-10T13:42:04.922] [DEBUG] cApi - Записей: 0
-[2024-01-10T13:42:25.633] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-10T13:42:39.170] [DEBUG] cApi - Записей: 1
-[2024-01-10T16:30:47.532] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-10T16:30:49.126] [DEBUG] cApi - Записей: 1
-[2024-01-11T10:20:41.776] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-11T10:20:42.953] [DEBUG] cApi - Записей: 1
-[2024-01-11T11:27:26.332] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-11T11:27:26.843] [DEBUG] cApi - Записей: 1
-[2024-01-11T13:51:37.316] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-11T13:51:38.013] [DEBUG] cApi - Записей: 1
-[2024-01-11T14:53:58.831] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-11T14:53:59.592] [DEBUG] cApi - Записей: 1
-[2024-01-11T16:04:55.001] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-11T16:04:56.316] [DEBUG] cApi - Записей: 1
-[2024-01-15T09:43:16.119] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-15T09:43:16.699] [DEBUG] cApi - Записей: 1
-[2024-01-15T10:47:45.030] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-15T10:47:45.663] [DEBUG] cApi - Записей: 1
-[2024-01-15T13:01:37.903] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-15T13:01:38.387] [DEBUG] cApi - Записей: 1
-[2024-01-15T14:05:17.614] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-15T14:05:18.012] [DEBUG] cApi - Записей: 1
-[2024-01-15T15:21:11.717] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-15T15:21:13.007] [DEBUG] cApi - Записей: 1
-[2024-01-16T11:00:28.180] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-16T11:00:29.580] [DEBUG] cApi - Записей: 1
-[2024-01-16T15:55:00.193] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-16T15:55:00.637] [DEBUG] cApi - Записей: 1
-[2024-01-17T13:24:48.140] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-17T13:24:48.844] [DEBUG] cApi - Записей: 1
-[2024-01-17T14:52:24.708] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
-[2024-01-17T14:52:25.601] [DEBUG] cApi - Записей: 1
+[2024-01-19T13:17:06.871] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
+[2024-01-19T13:17:07.042] [DEBUG] cApi - Записей: 1
+[2024-01-19T13:17:26.174] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-19T13:17:26.180] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-19T13:17:26.234] [INFO] cApi - 0
+[2024-01-19T13:17:26.235] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-19T13:17:26.235] [DEBUG] cApi - /
+[2024-01-19T13:17:26.236] [INFO] cApi - 0
+[2024-01-19T13:17:26.237] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-19T13:17:26.237] [DEBUG] cApi - /
+[2024-01-19T13:17:34.288] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-19T13:17:34.351] [INFO] cApi - 0
+[2024-01-19T13:17:34.351] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-19T13:17:34.352] [DEBUG] cApi - /
+[2024-01-19T13:17:50.959] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
+[2024-01-19T13:17:51.122] [DEBUG] cApi - Записей: 1
+[2024-01-19T13:17:52.085] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-19T13:17:52.088] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-19T13:17:52.145] [INFO] cApi - 0
+[2024-01-19T13:17:52.145] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-19T13:17:52.145] [DEBUG] cApi - /
+[2024-01-19T13:17:52.149] [INFO] cApi - 1
+[2024-01-19T13:17:52.149] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-19T13:17:52.150] [DEBUG] cApi - /
