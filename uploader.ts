@@ -71,19 +71,35 @@ app.get("/openLinc*", async function (req: any, res: any) {
 })
 
 app.get("/oneTime*", async function (req: any, res: any) {
+    console.log('oneTime');
     var filePath = '';
     if (req?.cookies && req.cookies?.token !== '') {
         var dat = await mongoS.find({ token: req.cookies.token });
-        if (dat.length)
-            filePath = path.normalize(dir+'/data/' + dat[0].login + '/' + decodeURI(req.url.substr(9)))
+        console.log(req.cookies.token);
+        console.log(dat);
+        if (dat.length) {
+            filePath = path.normalize(dir+'/data/' + dat[0].login + '/' + decodeURI(req.url.substr(9)));
+            console.log(filePath);
+            fs.readFile(filePath, function(error: any, data: any){              
+                if(error){                  
+                    res.statusCode = 404;
+                    res.end("Resourse not found!");
+                }   
+                else{
+                    res.end(data);
+                }
+            });
+        }
         else {
             res.statusCode = 404;
             res.end("Resourse not found!");
         }
     }
-    else console.log('smth wrong');
-    console.log(filePath);
-    res.sendFile(filePath)
+    else {
+        console.log('smth wrong');
+        res.end("Resourse not found!");
+    }
+    //res.sendFile(filePath)
     /*fs.readFile(filePath, function (error: any, data: any) {
         if (error) {
             res.statusCode = 404;

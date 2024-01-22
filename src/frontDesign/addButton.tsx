@@ -11,6 +11,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import Api from '../frontMech/api';
 import {User, userData} from '../frontMech/user';
 import Dialog from './dialog';
+import download_file from '../frontMech/downloadFile';
 
 const actions = [
   { icon: <FileUploadIcon />, name: 'Загрузить файл' },
@@ -63,14 +64,15 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder}: pro
             Api.askLS(User.getToken(), path, 'tar')
             .then((res: any)=>{
                 console.log(res.data.addr);
-                window.open((window.location.href==='http://localhost:8799/'?'http://localhost:8800/':'/') + res.data.addr)
+                download_file((window.location.href==='http://localhost:8799/'?'http://localhost:8800/':'/') + res.data.addr);
+                //window.open((window.location.href==='http://localhost:8799/'?'http://localhost:8800/':'/') + res.data.addr)
             }).catch((e: any)=>console.log(e))
         }
         else if (action === actions[0].name) {
             attFile();
             handleClose();
         }
-    }      
+    }
 
     const attFile = async () => {
         let input = document.createElement('input');

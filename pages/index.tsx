@@ -19,6 +19,7 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddButton from '../src/frontDesign/addButton'
 import Cookies from 'universal-cookie';
+import download_file from '../src/frontMech/downloadFile';
 
 const options = [
     'Открыть',
@@ -127,7 +128,7 @@ export default function Index() {
                 const cookies = new Cookies(null, {path: '/'});
                 cookies.set('token', User.getToken());
                 const fileAddr: string = encodeURI(`${window.location.href==='http://localhost:8799/'?'http://localhost:8800':''}/data/${path}${objName}`);
-                get_file_url(fileAddr);
+                download_file(fileAddr, objName);
                 console.log(fileAddr);
             }
             else if (action === 'Скачать' && index < files.directs.length) {const cookies = new Cookies(null, {path: '/'});
@@ -137,7 +138,7 @@ export default function Index() {
                     console.log(res.data);
                     console.log(window.location.href);
                     setTimeout((href: string, addr: string)=>
-                        {window.open(encodeURI((href==='http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr)))}, 
+                        {download_file(encodeURI((href==='http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr)), files.directs[index]+'.zip')}, 
                         3000, 
                         window.location.href, 
                         res.data.addr) 
@@ -161,22 +162,6 @@ export default function Index() {
             }
             menuClose();
         }
-    }
-
-    function get_file_url(url: string) {
-	
-        var link_url: any = document.createElement("a");
-        
-        link_url.download = true;
-        link_url.href = url;
-        document.body.appendChild(link_url);
-        link_url.click();
-        document.body.removeChild(link_url);    
-    }
- 
-    async function handleClick(event: any) {
-        event.preventDefault();
-        console.log(event.target.textContent);
     }
 
     return (

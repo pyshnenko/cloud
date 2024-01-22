@@ -288,3 +288,63 @@
   oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsInBhc3N3b3JkIjoiJDJiJDEwJDFLblN3bmFFUm9jNG5YenN5dVBjcGVMOVNRaTdwaTA4ZEVIWDJnaEZ0amJ2aWdyTHd6UDR5IiwiZmlyc3RfbmFtZSI6InNwYW1pZ29yIiwibGFzdF9uYW1lIjoic3BhbWlnb3IiLCJpZCI6MTEsImdvbGQiOjAsImlhdCI6MTcwNTQ3MDY4MSwiZXhwIjoxNzA1NDc0MjgxfQ.6b-pdm64q6bK-TgxQiwQi8nPhTiZGH8z8x2KkWCS1os'
 }
 [2024-01-19T12:54:58.300] [DEBUG] cApi - Записей: 1
+[2024-01-22T09:30:51.409] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsImZpcnN0X25hbWUiOiJzcGFtaWdvciIsImxhc3RfbmFtZSI6InNwYW1pZ29yIiwiaWQiOjExLCJnb2xkIjowLCJpYXQiOjE3MDU2NjUyMjAsImV4cCI6MTcwNTY2ODgyMH0.kR3Jx19FqSfbO_2lHBZK406Aj9mqungKFbW-Ba7EJWc'
+}
+[2024-01-22T09:30:51.494] [DEBUG] cApi - Записей: 1
+[2024-01-22T09:30:51.829] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-22T09:30:51.899] [INFO] cApi - 1
+[2024-01-22T09:30:51.900] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-22T09:30:51.900] [DEBUG] cApi - /
+[2024-01-22T09:32:42.776] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsImZpcnN0X25hbWUiOiJzcGFtaWdvciIsImxhc3RfbmFtZSI6InNwYW1pZ29yIiwiaWQiOjExLCJnb2xkIjowLCJpYXQiOjE3MDU2NjM2OTYsImV4cCI6MTcwNTY2NzI5Nn0.4MKTkmmEOkkbdd6DWLSApwut8jTQXG_DbUs0W8jElUI'
+}
+[2024-01-22T09:32:42.842] [DEBUG] cApi - Записей: 1
+[2024-01-22T09:32:42.994] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-22T09:32:43.053] [INFO] cApi - 1
+[2024-01-22T09:32:43.054] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-22T09:32:43.055] [DEBUG] cApi - /
+[2024-01-22T09:48:58.925] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-22T09:48:58.939] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-22T09:48:58.999] [INFO] cApi - 0
+[2024-01-22T09:48:59.000] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-22T09:48:59.000] [DEBUG] cApi - /
+[2024-01-22T09:48:59.001] [INFO] cApi - 0
+[2024-01-22T09:48:59.002] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-22T09:48:59.002] [DEBUG] cApi - /
+[2024-01-22T09:49:18.817] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-22T09:49:18.876] [INFO] cApi - 0
+[2024-01-22T09:49:18.876] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-22T09:49:18.877] [DEBUG] cApi - /
+[2024-01-22T09:49:32.889] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-22T09:49:32.895] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-22T09:49:32.956] [INFO] cApi - 0
+[2024-01-22T09:49:32.957] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-22T09:49:32.957] [DEBUG] cApi - /
+[2024-01-22T09:49:32.958] [INFO] cApi - 0
+[2024-01-22T09:49:32.959] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-22T09:49:32.959] [DEBUG] cApi - /
+[2024-01-22T09:49:40.694] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-22T09:49:40.700] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-22T09:49:40.772] [INFO] cApi - 0
+[2024-01-22T09:49:40.772] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-22T09:49:40.772] [DEBUG] cApi - /
+[2024-01-22T09:49:40.773] [INFO] cApi - 0
+[2024-01-22T09:49:40.773] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-22T09:49:40.773] [DEBUG] cApi - /
+[2024-01-22T09:49:58.512] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
+[2024-01-22T09:49:58.679] [DEBUG] cApi - Записей: 1
+[2024-01-22T09:50:00.743] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-22T09:50:00.751] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-22T09:50:00.803] [INFO] cApi - 0
+[2024-01-22T09:50:00.803] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-22T09:50:00.803] [DEBUG] cApi - /
+[2024-01-22T09:50:00.804] [INFO] cApi - 1
+[2024-01-22T09:50:00.804] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-22T09:50:00.805] [DEBUG] cApi - /
+[2024-01-22T09:50:15.916] [INFO] cApi - { location: '/', action: 'tar', name: '' }
+[2024-01-22T09:50:15.974] [INFO] cApi - 1
+[2024-01-22T09:50:15.975] [DEBUG] cApi - /home/spamigor/next/cloud/data
+[2024-01-22T09:50:15.975] [DEBUG] cApi - /

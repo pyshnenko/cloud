@@ -120,13 +120,27 @@ app.get("/oneTime*", function (req, res) {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
+                    console.log('oneTime');
                     filePath = '';
                     if (!((req === null || req === void 0 ? void 0 : req.cookies) && ((_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token) !== '')) return [3 /*break*/, 2];
                     return [4 /*yield*/, mongoS.find({ token: req.cookies.token })];
                 case 1:
                     dat = _b.sent();
-                    if (dat.length)
+                    console.log(req.cookies.token);
+                    console.log(dat);
+                    if (dat.length) {
                         filePath = path.normalize(dir + '/data/' + dat[0].login + '/' + decodeURI(req.url.substr(9)));
+                        console.log(filePath);
+                        fs.readFile(filePath, function (error, data) {
+                            if (error) {
+                                res.statusCode = 404;
+                                res.end("Resourse not found!");
+                            }
+                            else {
+                                res.end(data);
+                            }
+                        });
+                    }
                     else {
                         res.statusCode = 404;
                         res.end("Resourse not found!");
@@ -134,11 +148,9 @@ app.get("/oneTime*", function (req, res) {
                     return [3 /*break*/, 3];
                 case 2:
                     console.log('smth wrong');
+                    res.end("Resourse not found!");
                     _b.label = 3;
-                case 3:
-                    console.log(filePath);
-                    res.sendFile(filePath);
-                    return [2 /*return*/];
+                case 3: return [2 /*return*/];
             }
         });
     });
