@@ -128,10 +128,12 @@ export default async function handler(req: any, res: any) {
                     openData[buf.name] = true;
                     fs.writeFileSync(path.join(fileAddr, '%%%ssystemData.json'), JSON.stringify(openData));
                     res.status(200).json({
-                            tok: jwt.sign({addr: path.normalize('/'+dat[0].login+'/'+buf.location), 
+                        tok: jwt.sign({addr: path.normalize('/'+dat[0].login+'/'+buf.location), 
                             type: (directs.includes(buf.name)||buf.name==='/')?true: false,
-                            name: buf.name
-                        }, String(process.env.SIMPLETOK))})
+                            name: buf.name}, String(process.env.SIMPLETOK)),
+                        type: (directs.includes(buf.name)||buf.name==='/')?true: false,
+                        name: buf.name
+                    })
                 } catch(err) {
                     console.error(err)
                     res.status(500).json({message: 'some error'})
@@ -185,8 +187,11 @@ const makeZip = (archive: any, folderToGet: string, login: string, location: str
     const files = fs.readdirSync(folderToGet);
     files.forEach((file: any) => {
         const filePath = folderToGet + '/' + file;
-        archive.file(filePath, { name: file });
-        console.log('add file');
+        if (file === '%%%ssystemData.json') console.log('%%%ssystemData.json ignored');
+        else {
+            archive.file(filePath, { name: file });
+            console.log('add file');
+        }
     });  
     output.on('close', function() {
         console.log(archive.pointer() + ' total bytes');

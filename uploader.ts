@@ -19,47 +19,60 @@ app.use(cookieParser('secret key'));
 app.use(express.static(__dirname));
 
 app.get("/openLinc*", async function (req: any, res: any) {
+    console.log('\n\n\n\n\nyep\n\n\n');
     var filePath = '';
     var folderPath = '';
     if (req?.query && req.query?.tok && req.query?.tok !== '') {
-        const subPath = jwt.verify(decodeURI(req.query.tok), String(process.env.SIMPLETOK));
+        const subPath = await jwt.verify(decodeURI(req.query.tok), String(process.env.SIMPLETOK));
+        console.log('subPath');
         console.log(subPath);
-        filePath = path.normalize(path.join(dir, path.normalize('data/' + decodeURI(subPath.addr)), subPath.name));
+        filePath = path.normalize(path.join(dir, 'data', subPath.addr, subPath.name));
+        console.log('filePath');
+        console.log(filePath);
         folderPath = path.join(dir, path.normalize('data/' + subPath.addr));
+        console.log('folderPath');
+        console.log(folderPath);
         let addrArr: string[] = (path.normalize(subPath.addr)).split(path.sep);
         addrArr[0] = 'data';
         addrArr.pop();
+        console.log('addrArr');
+        console.log(addrArr);
         let access = false;
         for (let i = addrArr.length; i>1; i--) {
             let middlPath = '';
+            console.log('middlPath');
+            console.log(middlPath);
             for (let j = 0; j<i; j++) middlPath+='/'+addrArr[j];
             middlPath = path.join(dir, middlPath, '/%%%ssystemData.json');
+            console.log('middlPath2');
+            console.log(middlPath);
             if (fs.existsSync(middlPath)) {
                 const secureJson = JSON.parse(fs.readFileSync(middlPath));
+                console.log('secureJson');
+                console.log(secureJson);
                 if ((secureJson?.['/'])||(i===addrArr.length&&secureJson?.[subPath.name])){
                     console.log('access denied');
                     access = true;
                     break;
                 }
             }
-            console.log(middlPath);
         }
-        console.log(addrArr);
         if (access) {
             if (subPath.type) res.send(`<h4>Адрес: ${filePath}</h4><h4>Тип: 'Папка'</h4><h4>Имя файла или папки: ${subPath.name}</h4><h4>Доступ ${access?'Разрешен':'Запрещен'}</h4>`);
             else {    
                 console.log('выдаем')
                 console.log(filePath);
-                res.sendFile(filePath);
-                /*fs.readFile(decodeURI(encodeURI(filePath)), function (error: any, dataB: any) {
-                    if (error) {
+                //res.sendFile(filePath);
+                fs.readFile(filePath, function(error: any, data: any){              
+                    if(error){                  
                         res.statusCode = 404;
                         res.end("Resourse not found!");
+                    }   
+                    else{
+                        console.log('выдаем файл')
+                        res.end(data);
                     }
-                    else {
-                        res.sendFile(dataB);
-                    }
-                });*/
+                });
             }
         }
         else {

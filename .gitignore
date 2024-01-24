@@ -39,3 +39,4 @@ yarn-error.log*
 next-env.d.ts
 log/cloudtokenUpdlog.log
 cloud.spamigor.ru.conf
+log/cloudLoginlog.log

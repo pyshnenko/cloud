@@ -1,5 +1,4 @@
 require('dotenv').config();
-let FileSaver = require('file-saver');
 import jwt from 'jsonwebtoken';
 import React, { useEffect, useState, useRef, createContext, useContext } from 'react';
 import {TokenLocalData} from '../src/types/api/types';
@@ -155,9 +154,9 @@ export default function Index() {
             }
             else if (action === 'Поделиться') {
                 Api.askLS(User.getToken(), (index<files.directs.length?path+objName:path), 'chmod', (index<files.directs.length?'/':objName))
-                .then((res: any)=>console.log(
-                    `${window.location.href==='http://localhost:8800/'?'http://localhost:8800':'https://cloud.spamigor.ru'}/openLinc?tok=${encodeURI(res.data.tok)}`
-                ))
+                .then((res: any)=>{
+                    window.open(encodeURI(`/download?tok=${encodeURI(res.data.tok)}&name=${res.data.name}&type=${res.data.type}`))
+                })
                 .catch((e: any)=>console.log(e))
             }
             menuClose();

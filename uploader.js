@@ -57,59 +57,78 @@ app.get("/openLinc*", function (req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var filePath, folderPath, subPath, addrArr, access, i, middlPath, j, secureJson;
         return __generator(this, function (_c) {
-            filePath = '';
-            folderPath = '';
-            if ((req === null || req === void 0 ? void 0 : req.query) && ((_a = req.query) === null || _a === void 0 ? void 0 : _a.tok) && ((_b = req.query) === null || _b === void 0 ? void 0 : _b.tok) !== '') {
-                subPath = jwt.verify(decodeURI(req.query.tok), String(process.env.SIMPLETOK));
-                console.log(subPath);
-                filePath = path.normalize(path.join(dir, path.normalize('data/' + decodeURI(subPath.addr)), subPath.name));
-                folderPath = path.join(dir, path.normalize('data/' + subPath.addr));
-                addrArr = (path.normalize(subPath.addr)).split(path.sep);
-                addrArr[0] = 'data';
-                addrArr.pop();
-                access = false;
-                for (i = addrArr.length; i > 1; i--) {
-                    middlPath = '';
-                    for (j = 0; j < i; j++)
-                        middlPath += '/' + addrArr[j];
-                    middlPath = path.join(dir, middlPath, '/%%%ssystemData.json');
-                    if (fs.existsSync(middlPath)) {
-                        secureJson = JSON.parse(fs.readFileSync(middlPath));
-                        if ((secureJson === null || secureJson === void 0 ? void 0 : secureJson['/']) || (i === addrArr.length && (secureJson === null || secureJson === void 0 ? void 0 : secureJson[subPath.name]))) {
-                            console.log('access denied');
-                            access = true;
-                            break;
+            switch (_c.label) {
+                case 0:
+                    console.log('\n\n\n\n\nyep\n\n\n');
+                    filePath = '';
+                    folderPath = '';
+                    if (!((req === null || req === void 0 ? void 0 : req.query) && ((_a = req.query) === null || _a === void 0 ? void 0 : _a.tok) && ((_b = req.query) === null || _b === void 0 ? void 0 : _b.tok) !== '')) return [3 /*break*/, 2];
+                    return [4 /*yield*/, jwt.verify(decodeURI(req.query.tok), String(process.env.SIMPLETOK))];
+                case 1:
+                    subPath = _c.sent();
+                    console.log('subPath');
+                    console.log(subPath);
+                    filePath = path.normalize(path.join(dir, 'data', subPath.addr, subPath.name));
+                    console.log('filePath');
+                    console.log(filePath);
+                    folderPath = path.join(dir, path.normalize('data/' + subPath.addr));
+                    console.log('folderPath');
+                    console.log(folderPath);
+                    addrArr = (path.normalize(subPath.addr)).split(path.sep);
+                    addrArr[0] = 'data';
+                    addrArr.pop();
+                    console.log('addrArr');
+                    console.log(addrArr);
+                    access = false;
+                    for (i = addrArr.length; i > 1; i--) {
+                        middlPath = '';
+                        console.log('middlPath');
+                        console.log(middlPath);
+                        for (j = 0; j < i; j++)
+                            middlPath += '/' + addrArr[j];
+                        middlPath = path.join(dir, middlPath, '/%%%ssystemData.json');
+                        console.log('middlPath2');
+                        console.log(middlPath);
+                        if (fs.existsSync(middlPath)) {
+                            secureJson = JSON.parse(fs.readFileSync(middlPath));
+                            console.log('secureJson');
+                            console.log(secureJson);
+                            if ((secureJson === null || secureJson === void 0 ? void 0 : secureJson['/']) || (i === addrArr.length && (secureJson === null || secureJson === void 0 ? void 0 : secureJson[subPath.name]))) {
+                                console.log('access denied');
+                                access = true;
+                                break;
+                            }
                         }
                     }
-                    console.log(middlPath);
-                }
-                console.log(addrArr);
-                if (access) {
-                    if (subPath.type)
-                        res.send("<h4>\u0410\u0434\u0440\u0435\u0441: ".concat(filePath, "</h4><h4>\u0422\u0438\u043F: '\u041F\u0430\u043F\u043A\u0430'</h4><h4>\u0418\u043C\u044F \u0444\u0430\u0439\u043B\u0430 \u0438\u043B\u0438 \u043F\u0430\u043F\u043A\u0438: ").concat(subPath.name, "</h4><h4>\u0414\u043E\u0441\u0442\u0443\u043F ").concat(access ? 'Разрешен' : 'Запрещен', "</h4>"));
-                    else {
-                        console.log('выдаем');
-                        console.log(filePath);
-                        res.sendFile(filePath);
-                        /*fs.readFile(decodeURI(encodeURI(filePath)), function (error: any, dataB: any) {
-                            if (error) {
-                                res.statusCode = 404;
-                                res.end("Resourse not found!");
-                            }
-                            else {
-                                res.sendFile(dataB);
-                            }
-                        });*/
+                    if (access) {
+                        if (subPath.type)
+                            res.send("<h4>\u0410\u0434\u0440\u0435\u0441: ".concat(filePath, "</h4><h4>\u0422\u0438\u043F: '\u041F\u0430\u043F\u043A\u0430'</h4><h4>\u0418\u043C\u044F \u0444\u0430\u0439\u043B\u0430 \u0438\u043B\u0438 \u043F\u0430\u043F\u043A\u0438: ").concat(subPath.name, "</h4><h4>\u0414\u043E\u0441\u0442\u0443\u043F ").concat(access ? 'Разрешен' : 'Запрещен', "</h4>"));
+                        else {
+                            console.log('выдаем');
+                            console.log(filePath);
+                            //res.sendFile(filePath);
+                            fs.readFile(filePath, function (error, data) {
+                                if (error) {
+                                    res.statusCode = 404;
+                                    res.end("Resourse not found!");
+                                }
+                                else {
+                                    console.log('выдаем файл');
+                                    res.end(data);
+                                }
+                            });
+                        }
                     }
-                }
-                else {
-                    res.statusCode = 401;
-                    res.end('go out');
-                }
+                    else {
+                        res.statusCode = 401;
+                        res.end('go out');
+                    }
+                    return [3 /*break*/, 3];
+                case 2:
+                    console.log('smth wrong');
+                    _c.label = 3;
+                case 3: return [2 /*return*/];
             }
-            else
-                console.log('smth wrong');
-            return [2 /*return*/];
         });
     });
 });

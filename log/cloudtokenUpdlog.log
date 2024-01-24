@@ -348,3 +348,8 @@
 [2024-01-22T09:50:15.974] [INFO] cApi - 1
 [2024-01-22T09:50:15.975] [DEBUG] cApi - /home/spamigor/next/cloud/data
 [2024-01-22T09:50:15.975] [DEBUG] cApi - /
+[2024-01-24T09:03:26.128] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsImZpcnN0X25hbWUiOiJzcGFtaWdvciIsImxhc3RfbmFtZSI6InNwYW1pZ29yIiwiaWQiOjExLCJnb2xkIjowLCJpYXQiOjE3MDYwMDQxNDksImV4cCI6MTcwNjAwNzc0OX0.chrmGwFbA6fGWDDKHZMtpkk4xSeRItHUc9vDrTvewlk'
+}
+[2024-01-24T09:03:26.587] [DEBUG] cApi - Записей: 1
