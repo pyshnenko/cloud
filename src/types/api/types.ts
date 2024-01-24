@@ -31,3 +31,7 @@ export interface TokenLocalData {
     last_name: string,
     login: string
 }
+
+export interface ReqSecType {
+    act: string
+}

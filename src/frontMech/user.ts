@@ -13,10 +13,12 @@ const getToken = () => {
     return stoken;
 }
 
-const setToken = (token: string, atoken: string, decr?: any) => {
+const setToken = (token: string, atoken: string, decr?: any, save: boolean = true) => {
 
-    localStorage.setItem('cloudToken', token);
-    localStorage.setItem('cloudAToken', atoken);
+    if (save) {
+        localStorage.setItem('cloudToken', token);
+        localStorage.setItem('cloudAToken', atoken);
+    }
     stoken = token;
     satoken = atoken;
     auth = true;

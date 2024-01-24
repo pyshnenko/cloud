@@ -1,6 +1,10 @@
 import { loginApi, privateApi, getApi } from "./httpserv";
 import {loginType, RegisterReqData} from './../types/api/types'
 
+const askSimpleTok = () => {
+    return loginApi().post('/secure', {act: 'simpleToken'});
+}
+
 const login = (data: loginType) => {
     return loginApi().post('/login', data);
 }
@@ -21,7 +25,8 @@ const Api = {
     login,
     register,
     tokenUPD,
-    askLS
+    askLS,
+    askSimpleTok
 }
 
 export default Api;

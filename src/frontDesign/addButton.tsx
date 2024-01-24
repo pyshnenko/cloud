@@ -95,7 +95,9 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder}: pro
                     },
                     body: data,
                 }                
-                const response = await fetch(window.location.href==='http://localhost:8799/'?'http://localhost:8800/upload':'/upload', options);//http://localhost:8800/upload
+                const response = await fetch((window.location.href.slice(0,22)==='http://localhost:8799/')?
+                    'http://localhost:8800/upload':
+                    '/upload', options);//http://localhost:8800/upload
                 const res = await response.json();
                 console.log(res);
                 folder(path);

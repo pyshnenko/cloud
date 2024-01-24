@@ -39,10 +39,30 @@ export default async function handler(req: any, res: any) {
         }
         const oldToken: string = req.headers?.authorization.slice(7) || buf?.token || '';
         let dat = await mongoS.find({token: oldToken});
+        let access = false;
+        if (dat.length===0) {
+            let addrArr: string[] = (path.normalize(buf.location)).split(path.sep);
+            addrArr[0] = 'data';
+            console.log(addrArr)
+            for (let i = addrArr.length; i>1; i--) {
+                let middlPath = '';
+                for (let j = 0; j<i; j++) middlPath+='/'+addrArr[j];
+                middlPath = path.join(dir, middlPath, '/%%%ssystemData.json');
+                if (fs.existsSync(middlPath)) {
+                    const secureJson = JSON.parse(fs.readFileSync(middlPath));
+                    if (secureJson?.['/']){
+                        console.log('access denied');
+                        access = true;
+                        break;
+                    }
+                }
+            }
+            if (!access) console.log('failed')
+        }
         logger.info(dat.length);
         logger.debug(path.join(dir, 'data'));
         logger.debug(path.normalize(buf.location));
-        if (dat.length) {
+        if (dat.length || access) {
             console.log(buf)
             if (buf.action === 'mkdir' && buf?.name!=='') {
                 try {
@@ -89,10 +109,11 @@ export default async function handler(req: any, res: any) {
             }
             else if (buf.action === 'ls') {
                 const files: string[] = fs.readdirSync(path.join(dir, 'data'));
-                if (files.includes(dat[0].login)) {
+                if (access||(files.includes(dat[0]?.login))) {
+                    const location = access ? path.join(dir, 'data', path.normalize(buf.location)) : path.join(dir, 'data', dat[0].login, path.normalize(buf.location))
                     let userFiles = {
-                        directs: fs.readdirSync(path.join(dir, 'data', dat[0].login, path.normalize(buf.location)), { withFileTypes: true }).filter((d: any) => d.isDirectory()).map((d: any)=> d.name),
-                        files: fs.readdirSync(path.join(dir, 'data', dat[0].login, path.normalize(buf.location)), { withFileTypes: true }).filter((d: any) => !d.isDirectory()).map((d: any)=> d.name),
+                        directs: fs.readdirSync(location, { withFileTypes: true }).filter((d: any) => d.isDirectory()).map((d: any)=> d.name),
+                        files: fs.readdirSync(location, { withFileTypes: true }).filter((d: any) => !d.isDirectory()).map((d: any)=> d.name),
                     }
                     if (userFiles.files.includes('%%%ssystemData.json')) userFiles.files.splice(userFiles.files.indexOf('%%%ssystemData.json'), 1)
                     res.status(200).json(userFiles);
