@@ -48,26 +48,28 @@ export default async function handler(req: any, res: any) {
                 let middlPath = '';
                 for (let j = 0; j<i; j++) middlPath+='/'+addrArr[j];
                 middlPath = path.join(dir, middlPath, '/%%%ssystemData.json');
+                console.log('middle')
+                console.log(middlPath);
                 if (fs.existsSync(middlPath)) {
                     const secureJson = JSON.parse(fs.readFileSync(middlPath));
                     if (secureJson?.['/']){
                         console.log('access denied');
                         access = true;
+                        dat[0] = {login: ''};
                         break;
                     }
                 }
             }
             if (!access) console.log('failed')
-        }
-        logger.info(dat.length);
-        logger.debug(path.join(dir, 'data'));
-        logger.debug(path.normalize(buf.location));
+        }    
         if (dat.length || access) {
+            const location = access ? path.join(dir, 'data', path.normalize(buf.location)) : path.join(dir, 'data', dat[0].login, path.normalize(buf.location))
+            logger.debug(path.normalize(location));
             console.log(buf)
             if (buf.action === 'mkdir' && buf?.name!=='') {
                 try {
                     logger.debug(`folder for ${dat[0].login} created`)
-                    await fs.mkdirSync(path.join(dir, 'data', dat[0].login, path.normalize(buf.location), buf.name));
+                    await fs.mkdirSync(path.join(location, buf.name));
                     res.status(200).json([]);
                 }
                 catch (e: any) {
@@ -77,30 +79,31 @@ export default async function handler(req: any, res: any) {
             }
             else if (buf?.name && buf.action === 'rm' && buf?.name!=='') {
                 let folders: {dir: string[], files: string[]} = {dir: [], files: []};
-                fs.readdirSync(path.join(dir, 'data', dat[0].login, path.normalize(buf.location)), { withFileTypes: true }).filter((d: any)=> {
+                console.log(location);
+                fs.readdirSync(location, { withFileTypes: true }).filter((d: any)=> {
                     if (d.isDirectory()) folders.dir.push(d.name)
                     else folders.files.push(d.name)
                 });
                 if (folders.dir.includes(buf.name)) {
                     try {
-                        fs.rmdirSync(path.join(dir, 'data', dat[0].login, path.normalize(buf.location), buf.name), {recursive:true});
-                        logger.info(`Directory ${buf.location}/${buf.name} deleted by ${dat[0].login}`);
+                        fs.rmdirSync(path.join(location, buf.name), {recursive:true});
+                        logger.info(`Directory ${location}/${buf.name} deleted by ${dat[0].login}`);
                         res.status(200).json({});
                     }
                     catch (e: any) {
-                        logger.error(`directory ${buf.location}/${buf.name} not deleted by ${dat[0].login}`)
+                        logger.error(`directory ${location}/${buf.name} not deleted by ${dat[0].login}`)
                         logger.debug(e);
                         res.status(500).json({message: 'directory not deleted'})
                     }
                 }
                 else if (folders.files.includes(buf.name)) {
                     try {
-                        fs.unlinkSync(path.join(dir, 'data', dat[0].login, path.normalize(buf.location), buf.name));
-                        logger.info(`File ${buf.location}/${buf.name} deleted by ${dat[0].login}`);
+                        fs.unlinkSync(path.join(location, buf.name));
+                        logger.info(`File ${location}/${buf.name} deleted by ${dat[0].login}`);
                         res.status(200).json({});
                     }
                     catch (e: any) {
-                        logger.error(`file ${buf.location}/${buf.name} not deleted by ${dat[0].login}`)
+                        logger.error(`file ${location}/${buf.name} not deleted by ${dat[0].login}`)
                         logger.debug(e);
                         res.status(500).json({message: 'file not deleted'})
                     }
@@ -110,7 +113,6 @@ export default async function handler(req: any, res: any) {
             else if (buf.action === 'ls') {
                 const files: string[] = fs.readdirSync(path.join(dir, 'data'));
                 if (access||(files.includes(dat[0]?.login))) {
-                    const location = access ? path.join(dir, 'data', path.normalize(buf.location)) : path.join(dir, 'data', dat[0].login, path.normalize(buf.location))
                     let userFiles = {
                         directs: fs.readdirSync(location, { withFileTypes: true }).filter((d: any) => d.isDirectory()).map((d: any)=> d.name),
                         files: fs.readdirSync(location, { withFileTypes: true }).filter((d: any) => !d.isDirectory()).map((d: any)=> d.name),
@@ -131,25 +133,24 @@ export default async function handler(req: any, res: any) {
                 }
             }
             else if ((buf.action === 'chmod')&&(buf?.name)&&(buf.name!=='')) {
-                const fileAddr = path.join(dir, 'data', dat[0].login, path.normalize(buf.location));
                 const directs:string[] = fs.readdirSync(
                     path.join(
                         dir, 
                         'data', 
                         dat[0].login, 
-                        path.normalize(buf.location)), 
+                        location), 
                     { withFileTypes: true })
                     .filter((d: any) => d.isDirectory()).map((d: any)=> d.name)
                 let openData: any = {};
                 try {
                     let openData: any = {};
-                    if (fs.existsSync(path.join(fileAddr, '%%%ssystemData.json'))) {
-                        openData = JSON.parse(fs.readFileSync(path.join(fileAddr, '%%%ssystemData.json')));
+                    if (fs.existsSync(path.join(location, '%%%ssystemData.json'))) {
+                        openData = JSON.parse(fs.readFileSync(path.join(location, '%%%ssystemData.json')));
                     }
                     openData[buf.name] = true;
-                    fs.writeFileSync(path.join(fileAddr, '%%%ssystemData.json'), JSON.stringify(openData));
+                    fs.writeFileSync(path.join(location, '%%%ssystemData.json'), JSON.stringify(openData));
                     res.status(200).json({
-                        tok: jwt.sign({addr: path.normalize('/'+dat[0].login+'/'+buf.location), 
+                        tok: jwt.sign({addr: path.normalize('/'+dat[0].login+'/'+location), 
                             type: (directs.includes(buf.name)||buf.name==='/')?true: false,
                             name: buf.name}, String(process.env.SIMPLETOK)),
                         type: (directs.includes(buf.name)||buf.name==='/')?true: false,
@@ -161,7 +162,6 @@ export default async function handler(req: any, res: any) {
                 }
             }
             else if (buf.action === 'tar') {
-                const folderToGet = path.join(dir, 'data', dat[0].login, path.normalize(buf.location));
                 const archive = archiver('zip', { zlib: { level: 9 } });
                 archive.on('warning', (err: any) => {
                     if (err.code === 'ENOENT') {
@@ -174,9 +174,9 @@ export default async function handler(req: any, res: any) {
                     throw err;
                 });
                 console.log('makeZip');
-                makeZip(archive, folderToGet, dat[0].login, buf.location);
+                makeZip(archive, location, dat[0].login, location);
                 console.log('endMakeZip');
-                res.status(200).json({addr: 'oneTime/' + buf.location + '/' + dat[0].login + '-archive.zip' })   
+                res.status(200).json({addr: 'oneTime/' + buf.location + '/' + dat[0].login + 'Archive.zip' })   
                 console.log('after res');
                 //res.setHeader('Content-disposition', 'attachment; filename=archive.zip');
                 //res.setHeader('Content-type', 'application/zip');

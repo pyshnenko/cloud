@@ -367,3 +367,21 @@
   oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsInBhc3N3b3JkIjoiJDJiJDEwJDFLblN3bmFFUm9jNG5YenN5dVBjcGVMOVNRaTdwaTA4ZEVIWDJnaEZ0amJ2aWdyTHd6UDR5IiwiZmlyc3RfbmFtZSI6InNwYW1pZ29yIiwibGFzdF9uYW1lIjoic3BhbWlnb3IiLCJpZCI6MTEsImdvbGQiOjAsImlhdCI6MTcwNjA5NjU1OCwiZXhwIjoxNzA2MTAwMTU4fQ.BDL_s1ClhEWwg6dt5x6A6p9coLYG3iuaOYkjqwWNtOE'
 }
 [2024-01-24T16:05:51.766] [DEBUG] cApi - Записей: 1
+[2024-01-25T11:21:39.659] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsImZpcnN0X25hbWUiOiJzcGFtaWdvciIsImxhc3RfbmFtZSI6InNwYW1pZ29yIiwiaWQiOjExLCJnb2xkIjowLCJpYXQiOjE3MDYxMDE2OTIsImV4cCI6MTcwNjEwNTI5Mn0.fsZdQhV5Ebq42nmim12y0cctu2rVb0ufr0swfPFfjyo'
+}
+[2024-01-25T11:21:40.202] [DEBUG] cApi - Записей: 1
+[2024-01-25T13:11:21.058] [INFO] cApi - { location: '\\spamigor\\папка', action: 'ls', name: '' }
+[2024-01-25T13:11:21.062] [INFO] cApi - { location: '\\spamigor\\папка', action: 'ls', name: '' }
+[2024-01-25T13:11:21.063] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsInBhc3N3b3JkIjoiJDJiJDEwJDFLblN3bmFFUm9jNG5YenN5dVBjcGVMOVNRaTdwaTA4ZEVIWDJnaEZ0amJ2aWdyTHd6UDR5IiwiZmlyc3RfbmFtZSI6InNwYW1pZ29yIiwibGFzdF9uYW1lIjoic3BhbWlnb3IiLCJpZCI6MTEsImdvbGQiOjAsImlhdCI6MTcwNjE3MDkwMCwiZXhwIjoxNzA2MTc0NTAwfQ.Seq3-coz8HQ86bYi8E92aOwnhHFW_Fajasp53T-cXEM'
+}
+[2024-01-25T13:11:21.072] [INFO] cApi - { location: '/', action: 'ls', name: '' }
+[2024-01-25T13:11:21.148] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data\spamigor\папка\qqwwee\
+[2024-01-25T13:11:21.168] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data\spamigor\папка\qqwwee\
+[2024-01-25T13:11:21.806] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data\spamigor\
+[2024-01-25T13:11:21.813] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data\spamigor\папка
+[2024-01-25T13:11:21.913] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data\spamigor\папка
+[2024-01-25T13:11:21.980] [DEBUG] cApi - Записей: 0

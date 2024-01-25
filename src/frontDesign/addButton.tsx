@@ -24,10 +24,11 @@ interface props {
     path: string, 
     setPath: (d: string)=>void, 
     files: {directs: string[], files: string[]}, 
-    folder: (p: string)=>void
+    folder: (p: string)=>void,
+    notVerify?: boolean
 }
 
-export default function SpeedDialTooltipOpen({path, setPath, files, folder}: props) {
+export default function SpeedDialTooltipOpen({path, setPath, files, folder, notVerify}: props) {
     const [open, setOpen] = React.useState(false);
     const [dialogResult, setDialogResult] = React.useState<{ready: boolean, text?: string, numb?: number}>({ready: false});
     const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
@@ -40,7 +41,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder}: pro
                 createFolder(dialogResult.text);
                 setDialogOpen(false);
                 handleClose();
-                setPath(path+'/'+dialogResult.text);
+                //setPath(path+'/'+dialogResult.text);
                 setDialogResult({ready: false});
             }
             else if (!dialogResult.text) {
@@ -88,7 +89,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder}: pro
                 const options = {
                     method: 'POST',
                     headers: {
-                        folder: encodeURI(userData.login+'/'+(path==='/'?'':path)),
+                        folder: encodeURI((notVerify?'':(userData.login+'/'))+(path==='/'?'':path)),
                         fname: encodeURI(files[i].name),
                         user: encodeURI(userData.login),
                         token: encodeURI(User.getToken())
@@ -115,8 +116,8 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder}: pro
         .then((res: any)=>{
             console.log(res);
             setPath(path+'/'+name);
+            setDialogOpen(false);
         }).catch((e: any)=>console.log(e));
-        setDialogOpen(false);
     }
 
   return (

@@ -34,8 +34,8 @@ export default function DownloadPage () {
                 console.log(res);
                 const tokData: any = jwt.verify(tok, res.data.simpleToken);
                 if (tokData?.addr && tokData.addr!=='') {
-                    setOPath(tokData.addr);
-                    const pathArr = tokData.addr.split(tokData.addr.indexOf('/')===-1?'\\':'/');
+                    setOPath(tokData.addr.replace(/\\/g, '/'));
+                    const pathArr = tokData.addr.replace(/\\/g, '/').split('/');
                     let bbPath: string = '';
                     for (let i = 2; i<pathArr.length; i++) bbPath+='/'+pathArr[i];
                     console.log(bbPath);
