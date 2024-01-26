@@ -48,6 +48,7 @@ var path = require('path');
 var mongo = require('./src/mech/mongo');
 var mongoS = new mongo();
 var jwt = require('jsonwebtoken');
+var access_check = require('./src/mech/requested_feature').access_check;
 var dir = process.cwd();
 app.use(cors());
 app.use(cookieParser('secret key'));
@@ -55,7 +56,7 @@ app.use(express.static(__dirname));
 app.get("/openLinc*", function (req, res) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var filePath, folderPath, subPath, addrArr, access, i, middlPath, j, secureJson;
+        var filePath, folderPath, subPath;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -66,47 +67,12 @@ app.get("/openLinc*", function (req, res) {
                     return [4 /*yield*/, jwt.verify(decodeURI(req.query.tok), String(process.env.SIMPLETOK))];
                 case 1:
                     subPath = _c.sent();
-                    console.log('subPath');
-                    console.log(subPath);
                     filePath = path.normalize(path.join(dir, 'data', subPath.addr, subPath.name));
-                    console.log('filePath');
-                    console.log(filePath);
                     folderPath = path.join(dir, path.normalize('data/' + subPath.addr));
-                    console.log('folderPath');
-                    console.log(folderPath);
-                    addrArr = (path.normalize(subPath.addr)).split(path.sep);
-                    addrArr[0] = 'data';
-                    addrArr.pop();
-                    console.log('addrArr');
-                    console.log(addrArr);
-                    access = false;
-                    for (i = addrArr.length; i > 1; i--) {
-                        middlPath = '';
-                        console.log('middlPath');
-                        console.log(middlPath);
-                        for (j = 0; j < i; j++)
-                            middlPath += '/' + addrArr[j];
-                        middlPath = path.join(dir, middlPath, '/%%%ssystemData.json');
-                        console.log('middlPath2');
-                        console.log(middlPath);
-                        if (fs.existsSync(middlPath)) {
-                            secureJson = JSON.parse(fs.readFileSync(middlPath));
-                            console.log('secureJson');
-                            console.log(secureJson);
-                            if ((secureJson === null || secureJson === void 0 ? void 0 : secureJson['/']) || (i === addrArr.length && (secureJson === null || secureJson === void 0 ? void 0 : secureJson[subPath.name]))) {
-                                console.log('access denied');
-                                access = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (access) {
+                    if (access_check(subPath.addr, subPath.name)) {
                         if (subPath.type)
-                            res.send("<h4>\u0410\u0434\u0440\u0435\u0441: ".concat(filePath, "</h4><h4>\u0422\u0438\u043F: '\u041F\u0430\u043F\u043A\u0430'</h4><h4>\u0418\u043C\u044F \u0444\u0430\u0439\u043B\u0430 \u0438\u043B\u0438 \u043F\u0430\u043F\u043A\u0438: ").concat(subPath.name, "</h4><h4>\u0414\u043E\u0441\u0442\u0443\u043F ").concat(access ? 'Разрешен' : 'Запрещен', "</h4>"));
+                            res.send("<h4>\u0410\u0434\u0440\u0435\u0441: ".concat(filePath, "</h4><h4>\u0422\u0438\u043F: '\u041F\u0430\u043F\u043A\u0430'</h4><h4>\u0418\u043C\u044F \u0444\u0430\u0439\u043B\u0430 \u0438\u043B\u0438 \u043F\u0430\u043F\u043A\u0438: ").concat(subPath.name, "</h4><h4>\u0414\u043E\u0441\u0442\u0443\u043F \u0420\u0430\u0437\u0440\u0435\u0448\u0435\u043D</h4>"));
                         else {
-                            console.log('выдаем');
-                            console.log(filePath);
-                            //res.sendFile(filePath);
                             fs.readFile(filePath, function (error, data) {
                                 if (error) {
                                     res.statusCode = 404;
@@ -135,20 +101,29 @@ app.get("/openLinc*", function (req, res) {
 app.get("/oneTime*", function (req, res) {
     var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var filePath, dat;
+        var filePath, login, access, dat;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     console.log('oneTime');
-                    filePath = '';
+                    filePath = '', login = '', access = false;
                     if (!((req === null || req === void 0 ? void 0 : req.cookies) && ((_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token) !== '')) return [3 /*break*/, 2];
                     return [4 /*yield*/, mongoS.find({ token: req.cookies.token })];
                 case 1:
                     dat = _b.sent();
+                    if (dat.length) {
+                        access = true;
+                        login = dat[0].login;
+                    }
                     console.log(req.cookies.token);
                     console.log(dat);
-                    if (dat.length) {
-                        filePath = path.normalize(dir + '/data/' + dat[0].login + '/' + decodeURI(req.url.substr(9)));
+                    return [3 /*break*/, 3];
+                case 2:
+                    access = access_check(login + '/' + decodeURI(req.url.substr(9)));
+                    _b.label = 3;
+                case 3:
+                    if (access) {
+                        filePath = path.normalize(dir + '/data/' + login + '/' + decodeURI(req.url.substr(9)));
                         console.log(filePath);
                         fs.readFile(filePath, function (error, data) {
                             if (error) {
@@ -164,12 +139,7 @@ app.get("/oneTime*", function (req, res) {
                         res.statusCode = 404;
                         res.end("Resourse not found!");
                     }
-                    return [3 /*break*/, 3];
-                case 2:
-                    console.log('smth wrong');
-                    res.end("Resourse not found!");
-                    _b.label = 3;
-                case 3: return [2 /*return*/];
+                    return [2 /*return*/];
             }
         });
     });

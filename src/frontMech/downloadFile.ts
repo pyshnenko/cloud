@@ -1,4 +1,4 @@
-export default function download_file(fileURL: string, fileName: string = 'spamigor-archive.zip') {
+export default function download_file(fileURL: string, fileName: string = 'Archive.zip') {
     var save = document.createElement('a');
     save.href = fileURL;
     save.target = '_blank';

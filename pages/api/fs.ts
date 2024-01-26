@@ -8,6 +8,7 @@ import NextCors from 'nextjs-cors';
 const dir = process.cwd();
 const mongo = require('./../../src/mech/mongo');
 const mongoS = new mongo();
+const {access_check, makeZip} = require('../../src/mech/requested_feature')
 
 const log4js = require("log4js");
 
@@ -39,31 +40,11 @@ export default async function handler(req: any, res: any) {
         }
         const oldToken: string = req.headers?.authorization.slice(7) || buf?.token || '';
         let dat = await mongoS.find({token: oldToken});
-        let access = false;
-        if (dat.length===0) {
-            let addrArr: string[] = (path.normalize(buf.location)).split(path.sep);
-            addrArr[0] = 'data';
-            console.log(addrArr)
-            for (let i = addrArr.length; i>1; i--) {
-                let middlPath = '';
-                for (let j = 0; j<i; j++) middlPath+='/'+addrArr[j];
-                middlPath = path.join(dir, middlPath, '/%%%ssystemData.json');
-                console.log('middle')
-                console.log(middlPath);
-                if (fs.existsSync(middlPath)) {
-                    const secureJson = JSON.parse(fs.readFileSync(middlPath));
-                    if (secureJson?.['/']){
-                        console.log('access denied');
-                        access = true;
-                        dat[0] = {login: ''};
-                        break;
-                    }
-                }
-            }
-            if (!access) console.log('failed')
-        }    
-        if (dat.length || access) {
-            const location = access ? path.join(dir, 'data', path.normalize(buf.location)) : path.join(dir, 'data', dat[0].login, path.normalize(buf.location))
+        let access: {result: boolean, login?: string} = dat.length===0?access_check(buf.location, buf?.name||'/', true) as {result: boolean, login?: string}:{result: false};
+        console.log(typeof(access.result));
+        if (access.result===true) {dat[0].login = access.login;console.log('done')}
+        if (dat.length) {
+            const location = access.result ? path.join(dir, 'data', path.normalize(buf.location)) : path.join(dir, 'data', dat[0].login, path.normalize(buf.location))
             logger.debug(path.normalize(location));
             console.log(buf)
             if (buf.action === 'mkdir' && buf?.name!=='') {
@@ -112,7 +93,7 @@ export default async function handler(req: any, res: any) {
             }
             else if (buf.action === 'ls') {
                 const files: string[] = fs.readdirSync(path.join(dir, 'data'));
-                if (access||(files.includes(dat[0]?.login))) {
+                if (access.result||(files.includes(dat[0]?.login))) {
                     let userFiles = {
                         directs: fs.readdirSync(location, { withFileTypes: true }).filter((d: any) => d.isDirectory()).map((d: any)=> d.name),
                         files: fs.readdirSync(location, { withFileTypes: true }).filter((d: any) => !d.isDirectory()).map((d: any)=> d.name),
@@ -133,13 +114,7 @@ export default async function handler(req: any, res: any) {
                 }
             }
             else if ((buf.action === 'chmod')&&(buf?.name)&&(buf.name!=='')) {
-                const directs:string[] = fs.readdirSync(
-                    path.join(
-                        dir, 
-                        'data', 
-                        dat[0].login, 
-                        location), 
-                    { withFileTypes: true })
+                const directs:string[] = fs.readdirSync(location, { withFileTypes: true })
                     .filter((d: any) => d.isDirectory()).map((d: any)=> d.name)
                 let openData: any = {};
                 try {
@@ -150,7 +125,7 @@ export default async function handler(req: any, res: any) {
                     openData[buf.name] = true;
                     fs.writeFileSync(path.join(location, '%%%ssystemData.json'), JSON.stringify(openData));
                     res.status(200).json({
-                        tok: jwt.sign({addr: path.normalize('/'+dat[0].login+'/'+location), 
+                        tok: jwt.sign({addr: path.normalize(path.join(dat[0].login, path.normalize(buf.location))),//'/'+dat[0].login+'/'+location), 
                             type: (directs.includes(buf.name)||buf.name==='/')?true: false,
                             name: buf.name}, String(process.env.SIMPLETOK)),
                         type: (directs.includes(buf.name)||buf.name==='/')?true: false,
@@ -191,48 +166,4 @@ export default async function handler(req: any, res: any) {
             console.log(jwt.verify(decodeURI(req.query.tok), String(process.env.SIMPLETOK)));
         }
     }
-
-}
-
-const makeZip = (archive: any, folderToGet: string, login: string, location: string) => {
-
-    try {
-        console.log('delete old');
-        fs.unlinkSync(path.normalize(folderToGet + '/' + login + '-archive.zip'));
-    }
-    catch (e: any) {
-        console.log('delete error');
-    }
-    const output = fs.createWriteStream(folderToGet + '/' + login + '-archive.zip');
-    archive.pipe(output);
-    const files = fs.readdirSync(folderToGet);
-    files.forEach((file: any) => {
-        const filePath = folderToGet + '/' + file;
-        if (file === '%%%ssystemData.json') console.log('%%%ssystemData.json ignored');
-        else {
-            archive.file(filePath, { name: file });
-            console.log('add file');
-        }
-    });  
-    output.on('close', function() {
-        console.log(archive.pointer() + ' total bytes');
-        console.log('archiver has been finalized and the output file descriptor has closed.');
-        //return 'oneTime/' + location + '/' + login + '-archive.zip' 
-    });
-    archive.on('warning', function(err: any) {
-        if (err.code === 'ENOENT') {
-            console.log('warning');
-          console.log(err)
-        } else {
-          // throw error
-            console.log('warning 2');
-            throw err;
-        }
-    });
-    archive.on('error', function(err: any) {
-        console.log('error');
-        throw err;
-    });
-    console.log('finalize');
-    archive.finalize(()=>console.log('final message'));
 }

@@ -10,6 +10,8 @@ const path = require('path');
 const mongo = require('./src/mech/mongo');
 const mongoS = new mongo();
 const jwt = require('jsonwebtoken');
+const {access_check} = require('./src/mech/requested_feature');
+
 export {};
 const dir = process.cwd();
 
@@ -26,25 +28,8 @@ app.get("/openLinc*", async function (req: any, res: any) {
         const subPath = await jwt.verify(decodeURI(req.query.tok), String(process.env.SIMPLETOK));
         filePath = path.normalize(path.join(dir, 'data', subPath.addr, subPath.name));
         folderPath = path.join(dir, path.normalize('data/' + subPath.addr));
-        let addrArr: string[] = (path.normalize(subPath.addr)).split(path.sep);
-        addrArr[0] = 'data';
-        addrArr.pop();
-        let access = false;
-        for (let i = addrArr.length; i>1; i--) {
-            let middlPath = '';
-            for (let j = 0; j<i; j++) middlPath+='/'+addrArr[j];
-            middlPath = path.join(dir, middlPath, '/%%%ssystemData.json');
-            if (fs.existsSync(middlPath)) {
-                const secureJson = JSON.parse(fs.readFileSync(middlPath));
-                if ((secureJson?.['/'])||(i===addrArr.length&&secureJson?.[subPath.name])){
-                    console.log('access denied');
-                    access = true;
-                    break;
-                }
-            }
-        }
-        if (access) {
-            if (subPath.type) res.send(`<h4>Адрес: ${filePath}</h4><h4>Тип: 'Папка'</h4><h4>Имя файла или папки: ${subPath.name}</h4><h4>Доступ ${access?'Разрешен':'Запрещен'}</h4>`);
+        if (access_check(subPath.addr, subPath.name)) {
+            if (subPath.type) res.send(`<h4>Адрес: ${filePath}</h4><h4>Тип: 'Папка'</h4><h4>Имя файла или папки: ${subPath.name}</h4><h4>Доступ Разрешен</h4>`);
             else {    
                 fs.readFile(filePath, function(error: any, data: any){              
                     if(error){                  
@@ -68,31 +53,29 @@ app.get("/openLinc*", async function (req: any, res: any) {
 
 app.get("/oneTime*", async function (req: any, res: any) {
     console.log('oneTime');
-    var filePath = '';
+    let filePath: string = '', login: string='', access: boolean = false;
     if (req?.cookies && req.cookies?.token !== '') {
-        var dat = await mongoS.find({ token: req.cookies.token });
+        let dat: {login: string}[] = await mongoS.find({ token: req.cookies.token }) as {login: string}[];
+        if (dat.length) {access = true; login = dat[0].login}
         console.log(req.cookies.token);
         console.log(dat);
-        if (dat.length) {
-            filePath = path.normalize(dir+'/data/' + dat[0].login + '/' + decodeURI(req.url.substr(9)));
-            console.log(filePath);
-            fs.readFile(filePath, function(error: any, data: any){              
-                if(error){                  
-                    res.statusCode = 404;
-                    res.end("Resourse not found!");
-                }   
-                else{
-                    res.end(data);
-                }
-            });
-        }
-        else {
-            res.statusCode = 404;
-            res.end("Resourse not found!");
-        }
+    }
+    else access=access_check(login + '/' + decodeURI(req.url.substr(9)))
+    if (access) {
+        filePath = path.normalize(dir+'/data/' + login + '/' + decodeURI(req.url.substr(9)));
+        console.log(filePath);
+        fs.readFile(filePath, function(error: any, data: any){              
+            if(error){                  
+                res.statusCode = 404;
+                res.end("Resourse not found!");
+            }   
+            else{
+                res.end(data);
+            }
+        });
     }
     else {
-        console.log('smth wrong');
+        res.statusCode = 404;
         res.end("Resourse not found!");
     }
 })

@@ -160,9 +160,8 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                 Api.askLS(User.getToken(), path + '/' + files.directs[index], 'tar')
                 .then(async (res: any)=>{
                     console.log(res.data);
-                    console.log(window.location.href);
                     setTimeout((href: string, addr: string)=>
-                        {download_file(encodeURI((href==='http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr)), files.directs[index]+'.zip'); console.log(encodeURI((href==='http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr)))}, 
+                        {download_file(encodeURI(href.includes('http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr))); console.log(encodeURI((href==='http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr)))}, 
                         3000, 
                         window.location.href, 
                         res.data.addr) 

@@ -385,3 +385,8 @@
 [2024-01-25T13:11:21.813] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data\spamigor\папка
 [2024-01-25T13:11:21.913] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data\spamigor\папка
 [2024-01-25T13:11:21.980] [DEBUG] cApi - Записей: 0
+[2024-01-26T10:20:56.251] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeL9SQi7pi08dEHX2ghFtjbvigrLwzP4y',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNwYW1pZ29yIiwibG9naW4iOiJzcGFtaWdvciIsImZpcnN0X25hbWUiOiJzcGFtaWdvciIsImxhc3RfbmFtZSI6InNwYW1pZ29yIiwiaWQiOjExLCJnb2xkIjowLCJpYXQiOjE3MDYxODM5NTEsImV4cCI6MTcwNjE4NzU1MX0.R-SMwQkH0ObJVg7YzilNQCd-VBBqkbvzOWWi1d-Rsm8'
+}
+[2024-01-26T10:20:56.995] [DEBUG] cApi - Записей: 1
