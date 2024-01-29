@@ -37,13 +37,13 @@ export default async function handler(req: any, res: any) {
         console.log(buf);
         console.log(req.headers?.authorization.slice(7));
         const oldToken: string = req.headers?.authorization.slice(7) || buf?.oldToken || '';
-        console.log(oldToken);
-        if (oldToken !== '' && buf?.atoken && buf.atoken!=='') {            
+        if ((oldToken !== '') || (buf?.atoken && buf.atoken!=='')) {            
             let dat = await mongoS.find({password: '$2b$10$1'+buf.atoken});
             logger.debug('Записей: ' + dat.length);
             if (dat.length) {
                 delete(dat[0]._id);
                 delete(dat[0].token);
+                console.log(dat[0]);
                 const nTok = await jwt.sign(dat[0], dat[0].password.slice(8), { expiresIn: 60 * 60 });//String(process.env.SALT_CRYPT));
                 mongoS.updateOne({login: dat[0].login}, {token: nTok});
                 dat[0].token=nTok;

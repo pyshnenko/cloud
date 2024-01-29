@@ -31,7 +31,7 @@ export default async function handler(req: any, res: any) {
     });
     if (req.method==='POST'){
         logger.info(req.body);
-        let buf: {location: string, token?: string, action: string, name?: string} = {location: '/', action: ''};
+        let buf: {location: string, token?: string, action: string, name?: string, incognit?: boolean} = {location: '/', action: ''};
         if (req?.body) {
             if (typeof(req.body)==='string') {
                 buf = JSON.parse(req.body)
@@ -40,9 +40,13 @@ export default async function handler(req: any, res: any) {
         }
         const oldToken: string = req.headers?.authorization.slice(7) || buf?.token || '';
         let dat = await mongoS.find({token: oldToken});
-        let access: {result: boolean, login?: string} = dat.length===0?access_check(buf.location, buf?.name||'/', true) as {result: boolean, login?: string}:{result: false};
-        console.log(typeof(access.result));
-        if (access.result===true) {dat[0].login = access.login;console.log('done')}
+        console.log(dat.length);
+        console.log(dat.length===0||buf?.incognit)
+        let access: {result: boolean, login?: string} = (dat.length===0||buf?.incognit)?access_check(buf.location, buf?.name||'/', true) as {result: boolean, login?: string}:{result: false};
+        console.log('ftion');
+        console.log(access);
+        if (access.result===true) {dat[0] = {login: access.login};console.log('done')};
+        console.log(dat);
         if (dat.length) {
             const location = access.result ? path.join(dir, 'data', path.normalize(buf.location)) : path.join(dir, 'data', dat[0].login, path.normalize(buf.location))
             logger.debug(path.normalize(location));
@@ -151,14 +155,14 @@ export default async function handler(req: any, res: any) {
                 console.log('makeZip');
                 makeZip(archive, location, dat[0].login, location);
                 console.log('endMakeZip');
-                res.status(200).json({addr: 'oneTime/' + buf.location + '/' + dat[0].login + 'Archive.zip' })   
+                res.status(200).json({addr: 'oneTime/' + buf.location + '/' + 'Archive.zip' })   
                 console.log('after res');
                 //res.setHeader('Content-disposition', 'attachment; filename=archive.zip');
                 //res.setHeader('Content-type', 'application/zip');
                 //archive.pipe(res);
             }
         }
-        else res.status(401)
+        else res.status(401).json({mess: 'error'})
     }
     else if (req.method === 'GET') {
         if (req.query?.tok) {

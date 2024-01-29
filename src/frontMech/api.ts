@@ -17,8 +17,8 @@ const tokenUPD = (data: string, atoken: string) => {
     return privateApi(data).post('/tokenUpd', {atoken, oldToken: data});
 }
 
-const askLS = (data: string, location: string = '/', action: string = 'ls', name: string = '') => {
-    return privateApi(data).post('/fs', {location, action, name});
+const askLS = (data: string, location: string = '/', action: string = 'ls', name: string = '', incognit: boolean = false) => {
+    return privateApi(data).post('/fs', {location, action, name, incognit});
 }
 
 const Api = {

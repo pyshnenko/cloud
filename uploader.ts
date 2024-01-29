@@ -71,6 +71,8 @@ app.get("/oneTime*", async function (req: any, res: any) {
             }   
             else{
                 res.end(data);
+                console.log('delete')
+                fs.unlinkSync(filePath);
             }
         });
     }
@@ -80,30 +82,33 @@ app.get("/oneTime*", async function (req: any, res: any) {
     }
 })
 
-app.get("/data*", async function (request: any, response: any) {
+app.get("/data*", async function (req: any, res: any) {
     var filePath = '';
-    if (request?.cookies && request.cookies?.token !== '') {
-        var dat = await mongoS.find({ token: request.cookies.token });
-        if (dat.length)
-            filePath = path.normalize(dir+'/data/' + dat[0].login + '/' + decodeURI(request.url.substr(6)))
-        else {
-            response.statusCode = 404;
-            response.end("Resourse not found!");
-        }
+    let access: boolean = false, login: string = '';    
+    if (req?.cookies && req.cookies?.token !== '') {
+        let dat: {login: string}[] = await mongoS.find({ token: req.cookies.token }) as {login: string}[];
+        if (dat.length) {access = true; login = dat[0].login}
+        console.log(req.cookies.token);
+        console.log(dat);
     }
-    else console.log('smth wrong');
-    console.log(filePath);
-    response.sendFile(filePath)
-    /*fs.readFile(filePath, function (error: any, data: any) {
+    else access=access_check(login + '/' + decodeURI(req.url.substr(9)))
+    console.log(access);
+    if (access) {
+        filePath = path.normalize(dir+'/data/' + login + '/' + decodeURI(req.url.substr(6)));
+        fs.readFile(filePath, function (error: any, data: any) {
         if (error) {
-            response.statusCode = 404;
-            response.end("Resourse not found!");
+            res.statusCode = 404;
+            res.end("Resourse not found!");
         }
         else {
-            response.sendFile(filePath)
-            //response.end(data);
+            //response.sendFile(filePath)
+            res.end(data);
         }
-    });*/
+    })}
+    else {        
+        res.statusCode = 404;
+        res.end("Resourse not found!");
+    }
 });
   
 

@@ -132,6 +132,8 @@ app.get("/oneTime*", function (req, res) {
                             }
                             else {
                                 res.end(data);
+                                console.log('delete');
+                                fs.unlinkSync(filePath);
                             }
                         });
                     }
@@ -144,31 +146,48 @@ app.get("/oneTime*", function (req, res) {
         });
     });
 });
-app.get("/data*", function (request, response) {
+app.get("/data*", function (req, res) {
     var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var filePath, dat;
+        var filePath, access, login, dat;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     filePath = '';
-                    if (!((request === null || request === void 0 ? void 0 : request.cookies) && ((_a = request.cookies) === null || _a === void 0 ? void 0 : _a.token) !== '')) return [3 /*break*/, 2];
-                    return [4 /*yield*/, mongoS.find({ token: request.cookies.token })];
+                    access = false, login = '';
+                    if (!((req === null || req === void 0 ? void 0 : req.cookies) && ((_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token) !== '')) return [3 /*break*/, 2];
+                    return [4 /*yield*/, mongoS.find({ token: req.cookies.token })];
                 case 1:
                     dat = _b.sent();
-                    if (dat.length)
-                        filePath = path.normalize(dir + '/data/' + dat[0].login + '/' + decodeURI(request.url.substr(6)));
-                    else {
-                        response.statusCode = 404;
-                        response.end("Resourse not found!");
+                    if (dat.length) {
+                        access = true;
+                        login = dat[0].login;
                     }
+                    console.log(req.cookies.token);
+                    console.log(dat);
                     return [3 /*break*/, 3];
                 case 2:
-                    console.log('smth wrong');
+                    access = access_check(login + '/' + decodeURI(req.url.substr(9)));
                     _b.label = 3;
                 case 3:
-                    console.log(filePath);
-                    response.sendFile(filePath);
+                    console.log(access);
+                    if (access) {
+                        filePath = path.normalize(dir + '/data/' + login + '/' + decodeURI(req.url.substr(6)));
+                        fs.readFile(filePath, function (error, data) {
+                            if (error) {
+                                res.statusCode = 404;
+                                res.end("Resourse not found!");
+                            }
+                            else {
+                                //response.sendFile(filePath)
+                                res.end(data);
+                            }
+                        });
+                    }
+                    else {
+                        res.statusCode = 404;
+                        res.end("Resourse not found!");
+                    }
                     return [2 /*return*/];
             }
         });

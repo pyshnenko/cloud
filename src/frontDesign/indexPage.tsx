@@ -29,6 +29,11 @@ const options = [
     'Удалить'
   ];
 
+const imgEnd = [
+    'png',
+    'jpg'
+]
+
 export default function Index({exPath, notVerify, bbPath}: {exPath?: string, notVerify?: boolean, bbPath?: string }) {
     const [datal, setDatal] = useState<string>();
     const [path, setPath] = useState<string>(exPath || '/');
@@ -51,12 +56,14 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                 User.setToken(saved, crypt, decr);
                 console.log(userData);
                 folder();
+                const cookies = new Cookies(null, {path: '/'});
+                cookies.set('token', saved);
                 setDatal(decr.login)
             } catch(e: any) {
                 setDatal('токен протух');
                 console.log(e);
                 console.log(e.message);
-                if (e.message === 'jwt malformed' || e.message === 'jwt expired') {
+                if (e){//.message === 'jwt malformed' || e.message === 'jwt expired') {
                     console.log(e.expiredAt);
                     const date = new Date(e.expiredAt);
                     const days: number = (Number(new Date())- Number(date))/(1000*60*60*24);
@@ -74,7 +81,9 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                             delete(usData.token);
                             delete(usData.atoken);
                             User.setToken(token, atoken, usData);
-                            folder();
+                            const cookies = new Cookies(null, {path: '/'});
+                            cookies.set('token', token);
+                            folder('/', token);
                             setDatal(usData.login)
                         })
                         .catch((e)=>{
@@ -132,10 +141,16 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
         return newPath;
     }
 
-    const folder = async (location: string = '/') => {
+    const folder = async (location: string = '/', newToken?: string) => {
         console.log(userData);
-        let data: any = await Api.askLS(User.getToken(), location);
-        setFiles({directs: data.data.directs, files: data.data.files});
+        let data: any;
+        try {
+            data = await Api.askLS(newToken||User.getToken(), location, 'ls', '', notVerify);
+            setFiles({directs: data.data.directs, files: data.data.files});
+        }
+        catch(e){
+            console.log(e)
+        };
         //Api.askLS(User.getToken());
     }
 
@@ -157,7 +172,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
             }
             else if (action === 'Скачать' && index < files.directs.length) {const cookies = new Cookies(null, {path: '/'});
                 cookies.set('token', User.getToken());
-                Api.askLS(User.getToken(), path + '/' + files.directs[index], 'tar')
+                Api.askLS(User.getToken(), path + '/' + files.directs[index], 'tar', '', notVerify)
                 .then(async (res: any)=>{
                     console.log(res.data);
                     setTimeout((href: string, addr: string)=>
@@ -240,7 +255,15 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                                 }}
                                 sx={{display: 'column-flex', maxWidth: '100px', maxHeight: '120px', overflowWrap: 'anywhere'}}
                             >
-                                {item.slice(-3)==='txt'?<TextSnippetIcon sx={{zoom: 2.5}} />:<InsertDriveFileIcon sx={{zoom: 2.5}} />}
+                                {item.toLocaleLowerCase().slice(-3)==='txt'?
+                                    <TextSnippetIcon sx={{zoom: 2.5}} />:
+                                    imgEnd.includes(item.toLocaleLowerCase().slice(-3))? 
+                                        <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                            <Box sx={{width: '60px', height: '60px'}}>
+                                                <img style={{width: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${item}`} />
+                                            </Box>
+                                        </Box> :
+                                    <InsertDriveFileIcon sx={{zoom: 2.5}} />}
                                 <Typography sx={{width: '85px'}}>{item.length>15?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
                             </Button>
                             

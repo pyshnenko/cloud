@@ -7,7 +7,7 @@ const dir = process.cwd();
 export function access_check (addr: string, name: string = '/', needLogin: boolean = false) {    
     let addrArr: string[] = (path.normalize(addr)).split(path.sep);
     addrArr[0]===''?addrArr[0] = 'data':addrArr.unshift('data');
-    addrArr.pop();
+    //addrArr.pop();
     let access = false;
     for (let i = addrArr.length; i>1; i--) {
         let middlPath = '';

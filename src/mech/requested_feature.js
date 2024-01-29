@@ -10,7 +10,7 @@ function access_check(addr, name, needLogin) {
     if (needLogin === void 0) { needLogin = false; }
     var addrArr = (path.normalize(addr)).split(path.sep);
     addrArr[0] === '' ? addrArr[0] = 'data' : addrArr.unshift('data');
-    addrArr.pop();
+    //addrArr.pop();
     var access = false;
     for (var i = addrArr.length; i > 1; i--) {
         var middlPath = '';
