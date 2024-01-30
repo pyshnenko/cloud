@@ -112,7 +112,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
             setPath('');
             setPath(path);
         } 
-        useLoading(false, 'attFile');        
+        loading(false, 'attFile');        
         input.click();
     }
 
