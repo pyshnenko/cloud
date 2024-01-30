@@ -33,6 +33,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
     const [open, setOpen] = React.useState(false);
     const [dialogResult, setDialogResult] = React.useState<{ready: boolean, text?: string, numb?: number}>({ready: false});
     const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
+    const loading = useLoading;
 
     React.useEffect(()=>{
         if (dialogResult.ready) {
@@ -63,13 +64,13 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
             setDialogOpen(true);
         }
         else if (action === actions[1].name) {
-            useLoading(true, 'tar');
+            loading(true, 'tar');
             Api.askLS(User.getToken(), path, 'tar')
             .then((res: any)=>{
                 console.log(res.data.addr);
                 download_file((window.location.href==='http://localhost:8799/'?'http://localhost:8800/':'/') + res.data.addr);
                 //window.open((window.location.href==='http://localhost:8799/'?'http://localhost:8800/':'/') + res.data.addr)
-            }).catch((e: any)=>console.log(e)).finally(()=>useLoading(false, 'tar'))
+            }).catch((e: any)=>console.log(e)).finally(()=>loading(false, 'tar'))
         }
         else if (action === actions[0].name) {
             attFile();
@@ -78,7 +79,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
     }
 
     const attFile = async () => {
-        useLoading(true, 'attFile');
+        loading(true, 'attFile');
         let input = document.createElement('input');
         input.type = 'file';
         input.multiple = true;
@@ -107,7 +108,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
                 folder(path);
             }
             const oPath = path;            
-            useLoading(false, 'attFile');
+            loading(false, 'attFile');
             setPath('');
             setPath(path);
         } 
