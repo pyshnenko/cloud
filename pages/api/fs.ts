@@ -1,14 +1,15 @@
 require('dotenv').config();
 const fs = require('fs');
-const zlib = require('zlib');
 const archiver = require('archiver');
 const path = require('path');
 let jwt = require('jsonwebtoken');
 import NextCors from 'nextjs-cors';
+import { FSType } from '../../src/types/api/types';
 const dir = process.cwd();
 const mongo = require('./../../src/mech/mongo');
 const mongoS = new mongo();
-const {access_check, makeZip} = require('../../src/mech/requested_feature')
+const {access_check, makeZip, body_data} = require('../../src/mech/requested_feature');
+const {FSType} = require('../../src/types/api/types');
 
 const log4js = require("log4js");
 
@@ -23,7 +24,6 @@ log4js.configure({
 const logger = log4js.getLogger("cApi");
 
 export default async function handler(req: any, res: any) {
-    console.log(req.method);
     await NextCors(req, res, {
         methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
         origin: '*',
@@ -31,26 +31,15 @@ export default async function handler(req: any, res: any) {
     });
     if (req.method==='POST'){
         logger.info(req.body);
-        let buf: {location: string, token?: string, action: string, name?: string, incognit?: boolean} = {location: '/', action: ''};
-        if (req?.body) {
-            if (typeof(req.body)==='string') {
-                buf = JSON.parse(req.body)
-            }
-            else buf = req.body;
-        }
+        const buf: FSType = body_data(req.body);
         const oldToken: string = req.headers?.authorization.slice(7) || buf?.token || '';
         let dat = await mongoS.find({token: oldToken});
-        console.log(dat.length);
-        console.log(dat.length===0||buf?.incognit)
         let access: {result: boolean, login?: string} = (dat.length===0||buf?.incognit)?access_check(buf.location, buf?.name||'/', true) as {result: boolean, login?: string}:{result: false};
-        console.log('ftion');
-        console.log(access);
-        if (access.result===true) {dat[0] = {login: access.login};console.log('done')};
-        console.log(dat);
+        if (access.result===true) dat[0] = {login: access.login};
+        logger.info(dat[0]?.login);
         if (dat.length) {
             const location = access.result ? path.join(dir, 'data', path.normalize(buf.location)) : path.join(dir, 'data', dat[0].login, path.normalize(buf.location))
             logger.debug(path.normalize(location));
-            console.log(buf)
             if (buf.action === 'mkdir' && buf?.name!=='') {
                 try {
                     logger.debug(`folder for ${dat[0].login} created`)
@@ -64,7 +53,6 @@ export default async function handler(req: any, res: any) {
             }
             else if (buf?.name && buf.action === 'rm' && buf?.name!=='') {
                 let folders: {dir: string[], files: string[]} = {dir: [], files: []};
-                console.log(location);
                 fs.readdirSync(location, { withFileTypes: true }).filter((d: any)=> {
                     if (d.isDirectory()) folders.dir.push(d.name)
                     else folders.files.push(d.name)
@@ -136,7 +124,7 @@ export default async function handler(req: any, res: any) {
                         name: buf.name
                     })
                 } catch(err) {
-                    console.error(err)
+                    logger.error(err)
                     res.status(500).json({message: 'some error'})
                 }
             }
@@ -144,7 +132,7 @@ export default async function handler(req: any, res: any) {
                 const archive = archiver('zip', { zlib: { level: 9 } });
                 archive.on('warning', (err: any) => {
                     if (err.code === 'ENOENT') {
-                        console.warn('Warning:', err.message);
+                        logger.error('Warning:', err.message);
                     } else {
                         throw err;
                     }
@@ -152,22 +140,14 @@ export default async function handler(req: any, res: any) {
                 archive.on('error', (err: any) => {
                     throw err;
                 });
-                console.log('makeZip');
                 makeZip(archive, location, dat[0].login, location);
-                console.log('endMakeZip');
-                res.status(200).json({addr: 'oneTime/' + buf.location + '/' + 'Archive.zip' })   
-                console.log('after res');
+                logger.debug('endMakeZip');
+                res.status(200).json({addr: 'oneTime/' + buf.location + '/' + 'Archive.zip' })
                 //res.setHeader('Content-disposition', 'attachment; filename=archive.zip');
                 //res.setHeader('Content-type', 'application/zip');
                 //archive.pipe(res);
             }
         }
         else res.status(401).json({mess: 'error'})
-    }
-    else if (req.method === 'GET') {
-        if (req.query?.tok) {
-            console.log(process.env.SIMPLETOK)
-            console.log(jwt.verify(decodeURI(req.query.tok), String(process.env.SIMPLETOK)));
-        }
     }
 }

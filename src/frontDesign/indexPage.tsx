@@ -19,6 +19,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddButton from './addButton'
 import Cookies from 'universal-cookie';
 import download_file from '../frontMech/downloadFile';
+import {Loading, useLoading} from '../hooks/useLoading';
 
 const options = [
     'Открыть',
@@ -42,6 +43,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
     const menuOpen = Boolean(anchorEl.elem);
 
     useEffect(()=>{
+        useLoading(true, 'start');
         if (!notVerify) {
             const crypt: string = String(localStorage.getItem('cloudAToken'));
             console.log(crypt);
@@ -50,15 +52,11 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
             let decr: TokenLocalData & {exp: number};
             try {
                 decr = jwt.verify(saved, crypt) as TokenLocalData & {exp: number}
-                console.log(decr);
-                console.log((new Date(decr.iat*1000)).toLocaleString())
-                console.log((new Date(decr.exp*1000)).toLocaleString())
                 User.setToken(saved, crypt, decr);
-                console.log(userData);
                 folder();
                 const cookies = new Cookies(null, {path: '/'});
                 cookies.set('token', saved);
-                setDatal(decr.login)
+                setDatal(decr.login);
             } catch(e: any) {
                 setDatal('токен протух');
                 console.log(e);
@@ -70,8 +68,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                     console.log(`days: ${days}`);
                     if (days > 5) window.location.href='/login';
                     else {
-                        console.log('hello')
-                        console.log(saved)
+                        useLoading(true, 'tokenUPD');
                         Api.tokenUPD(saved, crypt)
                         .then((res)=>{
                             console.log(res);
@@ -84,13 +81,15 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                             const cookies = new Cookies(null, {path: '/'});
                             cookies.set('token', token);
                             folder('/', token);
-                            setDatal(usData.login)
+                            setDatal(usData.login);
+                            useLoading(false, 'tokenUPD')
                         })
                         .catch((e)=>{
                             console.log(e);
                             User.exit();
                             window.location.href='/login';
                         });
+                        useLoading(false, 'start');
                     }
                 }
             }
@@ -100,6 +99,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
             folder(path);
             setDatal('Путник')
         }
+        useLoading(false, 'start');
     }, [])
 
     useEffect(()=> {
@@ -142,6 +142,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
     }
 
     const folder = async (location: string = '/', newToken?: string) => {
+        useLoading(true, 'folder');
         console.log(userData);
         let data: any;
         try {
@@ -150,7 +151,8 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
         }
         catch(e){
             console.log(e)
-        };
+        }
+        finally {useLoading(false, 'folder')};
         //Api.askLS(User.getToken());
     }
 
@@ -172,31 +174,36 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
             }
             else if (action === 'Скачать' && index < files.directs.length) {const cookies = new Cookies(null, {path: '/'});
                 cookies.set('token', User.getToken());
+                useLoading(true, 'save');
                 Api.askLS(User.getToken(), path + '/' + files.directs[index], 'tar', '', notVerify)
                 .then(async (res: any)=>{
                     console.log(res.data);
                     setTimeout((href: string, addr: string)=>
-                        {download_file(encodeURI(href.includes('http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr))); console.log(encodeURI((href==='http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr)))}, 
+                        {download_file(encodeURI(href.includes('http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr))); useLoading(false, 'save')}, 
                         3000, 
                         window.location.href, 
                         res.data.addr) 
                     /*let file = new Blob([res.data], {type: "application/zip"});
                     FileSaver.saveAs(file, "hello world.zip");*/
                 })
-                .catch((e: any)=> console.log(e));
+                .catch((e: any)=> {console.log(e); useLoading(false, 'save')});
             }
             else if (action === 'Удалить') {
-                console.log(objName)
+                console.log(objName);
+                useLoading(true, 'rm')
                 Api.askLS(User.getToken(), path, 'rm', objName)
                 .then((res: any)=>folder(path))
                 .catch((e: any)=>console.log(e))
+                .finally(()=>useLoading(false, 'rm'))
             }
             else if (action === 'Поделиться') {
+                useLoading(true, 'chmod')
                 Api.askLS(User.getToken(), (index<files.directs.length?path+objName:path), 'chmod', (index<files.directs.length?'/':objName))
                 .then((res: any)=>{
                     window.open(encodeURI(`/download?tok=${encodeURI(res.data.tok)}&name=${res.data.name}&type=${res.data.type}`))
                 })
                 .catch((e: any)=>console.log(e))
+                .finally(()=>useLoading(false, 'chmod'))
             }
             menuClose();
         }
@@ -233,7 +240,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                                 sx={{display: 'column-flex', maxWidth: '100px', maxHeight: '120px', overflowWrap: 'anywhere'}}
                             >
                                 <FolderIcon sx={{zoom: 2.5}} />
-                                <Typography sx={{width: '85px'}}>{item.length>15?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
+                                <Typography sx={{width: '85px'}} title={item}>{item.length>15?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
                             </Button>
                             <IconButton
                                 sx={{position: 'relative', right: '15px', top: '0px'}}
@@ -264,7 +271,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                                             </Box>
                                         </Box> :
                                     <InsertDriveFileIcon sx={{zoom: 2.5}} />}
-                                <Typography sx={{width: '85px'}}>{item.length>15?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
+                                <Typography sx={{width: '85px'}} title={item}>{item.length>15?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
                             </Button>
                             
                             <IconButton
@@ -308,6 +315,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                     })}
                 </Menu>
             </div>
+            <Loading />
         </Box>
     )
 }

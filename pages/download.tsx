@@ -27,7 +27,7 @@ export default function DownloadPage () {
         console.log(typeR);
         if (!typeR) {
             console.log('download');
-            download_file(encodeURI(`/openLinc?tok=${tok}`), name)//http://localhost:8800
+            download_file(encodeURI(`http://localhost:8800/openLinc?tok=${tok}`), name)//http://localhost:8800
         }
         else {
             Api.askSimpleTok().then((res: any)=>{

@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeZip = exports.access_check = void 0;
+exports.body_data = exports.makeZip = exports.access_check = void 0;
 require('dotenv').config();
 var fs = require('fs');
 var path = require('path');
+var FSType = require('../types/api/types').FSType;
 var dir = process.cwd();
 function access_check(addr, name, needLogin) {
     if (name === void 0) { name = '/'; }
@@ -11,7 +12,6 @@ function access_check(addr, name, needLogin) {
     var addrArr = (path.normalize(addr)).split(path.sep);
     addrArr[0] === '' ? addrArr[0] = 'data' : addrArr.unshift('data');
     //addrArr.pop();
-    var access = false;
     for (var i = addrArr.length; i > 1; i--) {
         var middlPath = '';
         for (var j = 0; j < i; j++)
@@ -21,15 +21,14 @@ function access_check(addr, name, needLogin) {
             var secureJson = JSON.parse(fs.readFileSync(middlPath));
             if ((secureJson === null || secureJson === void 0 ? void 0 : secureJson['/']) || (i === addrArr.length && (secureJson === null || secureJson === void 0 ? void 0 : secureJson[name]))) {
                 console.log('access denied');
-                access = true;
                 return needLogin ? { result: true, login: addrArr[1] } : true;
             }
         }
     }
-    return false;
+    return { result: false };
 }
 exports.access_check = access_check;
-var makeZip = function (archive, folderToGet, login, location) {
+var makeZip = function (archive, folderToGet, name) {
     try {
         console.log('delete old');
         fs.unlinkSync(path.normalize(folderToGet + '/' + 'Archive.zip'));
@@ -37,21 +36,28 @@ var makeZip = function (archive, folderToGet, login, location) {
     catch (e) {
         console.log('delete error');
     }
+    var sysFile = undefined;
+    if (fs.existsSync(path.normalize(folderToGet + '/' + '%%%ssystemData.json'))) {
+        sysFile = fs.readFileSync(path.normalize(folderToGet + '/' + '%%%ssystemData.json'));
+        fs.unlinkSync(path.normalize(folderToGet + '/' + '%%%ssystemData.json'));
+    }
     var output = fs.createWriteStream(folderToGet + '/' + 'Archive.zip');
     archive.pipe(output);
-    var files = fs.readdirSync(folderToGet);
-    files.forEach(function (file) {
-        var filePath = folderToGet + '/' + file;
-        if (file === '%%%ssystemData.json')
-            console.log('%%%ssystemData.json ignored');
+    /*const files = fs.readdirSync(folderToGet);
+    files.forEach((file: any) => {
+        const filePath = folderToGet + '/' + file;
+        if (file === '%%%ssystemData.json') console.log('%%%ssystemData.json ignored');
         else {
             archive.file(filePath, { name: file });
             console.log('add file');
         }
-    });
+    });*/
+    archive.directory(folderToGet, name);
     output.on('close', function () {
         console.log(archive.pointer() + ' total bytes');
         console.log('archiver has been finalized and the output file descriptor has closed.');
+        if (sysFile !== undefined)
+            fs.writeFileSync(path.normalize(folderToGet + '/' + '%%%ssystemData.json'), sysFile);
         //return 'oneTime/' + location + '/' + login + '-archive.zip' 
     });
     archive.on('warning', function (err) {
@@ -73,3 +79,15 @@ var makeZip = function (archive, folderToGet, login, location) {
     archive.finalize(function () { return console.log('final message'); });
 };
 exports.makeZip = makeZip;
+function body_data(body) {
+    var buf = { location: '/', action: '' };
+    if (body) {
+        if (typeof (body) === 'string') {
+            buf = JSON.parse(body);
+        }
+        else
+            buf = body;
+    }
+    return buf;
+}
+exports.body_data = body_data;

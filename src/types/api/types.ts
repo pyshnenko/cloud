@@ -35,3 +35,11 @@ export interface TokenLocalData {
 export interface ReqSecType {
     act: string
 }
+
+export interface FSType {
+    location: string, 
+    token?: string, 
+    action: string, 
+    name?: string, 
+    incognit?: boolean
+}

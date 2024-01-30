@@ -12,6 +12,7 @@ import Api from '../frontMech/api';
 import {User, userData} from '../frontMech/user';
 import Dialog from './dialog';
 import download_file from '../frontMech/downloadFile';
+import { useLoading } from '../hooks/useLoading';
 
 const actions = [
   { icon: <FileUploadIcon />, name: 'Загрузить файл' },
@@ -62,12 +63,13 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
             setDialogOpen(true);
         }
         else if (action === actions[1].name) {
+            useLoading(true, 'tar');
             Api.askLS(User.getToken(), path, 'tar')
             .then((res: any)=>{
                 console.log(res.data.addr);
                 download_file((window.location.href==='http://localhost:8799/'?'http://localhost:8800/':'/') + res.data.addr);
                 //window.open((window.location.href==='http://localhost:8799/'?'http://localhost:8800/':'/') + res.data.addr)
-            }).catch((e: any)=>console.log(e))
+            }).catch((e: any)=>console.log(e)).finally(()=>useLoading(false, 'tar'))
         }
         else if (action === actions[0].name) {
             attFile();
@@ -76,6 +78,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
     }
 
     const attFile = async () => {
+        useLoading(true, 'attFile');
         let input = document.createElement('input');
         input.type = 'file';
         input.multiple = true;
@@ -103,11 +106,12 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
                 console.log(res);
                 folder(path);
             }
-            const oPath = path;
+            const oPath = path;            
+            useLoading(false, 'attFile');
             setPath('');
             setPath(path);
-        }
-        
+        } 
+        useLoading(false, 'attFile');        
         input.click();
     }
 
