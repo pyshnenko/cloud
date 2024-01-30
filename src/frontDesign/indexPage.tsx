@@ -42,8 +42,10 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
     const [anchorEl, setAnchorEl] = useState<{elem: null | HTMLElement, index: number}>({elem: null, index: -1});
     const menuOpen = Boolean(anchorEl.elem);
 
+    const loading = useLoading;
+
     useEffect(()=>{
-        useLoading(true, 'start');
+        loading(true, 'start');
         if (!notVerify) {
             const crypt: string = String(localStorage.getItem('cloudAToken'));
             console.log(crypt);
@@ -68,7 +70,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                     console.log(`days: ${days}`);
                     if (days > 5) window.location.href='/login';
                     else {
-                        useLoading(true, 'tokenUPD');
+                        loading(true, 'tokenUPD');
                         Api.tokenUPD(saved, crypt)
                         .then((res)=>{
                             console.log(res);
@@ -82,14 +84,14 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                             cookies.set('token', token);
                             folder('/', token);
                             setDatal(usData.login);
-                            useLoading(false, 'tokenUPD')
+                            loading(false, 'tokenUPD')
                         })
                         .catch((e)=>{
                             console.log(e);
                             User.exit();
                             window.location.href='/login';
                         });
-                        useLoading(false, 'start');
+                        loading(false, 'start');
                     }
                 }
             }
@@ -99,7 +101,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
             folder(path);
             setDatal('Путник')
         }
-        useLoading(false, 'start');
+        loading(false, 'start');
     }, [])
 
     useEffect(()=> {
@@ -142,7 +144,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
     }
 
     const folder = async (location: string = '/', newToken?: string) => {
-        useLoading(true, 'folder');
+        loading(true, 'folder');
         console.log(userData);
         let data: any;
         try {
@@ -152,7 +154,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
         catch(e){
             console.log(e)
         }
-        finally {useLoading(false, 'folder')};
+        finally {loading(false, 'folder')};
         //Api.askLS(User.getToken());
     }
 
@@ -174,36 +176,36 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
             }
             else if (action === 'Скачать' && index < files.directs.length) {const cookies = new Cookies(null, {path: '/'});
                 cookies.set('token', User.getToken());
-                useLoading(true, 'save');
+                loading(true, 'save');
                 Api.askLS(User.getToken(), path + '/' + files.directs[index], 'tar', '', notVerify)
                 .then(async (res: any)=>{
                     console.log(res.data);
                     setTimeout((href: string, addr: string)=>
-                        {download_file(encodeURI(href.includes('http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr))); useLoading(false, 'save')}, 
+                        {download_file(encodeURI(href.includes('http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr))); loading(false, 'save')}, 
                         3000, 
                         window.location.href, 
                         res.data.addr) 
                     /*let file = new Blob([res.data], {type: "application/zip"});
                     FileSaver.saveAs(file, "hello world.zip");*/
                 })
-                .catch((e: any)=> {console.log(e); useLoading(false, 'save')});
+                .catch((e: any)=> {console.log(e); loading(false, 'save')});
             }
             else if (action === 'Удалить') {
                 console.log(objName);
-                useLoading(true, 'rm')
+                loading(true, 'rm')
                 Api.askLS(User.getToken(), path, 'rm', objName)
                 .then((res: any)=>folder(path))
                 .catch((e: any)=>console.log(e))
-                .finally(()=>useLoading(false, 'rm'))
+                .finally(()=>loading(false, 'rm'))
             }
             else if (action === 'Поделиться') {
-                useLoading(true, 'chmod')
+                loading(true, 'chmod')
                 Api.askLS(User.getToken(), (index<files.directs.length?path+objName:path), 'chmod', (index<files.directs.length?'/':objName))
                 .then((res: any)=>{
                     window.open(encodeURI(`/download?tok=${encodeURI(res.data.tok)}&name=${res.data.name}&type=${res.data.type}`))
                 })
                 .catch((e: any)=>console.log(e))
-                .finally(()=>useLoading(false, 'chmod'))
+                .finally(()=>loading(false, 'chmod'))
             }
             menuClose();
         }
