@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import Api from '../frontMech/api';
 import {User, userData} from '../frontMech/user';
 import Typography from '@mui/material/Typography';
+import Fade from '@mui/material/Fade';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import IconButton from '@mui/material/IconButton';
 import FolderIcon from '@mui/icons-material/Folder';
@@ -47,6 +48,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
     const [path, setPath] = useState<string>(exPath || '/');
     const [files, setFiles] = useState<{directs: string[], files: string[]}>();
     const [anchorEl, setAnchorEl] = useState<{elem: null | HTMLElement, index: number}>({elem: null, index: -1});
+    const [animIn, setAnimIn] = useState<boolean>(false);
     const menuOpen = Boolean(anchorEl.elem);
 
     const loading = useLoading;
@@ -118,6 +120,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
     useEffect(()=>{
         console.log(path);
         if (User.getAuth()) {
+            setAnimIn(false);
             let realLocation = '';
             const location = path;
             if (notVerify) {
@@ -161,7 +164,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
         catch(e){
             console.log(e)
         }
-        finally {loading(false, 'folder')};
+        finally {loading(false, 'folder'); setAnimIn(true)};
         //Api.askLS(User.getToken());
     }
 
@@ -250,58 +253,62 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
             <Box sx={{display: 'inline-flex', alignItems: 'flex-start', flexWrap: 'wrap'}}>
                 {files?.directs.map((item: string, index: number)=> {
                     return (
-                        <Box sx={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', alignItems: 'flex-start'}} key={item}>
-                            <Button                                  
-                                onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{setAnchorEl({elem: event.currentTarget, index: index}); event.preventDefault()}}
-                                onDoubleClick={()=>setPath((path==='/'?'':path) +(path[path.length-1]==='/'||path[path.length-1]==='\\'?'':'/')+item+'/')} 
-                                sx={{display: 'column-flex', maxWidth: '100px', maxHeight: '120px', overflowWrap: 'anywhere', padding: '6px 0px'}}
-                            >
-                                <FolderIcon sx={{zoom: 2.5, color: '#FF9C0C'}} />
-                                <Typography sx={{width: '85px'}} title={item}>{item.length>15?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
-                            </Button>
-                            <IconButton
-                                sx={{position: 'relative', right: '15px', top: '0px', padding: '1px'}}
-                                aria-haspopup="true"
-                                onClick={(event: React.MouseEvent<HTMLElement>)=>setAnchorEl({elem: event.currentTarget, index: index})}
-                            >
-                                <MoreVertIcon />
-                            </IconButton>
-                        </Box>
+                        <Fade in={animIn} timeout={index*300} key={item}>
+                            <Box sx={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', alignItems: 'flex-start'}}>
+                                <Button                                  
+                                    onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{setAnchorEl({elem: event.currentTarget, index: index}); event.preventDefault()}}
+                                    onDoubleClick={()=>setPath((path==='/'?'':path) +(path[path.length-1]==='/'||path[path.length-1]==='\\'?'':'/')+item+'/')} 
+                                    sx={{display: 'column-flex', maxWidth: '100px', maxHeight: '120px', overflowWrap: 'anywhere', padding: '6px 0px'}}
+                                >
+                                    <FolderIcon sx={{zoom: 2.5, color: '#FF9C0C'}} />
+                                    <Typography sx={{width: '85px'}} title={item}>{item.length>15?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
+                                </Button>
+                                <IconButton
+                                    sx={{position: 'relative', right: '15px', top: '0px', padding: '1px'}}
+                                    aria-haspopup="true"
+                                    onClick={(event: React.MouseEvent<HTMLElement>)=>setAnchorEl({elem: event.currentTarget, index: index})}
+                                >
+                                    <MoreVertIcon />
+                                </IconButton>
+                            </Box>
+                        </Fade>
                     )
                 })}
                 {files?.files.map((item: string, index: number)=> {
                     return (
-                        <Box sx={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', alignItems: 'flex-start'}} key={item}>
-                            <Button 
-                                onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{
-                                    setAnchorEl({elem: event.currentTarget, index: index+files.directs.length}); 
-                                    event.preventDefault()
-                                }}
-                                sx={{display: 'column-flex', maxWidth: '100px', maxHeight: '120px', overflowWrap: 'anywhere', padding: '6px 0px'}}
-                            >
-                                {fileType(item)==='txt'? <TextSnippetIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
-                                    fileType(item)==='archive' ? <FolderZipIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
-                                    fileType(item)==='picture'? 
-                                        <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                            <Box sx={{width: '60px', height: '60px'}}>
-                                                <img style={{width: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${item}`} />
-                                            </Box>
-                                        </Box> :
-                                    <InsertDriveFileIcon sx={{zoom: 2.5, color: '#0AD58D'}} />}
-                                <Typography sx={{width: '85px'}} title={item}>{item.length>15?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
-                            </Button>
-                            
-                            <IconButton
-                                sx={{position: 'relative', right: '15px', top: 0, padding: '1px'}}
-                                aria-haspopup="true"
-                                onClick={(event: React.MouseEvent<HTMLElement>)=>{
-                                    setAnchorEl({elem: event.currentTarget, index: index+files.directs.length}); 
-                                    event.preventDefault()
-                                }}
-                            >
-                                <MoreVertIcon />
-                            </IconButton>
-                        </Box>
+                        <Fade in={animIn} timeout={(index+files.directs.length)*300} key={item}>
+                            <Box sx={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', alignItems: 'flex-start'}} key={item}>
+                                <Button 
+                                    onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{
+                                        setAnchorEl({elem: event.currentTarget, index: index+files.directs.length}); 
+                                        event.preventDefault()
+                                    }}
+                                    sx={{display: 'column-flex', maxWidth: '100px', maxHeight: '120px', overflowWrap: 'anywhere', padding: '6px 0px'}}
+                                >
+                                    {fileType(item)==='txt'? <TextSnippetIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
+                                        fileType(item)==='archive' ? <FolderZipIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
+                                        fileType(item)==='picture'? 
+                                            <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                                <Box sx={{width: '60px', height: '60px'}}>
+                                                    <img style={{width: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${item}`} />
+                                                </Box>
+                                            </Box> :
+                                        <InsertDriveFileIcon sx={{zoom: 2.5, color: '#0AD58D'}} />}
+                                    <Typography sx={{width: '85px'}} title={item}>{item.length>15?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
+                                </Button>
+                                
+                                <IconButton
+                                    sx={{position: 'relative', right: '15px', top: 0, padding: '1px'}}
+                                    aria-haspopup="true"
+                                    onClick={(event: React.MouseEvent<HTMLElement>)=>{
+                                        setAnchorEl({elem: event.currentTarget, index: index+files.directs.length}); 
+                                        event.preventDefault()
+                                    }}
+                                >
+                                    <MoreVertIcon />
+                                </IconButton>
+                            </Box>
+                        </Fade>
                     )
                 })}
             </Box>
