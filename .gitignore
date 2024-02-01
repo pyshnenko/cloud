@@ -3,6 +3,7 @@
 /uploads*
 /data*
 /log*
+log*
 # dependencies
 /node_modules
 /.pnp
@@ -40,3 +41,6 @@ next-env.d.ts
 log/cloudtokenUpdlog.log
 cloud.spamigor.ru.conf
 log/cloudLoginlog.log
+log/cloudtokenUpdlog.log
+log/cloudLoginlog.log
+log/cloudtokenUpdlog.log

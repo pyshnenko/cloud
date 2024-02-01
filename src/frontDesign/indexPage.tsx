@@ -20,6 +20,7 @@ import AddButton from './addButton'
 import Cookies from 'universal-cookie';
 import download_file from '../frontMech/downloadFile';
 import {Loading, useLoading} from '../hooks/useLoading';
+import FolderZipIcon from '@mui/icons-material/FolderZip';
 
 const options = [
     'Открыть',
@@ -33,6 +34,12 @@ const options = [
 const imgEnd = [
     'png',
     'jpg'
+]
+
+const archEnd = [
+    'rar',
+    '.7z',
+    'zip'
 ]
 
 export default function Index({exPath, notVerify, bbPath}: {exPath?: string, notVerify?: boolean, bbPath?: string }) {
@@ -162,6 +169,14 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
         setAnchorEl({elem: null, index: -1});
     }
 
+    const fileType = (name: string) => {
+        let item: string = name.toLocaleLowerCase().slice(-3);
+        if (item === 'txt') return 'txt'
+        else if (imgEnd.includes(item)) return 'picture'
+        else if (archEnd.includes(item)) return 'archive'
+        else return 'other'
+    }
+
     const menuClick = (action: string, index: number, path: string) => {
         if (files) {
             const objName = index<files.directs.length ? files.directs[index] : files.files[index-files.directs.length];
@@ -194,7 +209,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                 console.log(objName);
                 loading(true, 'rm')
                 Api.askLS(User.getToken(), path, 'rm', objName)
-                .then((res: any)=>folder(path))
+                .then((res: any)=>{folder(path); loading(false, 'rm')})
                 .catch((e: any)=>console.log(e))
                 .finally(()=>loading(false, 'rm'))
             }
@@ -239,13 +254,13 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                             <Button                                  
                                 onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{setAnchorEl({elem: event.currentTarget, index: index}); event.preventDefault()}}
                                 onDoubleClick={()=>setPath((path==='/'?'':path) +(path[path.length-1]==='/'||path[path.length-1]==='\\'?'':'/')+item+'/')} 
-                                sx={{display: 'column-flex', maxWidth: '100px', maxHeight: '120px', overflowWrap: 'anywhere'}}
+                                sx={{display: 'column-flex', maxWidth: '100px', maxHeight: '120px', overflowWrap: 'anywhere', padding: '6px 0px'}}
                             >
-                                <FolderIcon sx={{zoom: 2.5}} />
+                                <FolderIcon sx={{zoom: 2.5, color: '#FF9C0C'}} />
                                 <Typography sx={{width: '85px'}} title={item}>{item.length>15?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
                             </Button>
                             <IconButton
-                                sx={{position: 'relative', right: '15px', top: '0px'}}
+                                sx={{position: 'relative', right: '15px', top: '0px', padding: '1px'}}
                                 aria-haspopup="true"
                                 onClick={(event: React.MouseEvent<HTMLElement>)=>setAnchorEl({elem: event.currentTarget, index: index})}
                             >
@@ -262,22 +277,22 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                                     setAnchorEl({elem: event.currentTarget, index: index+files.directs.length}); 
                                     event.preventDefault()
                                 }}
-                                sx={{display: 'column-flex', maxWidth: '100px', maxHeight: '120px', overflowWrap: 'anywhere'}}
+                                sx={{display: 'column-flex', maxWidth: '100px', maxHeight: '120px', overflowWrap: 'anywhere', padding: '6px 0px'}}
                             >
-                                {item.toLocaleLowerCase().slice(-3)==='txt'?
-                                    <TextSnippetIcon sx={{zoom: 2.5}} />:
-                                    imgEnd.includes(item.toLocaleLowerCase().slice(-3))? 
+                                {fileType(item)==='txt'? <TextSnippetIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
+                                    fileType(item)==='archive' ? <FolderZipIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
+                                    fileType(item)==='picture'? 
                                         <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                             <Box sx={{width: '60px', height: '60px'}}>
                                                 <img style={{width: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${item}`} />
                                             </Box>
                                         </Box> :
-                                    <InsertDriveFileIcon sx={{zoom: 2.5}} />}
+                                    <InsertDriveFileIcon sx={{zoom: 2.5, color: '#0AD58D'}} />}
                                 <Typography sx={{width: '85px'}} title={item}>{item.length>15?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
                             </Button>
                             
                             <IconButton
-                                sx={{position: 'relative', right: '15px', top: 0}}
+                                sx={{position: 'relative', right: '15px', top: 0, padding: '1px'}}
                                 aria-haspopup="true"
                                 onClick={(event: React.MouseEvent<HTMLElement>)=>{
                                     setAnchorEl({elem: event.currentTarget, index: index+files.directs.length}); 

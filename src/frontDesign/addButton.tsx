@@ -127,11 +127,11 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
 
   return (
     <Box>
-        <Box sx={{ height: '99vh', width: '99vw', position: 'fixed', padding: 0, margin: 0 }}>
-        <Backdrop open={open||dialogOpen} />
+        <Box sx={{  }}>
+        {open&&<Backdrop open={open||dialogOpen} />}
             <SpeedDial
                 ariaLabel="Меню действий"
-                sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                sx={{ position: 'fixed', bottom: 16, right: 16, zIndex: 1000 }}
                 icon={<SpeedDialIcon />}
                 onClose={handleClose}
                 onOpen={handleOpen}
