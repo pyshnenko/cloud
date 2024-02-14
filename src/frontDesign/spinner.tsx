@@ -8,7 +8,7 @@ export default function Spinner() {
             <div className="spinner-circle-off spinner-circle-inner"></div>
             <div className="spinner-circle spinner-circle-single-1"></div>
             <div className="spinner-circle spinner-circle-single-2"></div>
-            <div className="text">...working...</div>
+            <div className="text">...Загрузка...</div>
         </Box>
     )
 }
