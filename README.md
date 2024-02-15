@@ -1,36 +1,21 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Облако
 
-## Getting Started
+Файлы хранятся на сервере БЕЗ ШИФРОВАНИЯ
+(это нужно для своих целей)
 
-First, run the development server:
+У каждого пользователя свое хранилище.
+Доступ по токену, без токена сервер не знает полный путь
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Можно создавать папки, скачивать папки целиком архивом
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Можно создавать открытые папки или давать сторонний доступ к отдельным файлам по уникальным ссылкам
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Развернуто на next.ts, данные о пользователях и ключи в монге
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+https://cloud.spamigor.ru
 
-## Learn More
+##lines
+https://cloud.spamigor.ru/lines
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Простенькая анимация на canvas. Главная особенность - синхронизация 2 вкладок через localStorage
+шарик вылетает из основной вкладки, влетает во вторую вкладку. При изменении позиции вкладки, направление динамически меняется
