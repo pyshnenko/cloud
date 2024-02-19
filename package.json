@@ -39,6 +39,7 @@
     "react-dom": "^18",
     "styled-components": "^6.1.2",
     "swagger-ui-react": "^5.10.5",
+    "three": "^0.161.0",
     "universal-cookie": "^7.0.1",
     "websocket": "^1.0.34"
   },
@@ -47,6 +48,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/three": "^0.161.2",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
