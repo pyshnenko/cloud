@@ -41,6 +41,7 @@
     "swagger-ui-react": "^5.10.5",
     "three": "^0.161.0",
     "universal-cookie": "^7.0.1",
+    "webgpu": "^0.1.16",
     "websocket": "^1.0.34"
   },
   "devDependencies": {
