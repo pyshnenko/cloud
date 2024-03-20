@@ -48,7 +48,7 @@ export default function DownloadPage () {
     }, [])
 
     return (
-    <Box>{type? oPath===''?<Typography>{fname}</Typography>:<IndexPage exPath={oPath} notVerify={true} bbPath={bPath} />:<Box>
+    <Box>{type? (oPath===''?<Typography>{fname}</Typography>:<IndexPage exPath={oPath} notVerify={true} bbPath={bPath} />):<Box>
         <Typography>{text}</Typography>
         <Typography>{fname}</Typography>
         <Typography>{type}</Typography>

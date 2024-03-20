@@ -1,6 +1,7 @@
 export default function download_file(fileURL: string, fileName: string = 'Archive.zip') {
     var save = document.createElement('a');
     save.href = fileURL;
+    console.log(save.href);
     save.target = '_blank';
     var filename = fileURL.substring(fileURL.lastIndexOf('/')+1);
     save.download = fileName || filename;

@@ -437,3 +437,18 @@
 [2024-01-30T10:58:59.578] [DEBUG] cApi - Записей: 0
 [2024-01-30T10:58:59.584] [INFO] cApi - spamigor
 [2024-01-30T10:58:59.585] [DEBUG] cApi - C:\Users\admin\Documents\web\next\cloud\data\spamigor\
+[2024-03-05T15:05:56.474] [INFO] cApi - { atoken: 'null', oldToken: 'null' }
+[2024-03-05T15:05:56.520] [DEBUG] cApi - Записей: 0
+[2024-03-11T09:20:29.030] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzA5Nzg4NzE3LCJleHAiOjE3MDk3OTIzMTd9.c20R-Z2MdoKbu9QornLAZS14Xhdq-iiiTDexWL6L8HU'
+}
+[2024-03-11T09:20:29.085] [DEBUG] cApi - Записей: 1
+[2024-03-11T21:09:42.435] [INFO] cApi - { atoken: 'null', oldToken: 'null' }
+[2024-03-11T21:09:42.533] [DEBUG] cApi - Записей: 0
+[2024-03-20T09:23:51.764] [INFO] cApi - { atoken: '', oldToken: '' }
+[2024-03-20T11:36:26.901] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwiZmlyc3RfbmFtZSI6InMiLCJsYXN0X25hbWUiOiJjIiwiaWQiOjEsImdvbGQiOjAsImlhdCI6MTcxMDkxODM5MSwiZXhwIjoxNzEwOTIxOTkxfQ.DWl8HIE68CfbXwavJOegct0ENSrVR15TU4Ehdu6H85M'
+}
+[2024-03-20T11:36:26.931] [DEBUG] cApi - Записей: 1
