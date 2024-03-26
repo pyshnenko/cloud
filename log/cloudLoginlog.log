@@ -271,3 +271,27 @@
 [2024-03-26T09:10:03.538] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
 [2024-03-26T09:10:03.558] [INFO] cApi - spamigor
 [2024-03-26T09:10:03.558] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-26T13:32:02.763] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzExNDMzNDAzLCJleHAiOjE3MTE0MzcwMDN9.68Bdo9TmdycWYHnSrZGCfutrVNhQ0KFpYuG_K1Vm1lw'
+}
+[2024-03-26T13:32:02.787] [DEBUG] cApi - Записей: 1
+[2024-03-26T13:32:02.890] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-26T13:32:02.912] [INFO] cApi - spamigor
+[2024-03-26T13:32:02.912] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-26T15:22:01.257] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-03-26T15:22:01.343] [DEBUG] cApi - Записей: 1
+[2024-03-26T15:40:35.256] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-03-26T15:40:35.331] [DEBUG] cApi - Записей: 1
+[2024-03-26T15:40:36.119] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-26T15:40:36.123] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-26T15:40:36.141] [INFO] cApi - undefined
+[2024-03-26T15:40:36.142] [INFO] cApi - spamigor
+[2024-03-26T15:40:36.142] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-26T15:46:29.385] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-26T15:46:29.388] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-26T15:46:29.404] [INFO] cApi - undefined
+[2024-03-26T15:46:29.404] [INFO] cApi - spamigor
+[2024-03-26T15:46:29.404] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-26T16:08:50.368] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-03-26T16:08:50.468] [DEBUG] cApi - Записей: 1

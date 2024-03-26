@@ -460,3 +460,8 @@
 [2024-03-20T17:12:51.776] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
 [2024-03-20T17:12:51.794] [INFO] cApi - spamigor
 [2024-03-20T17:12:51.794] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-26T15:18:26.936] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzExNDQ5MTIyLCJleHAiOjE3MTE0NTI3MjJ9.Ir22fPsJJwqmBnGJE5JVzsKJhAhuAPyNVXOAfdtKVZw'
+}
+[2024-03-26T15:18:26.971] [DEBUG] cApi - Записей: 1

@@ -33,8 +33,9 @@ const options = [
   ];
 
 const imgEnd = [
-    'png',
-    'jpg'
+    '.png',
+    '.jpg',
+    'jpeg'
 ]
 
 const archEnd = [
@@ -49,13 +50,16 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
     const [files, setFiles] = useState<{directs: string[], files: string[]}>();
     const [anchorEl, setAnchorEl] = useState<{elem: null | HTMLElement, index: number}>({elem: null, index: -1});
     const [animIn, setAnimIn] = useState<boolean>(false);
+    const [selectedId, setSelectedId] = useState<number>(-1);
     const menuOpen = Boolean(anchorEl.elem);
+    const trig = useRef(true);
 
     const loading = useLoading;
 
     useEffect(()=>{
         loading(true, 'start');
-        if (!notVerify) {
+        if (!notVerify&&trig.current) {
+            trig.current=false;
             const crypt: string = String(localStorage.getItem('cloudAToken'));
             console.log(crypt);
             const saved: string = String(localStorage.getItem('cloudToken'));
@@ -159,6 +163,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
         let data: any;
         try {
             data = await Api.askLS(newToken||User.getToken(), location, 'ls', '', notVerify);
+            console.log(data)
             setFiles({directs: data.data.directs, files: data.data.files});
         }
         catch(e){
@@ -173,11 +178,17 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
     }
 
     const fileType = (name: string) => {
-        let item: string = name.toLocaleLowerCase().slice(-3);
+        let item: string = name.toLocaleLowerCase().slice(-4);
         if (item === 'txt') return 'txt'
-        else if (imgEnd.includes(item)) return 'picture'
+        else {
+            let endText = 'other'
+            imgEnd.forEach((itemP: string)=>{if (name.includes(itemP)) endText='picture'})
+            archEnd.forEach((itemP: string)=>{if (name.includes(itemP)) endText='archive'})
+            return endText
+        }
+        /*if (imgEnd.includes(item)) return 'picture'
         else if (archEnd.includes(item)) return 'archive'
-        else return 'other'
+        else return 'other'*/
     }
 
     const menuClick = (action: string, index: number, path: string) => {
@@ -188,8 +199,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                 console.log(action + ' ' + path + (objName));
                 const cookies = new Cookies(null, {path: '/'});
                 cookies.set('token', User.getToken());
-                console.log(window.location.href)
-                const fileAddr: string = encodeURI(`${window.location.href.indexOf('localhost:8799/')!==-1?'http://localhost:8800':''}/data/${path}/${objName}`);
+                const fileAddr: string = encodeURI(`${window.location.href==='http://localhost:8799/'?'http://localhost:8800':''}/data/${path}${objName}`);
                 download_file(fileAddr, objName);
                 console.log(fileAddr);
             }
@@ -258,11 +268,19 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                             <Box sx={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', alignItems: 'flex-start'}}>
                                 <Button                                  
                                     onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{setAnchorEl({elem: event.currentTarget, index: index}); event.preventDefault()}}
+                                    onClick={()=>setSelectedId(index)}
                                     onDoubleClick={()=>setPath((path==='/'?'':path) +(path[path.length-1]==='/'||path[path.length-1]==='\\'?'':'/')+item+'/')} 
-                                    sx={{display: 'column-flex', maxWidth: '100px', maxHeight: '120px', overflowWrap: 'anywhere', padding: '6px 0px'}}
+                                    sx={{
+                                        display: 'column-flex', 
+                                        maxWidth: '100px', 
+                                        maxHeight: '120px', 
+                                        overflowWrap: 'anywhere', 
+                                        padding: '6px 0px', 
+                                        backgroundColor: index==selectedId?'blanchedalmond':'transparent'
+                                    }}
                                 >
                                     <FolderIcon sx={{zoom: 2.5, color: '#FF9C0C'}} />
-                                    <Typography sx={{width: '85px'}} title={item}>{item.length>15?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
+                                    <Typography sx={{width: '85px'}} title={item}>{((item.length>15)&&(index!==selectedId))?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
                                 </Button>
                                 <IconButton
                                     sx={{position: 'relative', right: '15px', top: '0px', padding: '1px'}}
@@ -280,11 +298,19 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                         <Fade in={animIn} timeout={(index+files.directs.length)*300} key={item}>
                             <Box sx={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', alignItems: 'flex-start'}} key={item}>
                                 <Button 
+                                    onClick={()=>setSelectedId(index+files.directs.length)}
                                     onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{
                                         setAnchorEl({elem: event.currentTarget, index: index+files.directs.length}); 
                                         event.preventDefault()
                                     }}
-                                    sx={{display: 'column-flex', maxWidth: '100px', maxHeight: '120px', overflowWrap: 'anywhere', padding: '6px 0px'}}
+                                    sx={{
+                                        display: 'column-flex', 
+                                        maxWidth: '100px', 
+                                        maxHeight: '120px', 
+                                        overflowWrap: 'anywhere', 
+                                        padding: '6px 0px', 
+                                        backgroundColor: (index+files.directs.length)==selectedId?'blanchedalmond':'transparent'
+                                    }}
                                 >
                                     {fileType(item)==='txt'? <TextSnippetIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
                                         fileType(item)==='archive' ? <FolderZipIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
@@ -295,7 +321,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                                                 </Box>
                                             </Box> :
                                         <InsertDriveFileIcon sx={{zoom: 2.5, color: '#0AD58D'}} />}
-                                    <Typography sx={{width: '85px'}} title={item}>{item.length>15?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
+                                    <Typography sx={{width: '85px'}} title={item}>{((item.length>15)&&(index+files.directs.length!==selectedId))?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
                                 </Button>
                                 
                                 <IconButton

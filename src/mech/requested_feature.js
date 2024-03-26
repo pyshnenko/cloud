@@ -29,6 +29,8 @@ function access_check(addr, name, needLogin) {
 }
 exports.access_check = access_check;
 var makeZip = function (archive, folderToGet, name) {
+    var oneTimePath = path.join(dir, 'data');
+    var oneTimeName = oneTimePath + '/' + String(Number(new Date)) + name + '-Archive.zip';
     try {
         console.log('delete old');
         fs.unlinkSync(path.normalize(folderToGet + '/' + 'Archive.zip'));
@@ -41,7 +43,8 @@ var makeZip = function (archive, folderToGet, name) {
         sysFile = fs.readFileSync(path.normalize(folderToGet + '/' + '%%%ssystemData.json'));
         fs.unlinkSync(path.normalize(folderToGet + '/' + '%%%ssystemData.json'));
     }
-    var output = fs.createWriteStream(folderToGet + '/' + 'Archive.zip');
+    var output = fs.createWriteStream(oneTimeName);
+    //const output = fs.createWriteStream(folderToGet + '/' + 'Archive.zip');
     archive.pipe(output);
     /*const files = fs.readdirSync(folderToGet);
     files.forEach((file: any) => {
@@ -52,12 +55,17 @@ var makeZip = function (archive, folderToGet, name) {
             console.log('add file');
         }
     });*/
-    archive.directory(folderToGet, name);
+    archive.directory(folderToGet + '/', false);
     output.on('close', function () {
         console.log(archive.pointer() + ' total bytes');
         console.log('archiver has been finalized and the output file descriptor has closed.');
         if (sysFile !== undefined)
             fs.writeFileSync(path.normalize(folderToGet + '/' + '%%%ssystemData.json'), sysFile);
+        fs.renameSync(oneTimeName, folderToGet + '/' + 'Archive.zip');
+        try {
+            fs.unlinkSync(oneTimeName);
+        }
+        catch (e) { }
         //return 'oneTime/' + location + '/' + login + '-archive.zip' 
     });
     archive.on('warning', function (err) {
