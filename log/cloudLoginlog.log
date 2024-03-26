@@ -86,3 +86,188 @@
 [2024-03-20T09:23:54.741] [DEBUG] cApi - Записей: 1
 [2024-03-20T09:52:53.516] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
 [2024-03-20T09:52:53.625] [DEBUG] cApi - Записей: 1
+[2024-03-21T08:16:46.334] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-03-21T08:16:46.442] [DEBUG] cApi - Записей: 1
+[2024-03-21T08:16:46.821] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-21T08:16:46.823] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-21T08:16:46.842] [INFO] cApi - undefined
+[2024-03-21T08:16:46.844] [INFO] cApi - spamigor
+[2024-03-21T08:16:46.845] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-21T09:21:52.392] [INFO] cApi - { act: 'simpleToken' }
+[2024-03-21T09:21:52.447] [INFO] cApi - { location: 'spamigor/д.саша', action: 'ls', name: '', incognit: true }
+[2024-03-21T09:21:52.451] [INFO] cApi - { location: 'spamigor/д.саша', action: 'ls', name: '', incognit: true }
+[2024-03-21T09:21:52.472] [INFO] cApi - spamigor
+[2024-03-21T09:21:52.472] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/д.саша
+[2024-03-21T09:21:52.473] [INFO] cApi - spamigor
+[2024-03-21T09:21:52.473] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/д.саша
+[2024-03-21T15:08:59.763] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzEwOTIzNzg2LCJleHAiOjE3MTA5MjczODZ9.af1IQlvtLkTUeDeMkvAeWB4E9IOa6c6Pw6Ah7PfI8IM'
+}
+[2024-03-21T15:08:59.786] [DEBUG] cApi - Записей: 1
+[2024-03-21T15:08:59.918] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-21T15:08:59.940] [INFO] cApi - spamigor
+[2024-03-21T15:08:59.940] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-21T15:09:05.988] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-21T15:09:06.013] [INFO] cApi - spamigor
+[2024-03-21T15:09:06.014] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-21T15:11:15.431] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwiZmlyc3RfbmFtZSI6InMiLCJsYXN0X25hbWUiOiJjIiwiaWQiOjEsImdvbGQiOjAsImlhdCI6MTcxMDk5ODIwNiwiZXhwIjoxNzExMDAxODA2fQ.hv8ACA5KeB4D2pYqCrIGkLrZjWXS2HzDMyqediFaqsA'
+}
+[2024-03-21T15:11:15.449] [DEBUG] cApi - Записей: 1
+[2024-03-21T15:11:15.473] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-21T15:11:15.492] [INFO] cApi - spamigor
+[2024-03-21T15:11:15.492] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-21T15:51:28.411] [INFO] cApi - { act: 'simpleToken' }
+[2024-03-21T15:51:28.543] [INFO] cApi - { location: 'spamigor/д.саша', action: 'ls', name: '', incognit: true }
+[2024-03-21T15:51:28.557] [INFO] cApi - { location: 'spamigor/д.саша', action: 'ls', name: '', incognit: true }
+[2024-03-21T15:51:28.564] [INFO] cApi - spamigor
+[2024-03-21T15:51:28.564] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/д.саша
+[2024-03-21T15:51:28.565] [INFO] cApi - spamigor
+[2024-03-21T15:51:28.566] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/д.саша
+[2024-03-22T08:11:37.971] [INFO] cApi - { act: 'simpleToken' }
+[2024-03-22T08:11:38.196] [INFO] cApi - { location: 'spamigor/д.саша', action: 'ls', name: '', incognit: true }
+[2024-03-22T08:11:38.203] [INFO] cApi - { location: 'spamigor/д.саша', action: 'ls', name: '', incognit: true }
+[2024-03-22T08:11:38.232] [INFO] cApi - spamigor
+[2024-03-22T08:11:38.232] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/д.саша
+[2024-03-22T08:11:38.238] [INFO] cApi - spamigor
+[2024-03-22T08:11:38.238] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/д.саша
+[2024-03-22T08:11:41.750] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzExMDIyOTM5LCJleHAiOjE3MTEwMjY1Mzl9.qEtq_WMgcVMnQBZVJX6bDR8lHQtKohkbWOexDb8Salg'
+}
+[2024-03-22T08:11:41.767] [DEBUG] cApi - Записей: 1
+[2024-03-22T08:11:41.910] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-22T08:11:41.927] [INFO] cApi - spamigor
+[2024-03-22T08:11:41.927] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-22T09:04:21.438] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzExMDIzMDc1LCJleHAiOjE3MTEwMjY2NzV9.1H5bCwQ1Qcat5jfcH9iVPzut3BwbZ5OqDnAG-30r480'
+}
+[2024-03-22T09:04:21.471] [DEBUG] cApi - Записей: 1
+[2024-03-22T09:04:21.542] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-22T09:04:21.566] [INFO] cApi - spamigor
+[2024-03-22T09:04:21.566] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-22T10:36:43.614] [INFO] cApi - { act: 'simpleToken' }
+[2024-03-22T10:36:43.726] [INFO] cApi - { location: 'spamigor/д.саша', action: 'ls', name: '', incognit: true }
+[2024-03-22T10:36:43.739] [INFO] cApi - { location: 'spamigor/д.саша', action: 'ls', name: '', incognit: true }
+[2024-03-22T10:36:43.750] [INFO] cApi - spamigor
+[2024-03-22T10:36:43.750] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/д.саша
+[2024-03-22T10:36:43.751] [INFO] cApi - spamigor
+[2024-03-22T10:36:43.751] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/д.саша
+[2024-03-22T10:36:52.474] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzExMDg0MzAxLCJleHAiOjE3MTEwODc5MDF9.f-l8gou7JY_wsH30c3kv2EHXzgGzeGnMwJalFgMbY8I'
+}
+[2024-03-22T10:36:52.497] [DEBUG] cApi - Записей: 1
+[2024-03-22T10:36:52.657] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-22T10:36:52.678] [INFO] cApi - spamigor
+[2024-03-22T10:36:52.678] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-22T13:15:44.487] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-22T13:15:44.511] [INFO] cApi - spamigor
+[2024-03-22T13:15:44.511] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-22T13:15:44.683] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-22T13:15:44.706] [INFO] cApi - spamigor
+[2024-03-22T13:15:44.706] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-22T13:17:16.730] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzExMDg3NDYxLCJleHAiOjE3MTEwOTEwNjF9.r3cxmebHxX4AaQK-dr_6xkBcINXOQbFLZAOd7Zp9Zqw'
+}
+[2024-03-22T13:17:16.753] [DEBUG] cApi - Записей: 1
+[2024-03-22T13:17:16.776] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-22T13:17:16.779] [INFO] cApi - undefined
+[2024-03-22T13:17:22.740] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-03-22T13:17:22.818] [DEBUG] cApi - Записей: 1
+[2024-03-22T13:17:23.179] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-22T13:17:23.183] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-22T13:17:23.199] [INFO] cApi - undefined
+[2024-03-22T13:17:23.200] [INFO] cApi - spamigor
+[2024-03-22T13:17:23.200] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-22T14:18:40.797] [INFO] cApi - {
+  location: '/',
+  action: 'mkdir',
+  name: 'схема по узлу',
+  incognit: false
+}
+[2024-03-22T14:18:40.824] [INFO] cApi - spamigor
+[2024-03-22T14:18:40.824] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-22T14:18:40.824] [DEBUG] cApi - folder for spamigor created
+[2024-03-22T14:18:40.870] [INFO] cApi - {
+  location: '//схема по узлу',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-03-22T14:18:40.893] [INFO] cApi - spamigor
+[2024-03-22T14:18:40.893] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/схема по узлу
+[2024-03-22T14:19:07.264] [INFO] cApi - {
+  location: '//схема по узлу',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-03-22T14:19:07.284] [INFO] cApi - spamigor
+[2024-03-22T14:19:07.284] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/схема по узлу
+[2024-03-22T14:19:07.328] [INFO] cApi - {
+  location: '//схема по узлу',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-03-22T14:19:07.352] [INFO] cApi - spamigor
+[2024-03-22T14:19:07.352] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/схема по узлу
+[2024-03-22T14:19:07.400] [INFO] cApi - {
+  location: '//схема по узлу',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-03-22T14:19:07.424] [INFO] cApi - spamigor
+[2024-03-22T14:19:07.425] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/схема по узлу
+[2024-03-22T14:24:01.994] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzExMDkzMDEyLCJleHAiOjE3MTEwOTY2MTJ9.nRemWLBIY9uwM_IvH8H4SpOp3mQGuYPzhu-ClzwN5ok'
+}
+[2024-03-22T14:24:02.016] [DEBUG] cApi - Записей: 1
+[2024-03-22T14:24:02.066] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-22T14:24:02.087] [INFO] cApi - spamigor
+[2024-03-22T14:24:02.087] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-22T14:24:04.438] [INFO] cApi - { location: 'схема по узлу/', action: 'ls', name: '', incognit: false }
+[2024-03-22T14:24:04.464] [INFO] cApi - spamigor
+[2024-03-22T14:24:04.464] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/схема по узлу/
+[2024-03-22T14:24:08.118] [INFO] cApi - {
+  location: 'схема по узлу/',
+  action: 'tar',
+  name: '',
+  incognit: false
+}
+[2024-03-22T14:24:08.144] [INFO] cApi - spamigor
+[2024-03-22T14:24:08.144] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/схема по узлу/
+[2024-03-22T14:24:08.156] [DEBUG] cApi - endMakeZip
+[2024-03-25T12:11:17.597] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzExMTA2NjQyLCJleHAiOjE3MTExMTAyNDJ9.WNKIlPmg0dAbii6K04SesD-lxwzhhwRLqvQKRBx9oco'
+}
+[2024-03-25T12:11:17.617] [DEBUG] cApi - Записей: 1
+[2024-03-25T12:11:17.807] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-25T12:11:17.833] [INFO] cApi - spamigor
+[2024-03-25T12:11:17.833] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-03-25T12:13:10.472] [INFO] cApi - { location: 'д.саша/', action: 'ls', name: '', incognit: false }
+[2024-03-25T12:13:10.496] [INFO] cApi - spamigor
+[2024-03-25T12:13:10.496] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/д.саша/
+[2024-03-26T09:10:02.985] [INFO] cApi - { act: 'simpleToken' }
+[2024-03-26T09:10:03.176] [INFO] cApi - { location: 'spamigor/д.саша', action: 'ls', name: '', incognit: true }
+[2024-03-26T09:10:03.185] [INFO] cApi - { location: 'spamigor/д.саша', action: 'ls', name: '', incognit: true }
+[2024-03-26T09:10:03.203] [INFO] cApi - spamigor
+[2024-03-26T09:10:03.203] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/д.саша
+[2024-03-26T09:10:03.204] [INFO] cApi - spamigor
+[2024-03-26T09:10:03.204] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/д.саша
+[2024-03-26T09:10:03.385] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzExMzU3ODc3LCJleHAiOjE3MTEzNjE0Nzd9.DixiMAe743yDyW4tbdPZl01dOABxSaDoRj8sEOGQTPs'
+}
+[2024-03-26T09:10:03.408] [DEBUG] cApi - Записей: 1
+[2024-03-26T09:10:03.538] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-03-26T09:10:03.558] [INFO] cApi - spamigor
+[2024-03-26T09:10:03.558] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
