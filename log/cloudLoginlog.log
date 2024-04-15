@@ -295,3 +295,5 @@
 [2024-03-26T15:46:29.404] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
 [2024-03-26T16:08:50.368] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
 [2024-03-26T16:08:50.468] [DEBUG] cApi - Записей: 1
+[2024-03-26T16:55:53.709] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-03-26T16:55:53.884] [DEBUG] cApi - Записей: 1
