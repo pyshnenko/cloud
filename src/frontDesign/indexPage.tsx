@@ -8,20 +8,14 @@ import Box from '@mui/material/Box';
 import Api from '../frontMech/api';
 import {User, userData} from '../frontMech/user';
 import Typography from '@mui/material/Typography';
-import Fade from '@mui/material/Fade';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import IconButton from '@mui/material/IconButton';
-import FolderIcon from '@mui/icons-material/Folder';
-import TextSnippetIcon from '@mui/icons-material/TextSnippet';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddButton from './addButton'
+import FilePalette from './filePalette'
 import Cookies from 'universal-cookie';
 import download_file from '../frontMech/downloadFile';
 import {Loading, useLoading} from '../hooks/useLoading';
-import FolderZipIcon from '@mui/icons-material/FolderZip';
 
 const options = [
     'Открыть',
@@ -66,9 +60,10 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
             console.log(saved);
             let decr: TokenLocalData & {exp: number};
             try {
-                decr = jwt.verify(saved, crypt) as TokenLocalData & {exp: number}
+                decr = jwt.verify(saved, crypt) as TokenLocalData & {exp: number};
+                console.log(decr);
                 User.setToken(saved, crypt, decr);
-                folder();
+                folder('/', saved);
                 const cookies = new Cookies(null, {path: '/'});
                 cookies.set('token', saved);
                 setDatal(decr.login);
@@ -85,7 +80,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                     else {
                         loading(true, 'tokenUPD');
                         Api.tokenUPD(saved, crypt)
-                        .then((res)=>{
+                        .then((res: any)=>{
                             console.log(res);
                             let usData = res.data;
                             const token = res.data.token;
@@ -99,7 +94,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                             setDatal(usData.login);
                             loading(false, 'tokenUPD')
                         })
-                        .catch((e)=>{
+                        .catch((e: any)=>{
                             console.log(e);
                             User.exit();
                             window.location.href='/login';
@@ -160,6 +155,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
     const folder = async (location: string = '/', newToken?: string) => {
         loading(true, 'folder');
         console.log(userData);
+        console.log(User.getToken());
         let data: any;
         try {
             data = await Api.askLS(newToken||User.getToken(), location, 'ls', '', notVerify);
@@ -168,6 +164,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
         }
         catch(e){
             console.log(e)
+            setFiles({directs: [], files: []});
         }
         finally {loading(false, 'folder'); setAnimIn(true)};
         //Api.askLS(User.getToken());
@@ -241,15 +238,21 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
     }
 
     return (
-        <Box sx={{display: 'flex', flexDirection: 'column'}}>
+        <Box sx={{display: 'flex', flexDirection: 'column', height: '98vh'}}>
             {files&&<AddButton path={path} setPath={setPath} files={files} folder={folder} notVerify={notVerify}/>}
-            <h1>{datal}</h1>        
-            <ButtonGroup variant="text" aria-label="text button group">
-                <Button onClick={()=>window.location.href='/login'}>Войти</Button>
-                <Button onClick={()=>window.location.href='/register'}>Регистрация</Button>
-                <Button onClick={()=>folder()}>О сайте</Button>
-            </ButtonGroup>
-            {User.getAuth()&&<div role="presentation" style={{zIndex: 10}}>
+            <Box sx={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap', alignItems: 'center'}}>
+                <h1 style={{margin: '4px'}}>{datal}</h1>        
+                <ButtonGroup variant="text" aria-label="text button group">
+                    <Button onClick={()=>window.location.href='/login'}>Войти</Button>
+                    <Button onClick={()=>window.location.href='/register'}>Регистрация</Button>
+                    <Button onClick={()=>folder()}>О сайте</Button>
+                </ButtonGroup>
+            </Box>
+            {User.getAuth()&&<div role="presentation" style={{
+                    backgroundColor: 'aliceblue', 
+                    padding: '4px', 
+                    borderRadius: '12px', 
+                    boxShadow: '0 0 10px aliceblue'}}>
                 <Breadcrumbs aria-label="breadcrumb">
                     <Typography color="inherit" onClick={()=>setPath('/')} sx={{cursor: 'pointer'}}>
                         {userData.login}
@@ -261,84 +264,19 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                     }
                 </Breadcrumbs>
             </div>}
-            <Box sx={{display: 'inline-flex', alignItems: 'flex-start', flexWrap: 'wrap'}}>
-                {files?.directs.map((item: string, index: number)=> {
-                    return (
-                        <Fade in={animIn} timeout={index*300} key={item}>
-                            <Box sx={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', alignItems: 'flex-start'}}>
-                                <Button                                  
-                                    onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{setAnchorEl({elem: event.currentTarget, index: index}); event.preventDefault()}}
-                                    onClick={()=>setSelectedId(index)}
-                                    onDoubleClick={()=>setPath((path==='/'?'':path) +(path[path.length-1]==='/'||path[path.length-1]==='\\'?'':'/')+item+'/')} 
-                                    sx={{
-                                        display: 'column-flex', 
-                                        maxWidth: '100px', 
-                                        maxHeight: '120px', 
-                                        overflowWrap: 'anywhere', 
-                                        padding: '6px 0px', 
-                                        backgroundColor: index==selectedId?'blanchedalmond':'transparent'
-                                    }}
-                                >
-                                    <FolderIcon sx={{zoom: 2.5, color: '#FF9C0C'}} />
-                                    <Typography sx={{width: '85px'}} title={item}>{((item.length>15)&&(index!==selectedId))?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
-                                </Button>
-                                <IconButton
-                                    sx={{position: 'relative', right: '15px', top: '0px', padding: '1px'}}
-                                    aria-haspopup="true"
-                                    onClick={(event: React.MouseEvent<HTMLElement>)=>setAnchorEl({elem: event.currentTarget, index: index})}
-                                >
-                                    <MoreVertIcon />
-                                </IconButton>
-                            </Box>
-                        </Fade>
-                    )
-                })}
-                {files?.files.map((item: string, index: number)=> {
-                    return (
-                        <Fade in={animIn} timeout={(index+files.directs.length)*300} key={item}>
-                            <Box sx={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', alignItems: 'flex-start'}} key={item}>
-                                <Button 
-                                    onClick={()=>setSelectedId(index+files.directs.length)}
-                                    onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{
-                                        setAnchorEl({elem: event.currentTarget, index: index+files.directs.length}); 
-                                        event.preventDefault()
-                                    }}
-                                    sx={{
-                                        display: 'column-flex', 
-                                        maxWidth: '100px', 
-                                        maxHeight: '120px', 
-                                        overflowWrap: 'anywhere', 
-                                        padding: '6px 0px', 
-                                        backgroundColor: (index+files.directs.length)==selectedId?'blanchedalmond':'transparent'
-                                    }}
-                                >
-                                    {fileType(item)==='txt'? <TextSnippetIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
-                                        fileType(item)==='archive' ? <FolderZipIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
-                                        fileType(item)==='picture'? 
-                                            <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                                <Box sx={{width: '60px', height: '60px'}}>
-                                                    <img style={{width: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${item}`} />
-                                                </Box>
-                                            </Box> :
-                                        <InsertDriveFileIcon sx={{zoom: 2.5, color: '#0AD58D'}} />}
-                                    <Typography sx={{width: '85px'}} title={item}>{((item.length>15)&&(index+files.directs.length!==selectedId))?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
-                                </Button>
-                                
-                                <IconButton
-                                    sx={{position: 'relative', right: '15px', top: 0, padding: '1px'}}
-                                    aria-haspopup="true"
-                                    onClick={(event: React.MouseEvent<HTMLElement>)=>{
-                                        setAnchorEl({elem: event.currentTarget, index: index+files.directs.length}); 
-                                        event.preventDefault()
-                                    }}
-                                >
-                                    <MoreVertIcon />
-                                </IconButton>
-                            </Box>
-                        </Fade>
-                    )
-                })}
-            </Box>
+            <FilePalette 
+                files={files} 
+                path={path} 
+                setSelectedId={setSelectedId} 
+                selectedId={selectedId} 
+                setAnchorEl={setAnchorEl} 
+                setPath={setPath} 
+                animIn={animIn} 
+                fileType={fileType} 
+                datal={datal} 
+                notVerify={notVerify}
+                folder={folder}
+            />
             <div>
                 <Menu
                     id="long-menu"

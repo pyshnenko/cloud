@@ -9,7 +9,7 @@ const dir = process.cwd();
 const mongo = require('./../../src/mech/mongo');
 const mongoS = new mongo();
 const {access_check, makeZip, body_data} = require('../../src/mech/requested_feature');
-const {FSType} = require('../../src/types/api/types');
+//const {FSType} = require('../../src/types/api/types');
 
 const log4js = require("log4js");
 
@@ -37,6 +37,7 @@ export default async function handler(req: any, res: any) {
         let access: {result: boolean, login?: string} = (dat.length===0||buf?.incognit)?access_check(buf.location, buf?.name||'/', true) as {result: boolean, login?: string}:{result: false};
         if (access.result===true) dat[0] = {login: access.login};
         logger.info(dat[0]?.login);
+        console.log(dat);
         if (dat.length) {
             const location = access.result ? path.join(dir, 'data', path.normalize(buf.location)) : path.join(dir, 'data', dat[0].login, path.normalize(buf.location))
             logger.debug(path.normalize(location));

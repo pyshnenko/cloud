@@ -1,0 +1,264 @@
+import React, { useEffect, useState, useRef, createContext, useContext } from 'react';
+import Box from '@mui/material/Box';
+import Fade from '@mui/material/Fade';
+import Button from '@mui/material/Button';
+import FolderIcon from '@mui/icons-material/Folder';
+import IconButton from '@mui/material/IconButton';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+import FolderZipIcon from '@mui/icons-material/FolderZip';
+import Typography from '@mui/material/Typography';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import { useLoading } from '../hooks/useLoading';
+import {User, userData} from '../frontMech/user';
+
+export default function FilePalette ({files, path, setSelectedId, selectedId, setAnchorEl, setPath, animIn, fileType, datal, notVerify, folder}: any) {
+
+    const [ fileDrag, setFileDrag ] = useState<boolean>(false);
+
+    const username = useRef(datal);
+    const folderPath = useRef(path);
+
+    const loading = useLoading;
+
+    useEffect(()=>{
+        username.current=datal;
+    }, [datal])
+
+    useEffect(()=>{
+        folderPath.current=path;
+        console.log(path)
+    }, [path])
+
+    useEffect(()=>{
+        console.log(fileDrag)
+    }, [fileDrag])
+    
+    useEffect(()=>{
+        console.log("user: " + datal);
+        const dropZone = document.getElementById('folderBox');
+        const dropZone2 = document.getElementById('folderBox2');
+        if (dropZone&&dropZone2) {
+            let hoverClassName = 'hover';
+        
+            dropZone.addEventListener("dragenter", function(e) {
+                e.preventDefault();
+                console.log("dragenter")
+                setFileDrag(true);
+            });
+        
+            dropZone2.addEventListener("dragover", function(e) {
+                e.preventDefault();
+                console.log("dragover")
+                setFileDrag(true);
+            });
+        
+            dropZone2.addEventListener("dragleave", function(e) {
+                e.preventDefault();
+                console.log("dragleave")
+                setFileDrag(false);
+            });
+        
+            // Это самое важное событие, событие, которое дает доступ к файлам
+            dropZone2.addEventListener("drop", async function(e: any) {
+                e.preventDefault();
+                setFileDrag(false);
+
+                const files = Array.from(e.dataTransfer.files);
+                console.log(files);
+                attFile(await getFileAsync(e.dataTransfer));
+                // TODO что-то делает с файлами...
+            });            
+        }
+    }, [])
+
+    const getFileAsync = async (dataTranfer: any) => {
+        const files = [];
+        for (var i = 0; i < dataTranfer.items.length; i++) {
+            const item = dataTranfer.items[i];
+            console.log(item)
+            if (item.kind === 'file') {
+                if (typeof item.webkitGetAsEntry === 'function'){
+                    const entry = item.webkitGetAsEntry();
+                    const entryContent: any = await readEntryContentAsync(entry);
+                    files.push(...entryContent);
+                    continue;
+                }
+    
+                const file = item.getAsFile();
+                if (file) { files.push(file); }
+            }
+            else console.log(item.kind)
+        }
+        return files;
+    };
+    
+    // Возвращает Promise со всеми файлами иерархии каталогов
+    const readEntryContentAsync = async (entry: any) => {
+        console.log(entry);
+        return new Promise((resolve, reject) => {
+            let reading = 0;
+            const contents: any[] = [];
+    
+            readEntry(entry);
+    
+            function readEntry(entry: any) {
+                //console.log(entry)
+                if (entry.isFile) {
+                    reading++;
+                    entry.file((file: any) => {
+                        reading--;
+                        const newFileName = entry.fullPath;
+                        //file.name = entry.fullPath;
+                        contents.push({file, fileName: file.name, path: folderPath.current+entry.fullPath.slice(1, entry.fullPath.length-file.name.length-1)});
+    
+                        if (reading === 0) {
+                            resolve(contents);
+                        }
+                    });
+                } else if (entry.isDirectory) {
+                    readReaderContent(entry.createReader());
+                }
+            };
+          
+            function readReaderContent(reader: any) {
+                reading++;
+                reader.readEntries(function(entries: any) {
+                    reading--;
+                    for (const entry of entries) {
+                        readEntry(entry);
+                    }
+                    if (reading === 0) {
+                        resolve(contents);
+                    }
+                });
+            };
+        });
+    };
+
+    const attFile = async (files: any[]) => {
+        console.log(files)
+        for (let i = 0; i<files.length; i++) {
+            console.log(files)
+            let data = new FormData();
+            data.append('file', files[i].file);
+            const options = {
+                method: 'POST',
+                headers: {
+                    folder: encodeURI((notVerify?'':(userData.login+'/'))+(files[i].path==='/'?'':files[i].path)),
+                    fname: encodeURI(files[i].fileName),
+                    user: encodeURI(userData.login),
+                    token: encodeURI(User.getToken())
+                },
+                body: data,
+            }                
+            const response = await fetch((window.location.href.slice(0,22)==='http://localhost:8799/')?
+                'http://localhost:8800/upload':
+                '/upload', options);//http://localhost:8800/upload
+            const res = await response.json();
+            console.log(res);
+            folder(path);
+        }
+        const oPath = path;            
+        loading(false, 'attFile');
+        setPath('');
+        setPath(path);
+        loading(false, 'attFile');
+    }
+    
+    return (
+        <Box sx={{
+            display: 'inline-flex', 
+            alignItems: 'flex-start', 
+            flexWrap: 'wrap', 
+            height: '100%', 
+            backgroundColor: 'floralwhite', 
+            padding: '8px', 
+            margin: '8px',
+            boxShadow: '0 0 10px floralwhite',
+            borderRadius: '8px',
+            alignContent: 'flex-start'
+        }}
+            id='folderBox'
+            onClick={()=>setSelectedId(-1)}
+        >
+            <Box sx={{position: 'absolute', top: 0, left: 0, width: fileDrag?'100vw':0, height: fileDrag?'100vh':0, opacity: 0.7, backgroundColor: 'black', zIndex: 1001}} id='folderBox2' />
+            {files?.directs.map((item: string, index: number)=> {
+                return (
+                    <Fade in={animIn} timeout={index*300} key={item}>
+                        <Box sx={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', alignItems: 'flex-start', zIndex: index==selectedId?1:0}}>
+                            <Button                                  
+                                onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{setAnchorEl({elem: event.currentTarget, index: index}); event.preventDefault()}}
+                                onClick={()=>{setTimeout(()=>setSelectedId(index), 10, index)}}
+                                onDoubleClick={()=>setPath((path==='/'?'':path) +(path[path.length-1]==='/'||path[path.length-1]==='\\'?'':'/')+item+'/')} 
+                                sx={{
+                                    display: 'column-flex', 
+                                    maxWidth: '100px', 
+                                    maxHeight: '120px', 
+                                    overflowWrap: 'anywhere', 
+                                    padding: '6px 0px', 
+                                    backgroundColor: index==selectedId?'blanchedalmond':'transparent'
+                                }}
+                            >
+                                <FolderIcon sx={{zoom: 2.5, color: '#FF9C0C'}} />
+                                <Typography sx={{width: '85px', backgroundColor: index==selectedId?'blanchedalmond':'transparent', opacity: 0.8}} title={item}>{((item.length>15)&&(index!==selectedId))?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
+                            </Button>
+                            <IconButton
+                                sx={{position: 'relative', right: '15px', top: '0px', padding: '1px'}}
+                                aria-haspopup="true"
+                                onClick={(event: React.MouseEvent<HTMLElement>)=>setAnchorEl({elem: event.currentTarget, index: index})}
+                            >
+                                <MoreVertIcon />
+                            </IconButton>
+                        </Box>
+                    </Fade>
+                )
+            })}
+            {files?.files.map((item: string, index: number)=> {
+                return (
+                    <Fade in={animIn} timeout={(index+files.directs.length)*300} key={item}>
+                        <Box sx={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', alignItems: 'flex-start', zIndex: (index+files.directs.length)==selectedId?1:0}} key={item}>
+                            <Button 
+                                onClick={()=>{setTimeout(()=>setSelectedId(index+files.directs.length), 10)}}
+                                onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{
+                                    setAnchorEl({elem: event.currentTarget, index: index+files.directs.length}); 
+                                    event.preventDefault()
+                                }}
+                                sx={{
+                                    display: 'column-flex', 
+                                    maxWidth: '100px', 
+                                    maxHeight: '120px', 
+                                    overflowWrap: 'anywhere', 
+                                    padding: '6px 0px', 
+                                    backgroundColor: (index+files.directs.length)==selectedId?'blanchedalmond':'transparent'
+                                }}
+                            >
+                                {fileType(item)==='txt'? <TextSnippetIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
+                                    fileType(item)==='archive' ? <FolderZipIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
+                                    fileType(item)==='picture'? 
+                                        <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                            <Box sx={{width: '60px', height: '60px'}}>
+                                                <img style={{width: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${item}`} />
+                                            </Box>
+                                        </Box> :
+                                    <InsertDriveFileIcon sx={{zoom: 2.5, color: '#0AD58D'}} />}
+                                <Typography sx={{width: '85px', backgroundColor: (index+files.directs.length)==selectedId?'blanchedalmond':'transparent', opacity: 0.8}} title={item}>{((item.length>15)&&(index+files.directs.length!==selectedId))?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
+                            </Button>
+                            
+                            <IconButton
+                                sx={{position: 'relative', right: '15px', top: 0, padding: '1px'}}
+                                aria-haspopup="true"
+                                onClick={(event: React.MouseEvent<HTMLElement>)=>{
+                                    setAnchorEl({elem: event.currentTarget, index: index+files.directs.length}); 
+                                    event.preventDefault()
+                                }}
+                            >
+                                <MoreVertIcon />
+                            </IconButton>
+                        </Box>
+                    </Fade>
+                )
+            })}
+        </Box>
+    )
+}
