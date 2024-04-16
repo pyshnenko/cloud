@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import { useLoading } from '../hooks/useLoading';
 import {User, userData} from '../frontMech/user';
+import UploadDiv from './uploadDiv';
 
 export default function FilePalette ({files, path, setSelectedId, selectedId, setAnchorEl, setPath, animIn, fileType, datal, notVerify, folder}: any) {
 
@@ -182,7 +183,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
             id='folderBox'
             onClick={()=>setSelectedId(-1)}
         >
-            <Box sx={{position: 'absolute', top: 0, left: 0, width: fileDrag?'100vw':0, height: fileDrag?'100vh':0, opacity: 0.7, backgroundColor: 'black', zIndex: 1001}} id='folderBox2' />
+            <UploadDiv fileDrag={fileDrag} />
             {files?.directs.map((item: string, index: number)=> {
                 return (
                     <Fade in={animIn} timeout={index*300} key={item}>
@@ -201,7 +202,16 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                                 }}
                             >
                                 <FolderIcon sx={{zoom: 2.5, color: '#FF9C0C'}} />
-                                <Typography sx={{width: '85px', backgroundColor: index==selectedId?'blanchedalmond':'transparent', opacity: 0.8}} title={item}>{((item.length>15)&&(index!==selectedId))?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
+                                <Typography 
+                                    sx={{
+                                        width: '85px', 
+                                        backgroundColor: index==selectedId?'blanchedalmond':'transparent', 
+                                        opacity: 0.8,
+                                        fontSize: '0.95rem'
+                                    }} 
+                                    title={item}>
+                                        {((item.length>15)&&(index!==selectedId))?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}
+                                </Typography>
                             </Button>
                             <IconButton
                                 sx={{position: 'relative', right: '15px', top: '0px', padding: '1px'}}
@@ -242,7 +252,17 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                                             </Box>
                                         </Box> :
                                     <InsertDriveFileIcon sx={{zoom: 2.5, color: '#0AD58D'}} />}
-                                <Typography sx={{width: '85px', backgroundColor: (index+files.directs.length)==selectedId?'blanchedalmond':'transparent', opacity: 0.8}} title={item}>{((item.length>15)&&(index+files.directs.length!==selectedId))?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}</Typography>
+                                <Typography 
+                                    sx={{
+                                        width: '85px', 
+                                        backgroundColor: (index+files.directs.length)==selectedId?'blanchedalmond':'transparent', 
+                                        opacity: 0.8,
+                                        fontSize: '0.95rem'
+                                    }} 
+                                    title={item}
+                                >
+                                    {((item.length>15)&&(index+files.directs.length!==selectedId))?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}
+                                </Typography>
                             </Button>
                             
                             <IconButton

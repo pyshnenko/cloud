@@ -51,65 +51,67 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
     const loading = useLoading;
 
     useEffect(()=>{
-        loading(true, 'start');
-        if (!notVerify&&trig.current) {
-            trig.current=false;
-            const crypt: string = String(localStorage.getItem('cloudAToken'));
-            console.log(crypt);
-            const saved: string = String(localStorage.getItem('cloudToken'));
-            console.log(saved);
-            let decr: TokenLocalData & {exp: number};
-            try {
-                decr = jwt.verify(saved, crypt) as TokenLocalData & {exp: number};
-                console.log(decr);
-                User.setToken(saved, crypt, decr);
-                folder('/', saved);
-                const cookies = new Cookies(null, {path: '/'});
-                cookies.set('token', saved);
-                setDatal(decr.login);
-            } catch(e: any) {
-                setDatal('токен протух');
-                console.log(e);
-                console.log(e.message);
-                if (e){//.message === 'jwt malformed' || e.message === 'jwt expired') {
-                    console.log(e.expiredAt);
-                    const date = new Date(e.expiredAt);
-                    const days: number = (Number(new Date())- Number(date))/(1000*60*60*24);
-                    console.log(`days: ${days}`);
-                    if (days > 5) window.location.href='/login';
-                    else {
-                        loading(true, 'tokenUPD');
-                        Api.tokenUPD(saved, crypt)
-                        .then((res: any)=>{
-                            console.log(res);
-                            let usData = res.data;
-                            const token = res.data.token;
-                            const atoken = res.data.atoken;
-                            delete(usData.token);
-                            delete(usData.atoken);
-                            User.setToken(token, atoken, usData);
-                            const cookies = new Cookies(null, {path: '/'});
-                            cookies.set('token', token);
-                            folder('/', token);
-                            setDatal(usData.login);
-                            loading(false, 'tokenUPD')
-                        })
-                        .catch((e: any)=>{
-                            console.log(e);
-                            User.exit();
-                            window.location.href='/login';
-                        });
-                        loading(false, 'start');
+        if (trig.current) {
+            loading(true, 'start');
+            if (!notVerify&&trig.current) {
+                trig.current=false;
+                const crypt: string = String(localStorage.getItem('cloudAToken'));
+                console.log(crypt);
+                const saved: string = String(localStorage.getItem('cloudToken'));
+                console.log(saved);
+                let decr: TokenLocalData & {exp: number};
+                try {
+                    decr = jwt.verify(saved, crypt) as TokenLocalData & {exp: number};
+                    console.log(decr);
+                    User.setToken(saved, crypt, decr);
+                    folder('/', saved);
+                    const cookies = new Cookies(null, {path: '/'});
+                    cookies.set('token', saved);
+                    setDatal(decr.login);
+                } catch(e: any) {
+                    setDatal('токен протух');
+                    console.log(e);
+                    console.log(e.message);
+                    if (e){//.message === 'jwt malformed' || e.message === 'jwt expired') {
+                        console.log(e.expiredAt);
+                        const date = new Date(e.expiredAt);
+                        const days: number = (Number(new Date())- Number(date))/(1000*60*60*24);
+                        console.log(`days: ${days}`);
+                        if (days > 5) window.location.href='/login';
+                        else {
+                            loading(true, 'tokenUPD');
+                            Api.tokenUPD(saved, crypt)
+                            .then((res: any)=>{
+                                console.log(res);
+                                let usData = res.data;
+                                const token = res.data.token;
+                                const atoken = res.data.atoken;
+                                delete(usData.token);
+                                delete(usData.atoken);
+                                User.setToken(token, atoken, usData);
+                                const cookies = new Cookies(null, {path: '/'});
+                                cookies.set('token', token);
+                                folder('/', token);
+                                setDatal(usData.login);
+                                loading(false, 'tokenUPD')
+                            })
+                            .catch((e: any)=>{
+                                console.log(e);
+                                User.exit();
+                                window.location.href='/login';
+                            });
+                            loading(false, 'start');
+                        }
                     }
                 }
+                console.log(userData)
             }
-            console.log(userData)
+            else {
+                folder(path);
+                setDatal('Путник')
+            }
+            loading(false, 'start');
         }
-        else {
-            folder(path);
-            setDatal('Путник')
-        }
-        loading(false, 'start');
     }, [])
 
     useEffect(()=> {
@@ -241,12 +243,15 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
         <Box sx={{display: 'flex', flexDirection: 'column', height: '98vh'}}>
             {files&&<AddButton path={path} setPath={setPath} files={files} folder={folder} notVerify={notVerify}/>}
             <Box sx={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap', alignItems: 'center'}}>
-                <h1 style={{margin: '4px'}}>{datal}</h1>        
+                {!notVerify?<Box sx={{display: 'flex', width: '100%', flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <h1 style={{margin: '4px'}}>{datal}</h1>
+                    <Button onClick={()=>{localStorage.clear(); window.location.href='/login'}} variant="outlined">Выйти</Button>
+                </Box>:      
                 <ButtonGroup variant="text" aria-label="text button group">
                     <Button onClick={()=>window.location.href='/login'}>Войти</Button>
                     <Button onClick={()=>window.location.href='/register'}>Регистрация</Button>
                     <Button onClick={()=>folder()}>О сайте</Button>
-                </ButtonGroup>
+                </ButtonGroup>}
             </Box>
             {User.getAuth()&&<div role="presentation" style={{
                     backgroundColor: 'aliceblue', 
