@@ -473,3 +473,16 @@
 [2024-03-27T08:59:59.915] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
 [2024-03-27T08:59:59.940] [INFO] cApi - spamigor
 [2024-03-27T08:59:59.940] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-04-15T16:14:12.991] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwiZmlyc3RfbmFtZSI6InMiLCJsYXN0X25hbWUiOiJjIiwiaWQiOjEsImdvbGQiOjAsImlhdCI6MTcxMzE2ODk3MiwiZXhwIjoxNzEzMTcyNTcyfQ.qNNAdUeXktSGIlyjZgXPYQ4rWULAdj15EPP-ryHRkXM'
+}
+[2024-04-15T16:14:13.037] [DEBUG] cApi - Записей: 1
+[2024-04-16T09:52:51.737] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzEzMTg2ODUzLCJleHAiOjE3MTMxOTA0NTN9.whg79debKBZPmrQXEaBgbJss0Y2gOdDNfFJY7j4M290'
+}
+[2024-04-16T09:52:51.755] [DEBUG] cApi - Записей: 1
+[2024-04-16T09:52:51.996] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-04-16T09:52:52.022] [INFO] cApi - spamigor
+[2024-04-16T09:52:52.022] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
