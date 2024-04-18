@@ -66,8 +66,9 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                 setFileDrag(false);
 
                 const files = Array.from(e.dataTransfer.files);
-                console.log(files);
+                console.log(e.dataTransfer);
                 attFile(await getFileAsync(e.dataTransfer));
+                //console.log(await getFileAsync(e.dataTransfer));
                 // TODO что-то делает с файлами...
             });            
         }
@@ -75,6 +76,8 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
 
     const getFileAsync = async (dataTranfer: any) => {
         const files = [];
+        const itemL = dataTranfer.items.length;
+        console.log(itemL);
         for (var i = 0; i < dataTranfer.items.length; i++) {
             const item = dataTranfer.items[i];
             console.log(item)
@@ -83,6 +86,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                     const entry = item.webkitGetAsEntry();
                     const entryContent: any = await readEntryContentAsync(entry);
                     files.push(...entryContent);
+
                     continue;
                 }
     
@@ -111,7 +115,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                         reading--;
                         const newFileName = entry.fullPath;
                         //file.name = entry.fullPath;
-                        contents.push({file, fileName: file.name, path: folderPath.current+entry.fullPath.slice(1, entry.fullPath.length-file.name.length-1)});
+                        contents.push({file, fileName: file.name, path: folderPath.current+entry.fullPath.slice(0, entry.fullPath.length-file.name.length-1)});
     
                         if (reading === 0) {
                             resolve(contents);
@@ -146,7 +150,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
             const options = {
                 method: 'POST',
                 headers: {
-                    folder: encodeURI((notVerify?'':(userData.login+'/'))+(files[i].path==='/'?'':files[i].path)),
+                    folder: encodeURI(userData.login+'/'+files[i].path),
                     fname: encodeURI(files[i].fileName),
                     user: encodeURI(userData.login),
                     token: encodeURI(User.getToken())
@@ -158,13 +162,17 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                 '/upload', options);//http://localhost:8800/upload
             const res = await response.json();
             console.log(res);
-            folder(path);
+            //folder(path);
         }
-        const oPath = path;            
+        const oPath = folderPath.current;            
         loading(false, 'attFile');
         setPath('');
-        setPath(path);
-        loading(false, 'attFile');
+        setTimeout(()=>{
+            setPath(oPath);
+            loading(false, 'attFile');
+        }, 1000);
+        console.log(oPath);
+        //setPath(oPath);
     }
     
     return (
