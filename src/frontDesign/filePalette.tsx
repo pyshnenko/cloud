@@ -9,6 +9,7 @@ import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import FolderZipIcon from '@mui/icons-material/FolderZip';
 import Typography from '@mui/material/Typography';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import TextField from '@mui/material/TextField';
 import { useLoading } from '../hooks/useLoading';
 import {User, userData} from '../frontMech/user';
 import UploadDiv from './uploadDiv';
@@ -19,6 +20,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
 
     const username = useRef(datal);
     const folderPath = useRef(path);
+    let inputIdTrig = useRef<any>(null);
 
     const loading = useLoading;
 
@@ -39,6 +41,10 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
         console.log("user: " + datal);
         const dropZone = document.getElementById('folderBox');
         const dropZone2 = document.getElementById('folderBox2');
+        const inputElem = document.getElementById('hiddenInput');
+        inputElem?.focus();
+        inputIdTrig.current = inputElem;
+
         if (dropZone&&dropZone2) {
             let hoverClassName = 'hover';
         
@@ -76,27 +82,72 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
 
     const getFileAsync = async (dataTranfer: any) => {
         const files = [];
-        const itemL = dataTranfer.items.length;
+        let itemInp = [];
+        let itemL = dataTranfer.items.length;
         console.log(itemL);
-        for (var i = 0; i < dataTranfer.items.length; i++) {
-            const item = dataTranfer.items[i];
-            console.log(item)
+        for (var i = 0; i < dataTranfer.items.length; i++) 
+            itemInp.push(dataTranfer.items[i]);
+        console.log(itemInp);
+        for (var i = 0; i < itemInp.length; i++) {
+            const item = itemInp[i];
             if (item.kind === 'file') {
                 if (typeof item.webkitGetAsEntry === 'function'){
                     const entry = item.webkitGetAsEntry();
+                    console.log(entry);
+                    /*const entryContent: any = await filesFromFolders(entry);
+                    console.log(entryContent)
+                    entryContent.map((itemMap: any)=> {
+                        console.log(itemMap)
+                        if (itemMap) files.push(itemMap);
+                    })
+                    console.log(files)*/
                     const entryContent: any = await readEntryContentAsync(entry);
+                    console.log(entryContent)
                     files.push(...entryContent);
 
                     continue;
                 }
     
                 const file = item.getAsFile();
+                console.log(file)
                 if (file) { files.push(file); }
             }
             else console.log(item.kind)
         }
+        console.log(files)
         return files;
     };
+
+    const filesFromFolders = async (entry: any) => {
+        console.log(entry);
+        const contents: any[] = [];
+        await readEntry(contents, entry);
+        console.log(contents)
+        return contents;
+        
+    }
+
+    async function readEntry(contents: any[], inpEntry: any, fstSt: boolean = true) {
+        console.log(inpEntry);
+        if (inpEntry.isFile) {                    
+            inpEntry.file((file: any) => {
+                //const newFileName = entry.fullPath;
+                //file.name = entry.fullPath;
+                contents.push({file, fileName: file.name, path: folderPath.current+inpEntry.fullPath.slice(0, inpEntry.fullPath.length-file.name.length-1)});
+                console.log(contents)
+                if (fstSt) return contents;
+            });
+        }
+        else if (inpEntry.isDirectory) {
+            inpEntry.createReader()
+                .readEntries(async function(entries: any) {
+                    for (const entry of entries) {
+                        contents.push(await readEntry(contents, entry, false));
+                    }console.log(contents)
+                    if (fstSt) return contents
+                })
+        }
+    }
     
     // Возвращает Promise со всеми файлами иерархии каталогов
     const readEntryContentAsync = async (entry: any) => {
@@ -110,13 +161,12 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
             function readEntry(entry: any) {
                 //console.log(entry)
                 if (entry.isFile) {
-                    reading++;
+                    reading++;                    
                     entry.file((file: any) => {
                         reading--;
                         const newFileName = entry.fullPath;
                         //file.name = entry.fullPath;
                         contents.push({file, fileName: file.name, path: folderPath.current+entry.fullPath.slice(0, entry.fullPath.length-file.name.length-1)});
-    
                         if (reading === 0) {
                             resolve(contents);
                         }
@@ -157,22 +207,35 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                 },
                 body: data,
             }                
-            const response = await fetch((window.location.href.slice(0,22)==='http://localhost:8799/')?
-                'http://localhost:8800/upload':
-                '/upload', options);//http://localhost:8800/upload
-            const res = await response.json();
-            console.log(res);
+            try{
+                const response = await fetch((window.location.href.slice(0,22)==='http://localhost:8799/')?
+                    'http://localhost:8800/upload':
+                    '/upload', options);//http://localhost:8800/upload
+                const res = await response.json();
+                console.log(res);
+            }
+            catch (e: any) {}
             //folder(path);
         }
         const oPath = folderPath.current;            
         loading(false, 'attFile');
-        setPath('');
+        setPath('//');
         setTimeout(()=>{
             setPath(oPath);
             loading(false, 'attFile');
         }, 1000);
         console.log(oPath);
         //setPath(oPath);
+    }
+
+    const pasteMove = (evt: any) => {
+        let files = evt.clipboardData.files;
+        console.log(files)
+        let upFiles: any[] = [];
+        for (let i = 0; i< files.length; i++) {
+            upFiles.push({file: files[i], fileName: files[i].name==='image.png'?String(files[i].lastModified)+'.png':files[i].name, path: folderPath.current});
+        }
+        attFile(upFiles);
     }
     
     return (
@@ -189,9 +252,10 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
             alignContent: 'flex-start'
         }}
             id='folderBox'
-            onClick={()=>setSelectedId(-1)}
+            onClick={()=>{setSelectedId(-1); inputIdTrig.current?.focus()}}
         >
             <UploadDiv fileDrag={fileDrag} />
+            <TextField sx={{position: 'absolute', top: '-100px'}} id='hiddenInput' onPasteCapture={pasteMove} />
             {files?.directs.map((item: string, index: number)=> {
                 return (
                     <Fade in={animIn} timeout={index*300} key={item}>

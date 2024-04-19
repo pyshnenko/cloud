@@ -119,28 +119,31 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
     }, [files])
 
     useEffect(()=>{
-        console.log(path);
-        if (User.getAuth()) {
-            setAnimIn(false);
-            let realLocation = '';
-            const location = path;
-            if (notVerify) {
-                let arrLocation: string[] = location.split(location.indexOf('/')===-1?'\\':'/');
-                console.log(arrLocation);
-                if (arrLocation.includes(userData.login)) {
+        if (path==='//') setPath('/')
+        else {
+            console.log(path);
+            if (User.getAuth()) {
+                setAnimIn(false);
+                let realLocation = '';
+                const location = path;
+                if (notVerify) {
+                    let arrLocation: string[] = location.split(location.indexOf('/')===-1?'\\':'/');
+                    console.log(arrLocation);
+                    if (arrLocation.includes(userData.login)) {
+                        realLocation = location;
+                        folder(realLocation);
+                    }
+                    else {
+                        console.log(location);
+                        realLocation = '/' + userData.login + '/'+ location.slice((location[0]==='/')?1:0 ) +'/';
+                        console.log(realLocation);
+                        setPath(realLocation);
+                    }
+                }
+                else {
                     realLocation = location;
                     folder(realLocation);
                 }
-                else {
-                    console.log(location);
-                    realLocation = '/' + userData.login + '/'+ location.slice((location[0]==='/')?1:0 ) +'/';
-                    console.log(realLocation);
-                    setPath(realLocation);
-                }
-            }
-            else {
-                realLocation = location;
-                folder(realLocation);
             }
         }
     }, [path])
