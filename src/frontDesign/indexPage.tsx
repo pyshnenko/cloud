@@ -16,6 +16,7 @@ import FilePalette from './filePalette'
 import Cookies from 'universal-cookie';
 import download_file from '../frontMech/downloadFile';
 import {Loading, useLoading} from '../hooks/useLoading';
+import { AlarmBar, useAlarm } from './alarm';
 
 const options = [
     'Открыть',
@@ -49,6 +50,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
     const trig = useRef(true);
 
     const loading = useLoading;
+    const alarm = useAlarm;
 
     useEffect(()=>{
         if (trig.current) {
@@ -68,15 +70,17 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                     const cookies = new Cookies(null, {path: '/'});
                     cookies.set('token', saved);
                     setDatal(decr.login);
+                    alarm('Успешная авторизация', 'info')
                 } catch(e: any) {
                     setDatal('токен протух');
-                    console.log(e);
-                    console.log(e.message);
+                    alarm('Обновим данные', 'info')
+                    //console.log(e);
+                    //console.log(e.message);
                     if (e){//.message === 'jwt malformed' || e.message === 'jwt expired') {
-                        console.log(e.expiredAt);
+                        //console.log(e.expiredAt);
                         const date = new Date(e.expiredAt);
                         const days: number = (Number(new Date())- Number(date))/(1000*60*60*24);
-                        console.log(`days: ${days}`);
+                        //console.log(`days: ${days}`);
                         if (days > 5) window.location.href='/login';
                         else {
                             loading(true, 'tokenUPD');
@@ -94,11 +98,13 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                                 folder('/', token);
                                 setDatal(usData.login);
                                 loading(false, 'tokenUPD')
+                                alarm('Успешная авторизация', 'info')
                             })
                             .catch((e: any)=>{
                                 console.log(e);
                                 User.exit();
                                 window.location.href='/login';
+                                alarm('Авторизоваться не удалось', 'warning')
                             });
                             loading(false, 'start');
                         }
@@ -159,17 +165,19 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
 
     const folder = async (location: string = '/', newToken?: string) => {
         loading(true, 'folder');
-        console.log(userData);
-        console.log(User.getToken());
+        //console.log(userData);
+        //console.log(User.getToken());
         let data: any;
         try {
             data = await Api.askLS(newToken||User.getToken(), location, 'ls', '', notVerify);
             console.log(data)
             setFiles({directs: data.data.directs, files: data.data.files});
+            alarm('Успешно обновлено')
         }
         catch(e){
             console.log(e)
             setFiles({directs: [], files: []});
+            alarm('Папка пуста или сервер не отвечает', 'error')
         }
         finally {loading(false, 'folder'); setAnimIn(true)};
         //Api.askLS(User.getToken());
@@ -219,14 +227,14 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                     /*let file = new Blob([res.data], {type: "application/zip"});
                     FileSaver.saveAs(file, "hello world.zip");*/
                 })
-                .catch((e: any)=> {console.log(e); loading(false, 'save')});
+                .catch((e: any)=> {alarm('Что-то пошло не так', 'error'); console.log(e); loading(false, 'save')});
             }
             else if (action === 'Удалить') {
                 console.log(objName);
                 loading(true, 'rm')
                 Api.askLS(User.getToken(), path, 'rm', objName)
-                .then((res: any)=>{folder(path); loading(false, 'rm')})
-                .catch((e: any)=>console.log(e))
+                .then((res: any)=>{alarm('удалено');folder(path); loading(false, 'rm')})
+                .catch((e: any)=>{alarm('Что-то пошло не так', 'error');console.log(e)})
                 .finally(()=>loading(false, 'rm'))
             }
             else if (action === 'Поделиться') {
@@ -235,7 +243,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                 .then((res: any)=>{
                     window.open(encodeURI(`/download?tok=${encodeURI(res.data.tok)}&name=${res.data.name}&type=${res.data.type}`))
                 })
-                .catch((e: any)=>console.log(e))
+                .catch((e: any)=>{alarm('Что-то пошло не так', 'error');console.log(e)})
                 .finally(()=>loading(false, 'chmod'))
             }
             menuClose();
@@ -313,6 +321,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                 </Menu>
             </div>
             <Loading />
+            <AlarmBar />
         </Box>
     )
 }

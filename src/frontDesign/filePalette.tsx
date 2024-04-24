@@ -72,7 +72,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                 setFileDrag(false);
 
                 const files = Array.from(e.dataTransfer.files);
-                console.log(e.dataTransfer);
+                console.log(files);
                 attFile(await getFileAsync(e.dataTransfer));
                 //console.log(await getFileAsync(e.dataTransfer));
                 // TODO что-то делает с файлами...

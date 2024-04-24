@@ -49,14 +49,21 @@ var mongo = require('./src/mech/mongo');
 var mongoS = new mongo();
 var jwt = require('jsonwebtoken');
 var access_check = require('./src/mech/requested_feature').access_check;
+var Redis = require("ioredis");
+var redis = new Redis({
+    port: Number(process.env.REDIS_PORT),
+    host: String(process.env.REDIS_HOST),
+    password: String(process.env.REDIS_PASS),
+    db: 1
+});
 var dir = process.cwd();
 app.use(cors());
 app.use(cookieParser('secret key'));
 app.use(express.static(__dirname));
 app.get("/openLinc*", function (req, res) {
-    var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
         var filePath, folderPath, subPath;
+        var _a, _b;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -99,9 +106,9 @@ app.get("/openLinc*", function (req, res) {
     });
 });
 app.get("/oneTime*", function (req, res) {
-    var _a;
     return __awaiter(this, void 0, void 0, function () {
         var filePath, login, access, dat;
+        var _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -147,9 +154,9 @@ app.get("/oneTime*", function (req, res) {
     });
 });
 app.get("/data*", function (req, res) {
-    var _a;
     return __awaiter(this, void 0, void 0, function () {
         var filePath, access, login, dat;
+        var _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -212,14 +219,7 @@ app.post("/upload", function (req, res, next) {
         res.send({ res: 'error' });
     else {
         var ddir = [];
-        try {
-            fs.readdirSync(path.normalize("data/".concat(folder)), { withFileTypes: true });
-            console.log('Папка найдена');
-        }
-        catch (e) {
-            fs.mkdirSync(path.normalize("data/".concat(folder)));
-            console.log('Папка успешно создана');
-        }
+        checkPathCorrect(folder);
         fs.rename(path.normalize("uploads/".concat(decodeURI(req.headers.user), "-").concat(decodeURI(req.headers.fname))), path.normalize("data/".concat(folder, "/").concat(decodeURI(req.headers.fname))), function (err) {
             if (err)
                 throw err; // не удалось переместить файл
@@ -229,3 +229,18 @@ app.post("/upload", function (req, res, next) {
     }
 });
 app.listen(8800, function () { return console.log('start'); });
+function checkPathCorrect(filePath) {
+    var splitPath = path.normalize(filePath).replace(/\\/g, '/').split('/');
+    var folder = '';
+    for (var i = 0; i < splitPath.length; i++) {
+        folder += ('/' + splitPath[i]);
+        try {
+            fs.readdirSync(path.normalize("data/".concat(folder)), { withFileTypes: true });
+            console.log('Папка найдена');
+        }
+        catch (e) {
+            fs.mkdirSync(path.normalize("data/".concat(folder)));
+            console.log('Папка успешно создана');
+        }
+    }
+}

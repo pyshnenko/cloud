@@ -11,6 +11,14 @@ const mongo = require('./src/mech/mongo');
 const mongoS = new mongo();
 const jwt = require('jsonwebtoken');
 const {access_check} = require('./src/mech/requested_feature');
+const Redis = require("ioredis");
+
+const redis = new Redis({
+    port: Number(process.env.REDIS_PORT),
+    host: String(process.env.REDIS_HOST),
+    password: String(process.env.REDIS_PASS),
+    db: 1
+})
 
 export {};
 const dir = process.cwd();
@@ -134,13 +142,7 @@ app.post("/upload", function (req: any, res: any, next: any) {
     else
     {
         let ddir: string[] = [];
-        try {
-            fs.readdirSync(path.normalize(`data/${folder}`), { withFileTypes: true });
-            console.log('Папка найдена');
-        } catch (e: any) {
-            fs.mkdirSync(path.normalize(`data/${folder}`));
-            console.log('Папка успешно создана');
-        }
+        checkPathCorrect(folder);
         fs.rename(path.normalize(`uploads/${decodeURI(req.headers.user)}-${decodeURI(req.headers.fname)}`), path.normalize(`data/${folder}/${decodeURI(req.headers.fname)}`), (err: any) => {
           if(err) throw err; // не удалось переместить файл
             console.log('Файл успешно перемещён');
@@ -150,3 +152,19 @@ app.post("/upload", function (req: any, res: any, next: any) {
 });
 
 app.listen(8800, ()=>console.log('start'));
+
+function checkPathCorrect(filePath: string) {
+
+    let splitPath: string[] = path.normalize(filePath).replace(/\\/g,'/').split('/');
+    let folder = ''
+    for (let i = 0; i<splitPath.length; i++) {
+        folder += ('/'+splitPath[i]);
+        try {
+            fs.readdirSync(path.normalize(`data/${folder}`), { withFileTypes: true });
+            console.log('Папка найдена');
+        } catch (e: any) {
+            fs.mkdirSync(path.normalize(`data/${folder}`));
+            console.log('Папка успешно создана');
+        }
+    }
+}
