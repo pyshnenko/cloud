@@ -468,3 +468,13 @@
 [2024-04-18T15:06:55.553] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
 [2024-04-18T15:06:55.575] [INFO] cApi - spamigor
 [2024-04-18T15:06:55.575] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-04-24T16:50:28.584] [INFO] cApi - { pass: '12101994a', login: 'Spamigor' }
+[2024-04-24T16:50:28.703] [DEBUG] cApi - Записей: 0
+[2024-04-24T16:50:37.202] [INFO] cApi - { pass: 'ugD6s2xz', login: 'Spamigor' }
+[2024-04-24T16:50:37.279] [DEBUG] cApi - Записей: 0
+[2024-04-24T16:50:38.988] [INFO] cApi - { pass: 'ugD6s2xz', login: 'Spamigor' }
+[2024-04-24T16:50:39.068] [DEBUG] cApi - Записей: 0
+[2024-04-24T16:50:47.804] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-04-24T16:50:47.884] [DEBUG] cApi - Записей: 1
+[2024-05-21T08:01:49.075] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-05-21T08:01:49.216] [DEBUG] cApi - Записей: 1

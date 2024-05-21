@@ -506,3 +506,25 @@
   oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzEzNTAzNDk4LCJleHAiOjE3MTM1MDcwOTh9.0fWaPxjk4T0U0T7qobnejzqI1vY2Y3w7qOqHrto_dho'
 }
 [2024-04-19T14:57:06.571] [DEBUG] cApi - Записей: 1
+[2024-04-28T03:22:46.044] [INFO] cApi - { atoken: 'null', oldToken: 'null' }
+[2024-04-28T03:22:46.065] [DEBUG] cApi - Записей: 0
+[2024-04-28T03:23:06.730] [INFO] cApi - { atoken: 'null', oldToken: 'null' }
+[2024-04-28T03:23:06.754] [DEBUG] cApi - Записей: 0
+[2024-04-28T03:27:47.966] [INFO] cApi - { atoken: 'null', oldToken: 'null' }
+[2024-04-28T03:27:47.989] [DEBUG] cApi - Записей: 0
+[2024-04-29T01:09:55.963] [INFO] cApi - { atoken: 'null', oldToken: 'null' }
+[2024-04-29T01:09:56.031] [DEBUG] cApi - Записей: 0
+[2024-04-30T01:05:06.588] [INFO] cApi - { atoken: 'null', oldToken: 'null' }
+[2024-04-30T01:05:06.611] [DEBUG] cApi - Записей: 0
+[2024-05-07T17:41:32.495] [INFO] cApi - { atoken: 'null', oldToken: 'null' }
+[2024-05-07T17:41:32.583] [DEBUG] cApi - Записей: 0
+[2024-05-07T21:30:04.140] [INFO] cApi - { atoken: 'null', oldToken: 'null' }
+[2024-05-07T21:30:04.163] [DEBUG] cApi - Записей: 0
+[2024-05-14T13:57:23.580] [INFO] cApi - { atoken: 'null', oldToken: 'null' }
+[2024-05-14T13:57:23.694] [DEBUG] cApi - Записей: 0
+[2024-05-14T13:57:26.809] [INFO] cApi - { atoken: 'null', oldToken: 'null' }
+[2024-05-14T13:57:26.838] [DEBUG] cApi - Записей: 0
+[2024-05-14T19:46:42.122] [INFO] cApi - { atoken: 'null', oldToken: 'null' }
+[2024-05-14T19:46:42.160] [DEBUG] cApi - Записей: 0
+[2024-05-19T15:15:33.613] [INFO] cApi - { atoken: 'null', oldToken: 'null' }
+[2024-05-19T15:15:33.692] [DEBUG] cApi - Записей: 0
