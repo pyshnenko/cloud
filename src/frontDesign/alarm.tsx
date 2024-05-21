@@ -90,7 +90,7 @@ export function AlarmBar() {
         <Snackbar open={open.includes(item.id)} autoHideDuration={6000} onClose={(evt: React.SyntheticEvent | Event)=>handleClose(evt, '', item.id)} key={index}>
           <Alert
             onClose={(evt: React.SyntheticEvent | Event)=>handleClose(evt, '', item.id)}
-            severity={item.type||"success"}
+            severity={(item.type=='error'?'error':item.type=='info'? 'info':'success')||"success"}
             variant="filled"
             sx={{ width: '100%', bottom: `${50*index + 24}px`, position: 'relative' }}
           >
