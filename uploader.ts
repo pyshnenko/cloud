@@ -137,6 +137,8 @@ app.post("/upload", function (req: any, res: any, next: any) {
     console.log('im here');
     const folder = decodeURI(req.headers.folder);
     let filedata = req.body;
+    console.log(req.body);
+    console.log(req.headers);
     if(!filedata)
         res.send({res: 'error'});
     else

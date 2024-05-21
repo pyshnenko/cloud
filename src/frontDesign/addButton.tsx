@@ -13,6 +13,9 @@ import {User, userData} from '../frontMech/user';
 import Dialog from './dialog';
 import download_file from '../frontMech/downloadFile';
 import { useLoading } from '../hooks/useLoading';
+import { useAlarm } from './alarm';
+import axios from 'axios';
+import Progress from './progress';
 
 const actions = [
   { icon: <FileUploadIcon />, name: 'Загрузить файл' },
@@ -33,7 +36,9 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
     const [open, setOpen] = React.useState(false);
     const [dialogResult, setDialogResult] = React.useState<{ready: boolean, text?: string, numb?: number}>({ready: false});
     const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
+    const [progressProps, setProgressProps] = React.useState<{visible: Boolean, value: number, name: string}>();
     const loading = useLoading;
+    const alarm = useAlarm;
 
     React.useEffect(()=>{
         if (dialogResult.ready) {
@@ -79,7 +84,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
     }
 
     const attFile = async () => {
-        loading(true, 'attFile');
+        //loading(true, 'attFile');
         let input = document.createElement('input');
         input.type = 'file';
         input.multiple = true;
@@ -99,16 +104,43 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
                         token: encodeURI(User.getToken())
                     },
                     body: data,
-                }                
-                const response = await fetch((window.location.href.slice(0,22)==='http://localhost:8799/')?
-                    'http://localhost:8800/upload':
-                    '/upload', options);//http://localhost:8800/upload
-                const res = await response.json();
-                console.log(res);
+                }             
+                    const response = axios.post((window.location.href.slice(0,22)==='http://localhost:8799/')?
+                        'http://localhost:8800/upload':
+                        '/upload', data, {
+                            onUploadProgress: (e: any) => {
+                                let val = Math.round(e.loaded * 100 / e.total);
+                                console.log(val);
+                                setProgressProps({visible: true, value: val, name: files[i].name})
+                            },
+                            headers: {
+                                folder: encodeURI((notVerify?'':(userData.login+'/'))+(path==='/'?'':path)),
+                                fname: encodeURI(files[i].name),
+                                user: encodeURI(userData.login),
+                                token: encodeURI(User.getToken())
+                            }
+                        });
+                        response.then((res: any)=>{
+                            console.log(res);
+                            if (res.data.res==='error')
+                                alarm('ошибка при передаче', 'error')
+
+                        })
+                        response.catch((e: any) => {
+                            console.log(e);
+                            alarm('ошибка при передаче', 'error')
+                        })
+                        response.finally(()=>{                            
+                            setProgressProps({visible: false, value: 0, name: ''})
+                        })
+                    //const res = await response//.json();
+                    /*console.log(response);
+                    if (response.data.res==='error')
+                        alarm('ошибка при передаче', 'error')*/
                 folder(path);
             }
             const oPath = path;            
-            loading(false, 'attFile');
+            //loading(false, 'attFile');
             setPath('');
             setPath(path);
         } 
@@ -127,6 +159,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
 
   return (
     <Box>
+        {progressProps&&progressProps.visible&&<Progress value={progressProps.value} name={progressProps.name} />}
         <Box sx={{  }}>
         {open&&<Backdrop open={open||dialogOpen} sx={{zIndex: 1}}/>}
             <SpeedDial
