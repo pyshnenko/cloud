@@ -286,7 +286,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                                 </Typography>
                             </Button>
                             <IconButton
-                                sx={{position: 'relative', right: '15px', top: '0px', padding: '1px'}}
+                                sx={{position: 'relative', right: '15px', top: '0px', padding: '0px'}}
                                 aria-haspopup="true"
                                 onClick={(event: React.MouseEvent<HTMLElement>)=>setAnchorEl({elem: event.currentTarget, index: index})}
                             >
@@ -338,7 +338,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                             </Button>
                             
                             <IconButton
-                                sx={{position: 'relative', right: '15px', top: 0, padding: '1px'}}
+                                sx={{position: 'relative', right: '15px', top: 0, padding: '0px'}}
                                 aria-haspopup="true"
                                 onClick={(event: React.MouseEvent<HTMLElement>)=>{
                                     setAnchorEl({elem: event.currentTarget, index: index+files.directs.length}); 
