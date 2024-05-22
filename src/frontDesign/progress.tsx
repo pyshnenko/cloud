@@ -80,7 +80,7 @@ export default function Progress ({mapVal, setMapVal, value, name}: {mapVal: Map
                     borderRadius: '20px'
                 }}>
                     {Array.from(mapVal).map((item: any[]) => { return (
-                        <LinearProgressWithLabel value={item[1]} name={item[0]} />
+                        <LinearProgressWithLabel value={item[1]} name={item[0]} key={item[1]} />
                     )})}
                 </Box>
             </Box>
