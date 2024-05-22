@@ -26,13 +26,10 @@ export function useAlarm(text: string, type: string = 'success') {
 }
 
 function newId() {
-  console.log('newId');
-  console.log(allertArrayGlob)
   let max = 0;
   for (let i = 0; i<allertArrayGlob.length; i++) {
     if (allertArrayGlob[i].id >= max) max = allertArrayGlob[i].id + 1
   }
-  console.log(max);
   return max
 }
 
@@ -54,8 +51,6 @@ export function AlarmBar() {
   }, [allertArray])
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string, id?: number) => {
-    console.log(id)
-    console.log(allertArrayGlob)
     if (reason === 'clickaway') {
       return;
     }

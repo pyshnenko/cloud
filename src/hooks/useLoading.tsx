@@ -10,7 +10,6 @@ let setOpenGlob: (b: string[])=>void;
 
 export function useLoading(openBool: boolean, name: string) {
 
-    console.log(openGlob);
     if (openBool && !openGlob.includes(name)) {let buf = copy(openGlob); buf.push(name); setOpenGlob(buf)}
     else if (!openBool && openGlob.includes(name)) {let buf = copy(openGlob); buf.splice(openGlob.indexOf(name), 1); setOpenGlob(buf)}
 }

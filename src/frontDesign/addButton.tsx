@@ -36,7 +36,8 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
     const [open, setOpen] = React.useState(false);
     const [dialogResult, setDialogResult] = React.useState<{ready: boolean, text?: string, numb?: number}>({ready: false});
     const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
-    const [progressProps, setProgressProps] = React.useState<{visible: Boolean, value: number, name: string}>();
+    const [progressProps, setProgressProps] = React.useState<Map<string, number>>();
+    //const [progressProps, setProgressProps] = React.useState<{visible: Boolean, value: number, name: string}>();
     const loading = useLoading;
     const alarm = useAlarm;
 
@@ -59,6 +60,10 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
             }
         }
     }, [dialogResult])
+
+    React.useEffect(()=>{
+        console.log(progressProps)
+    }, [progressProps])
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -91,52 +96,50 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
         input.onchange = async (e: any) => {
             let files = e.target.files;
             console.log(files)
+            let map1 = new Map();
             for (let i = 0; i<files.length; i++) {
                 console.log(files)
                 let data = new FormData();
-                data.append('file', files[i]);
-                const options = {
-                    method: 'POST',
-                    headers: {
-                        folder: encodeURI((notVerify?'':(userData.login+'/'))+(path==='/'?'':path)),
-                        fname: encodeURI(files[i].name),
-                        user: encodeURI(userData.login),
-                        token: encodeURI(User.getToken())
-                    },
-                    body: data,
-                }             
-                    const response = axios.post((window.location.href.slice(0,22)==='http://localhost:8799/')?
-                        'http://localhost:8800/upload':
-                        '/upload', data, {
-                            onUploadProgress: (e: any) => {
-                                let val = Math.round(e.loaded * 100 / e.total);
-                                console.log(val);
-                                setProgressProps({visible: true, value: val, name: files[i].name})
-                            },
-                            headers: {
-                                folder: encodeURI((notVerify?'':(userData.login+'/'))+(path==='/'?'':path)),
-                                fname: encodeURI(files[i].name),
-                                user: encodeURI(userData.login),
-                                token: encodeURI(User.getToken())
-                            }
-                        });
-                        response.then((res: any)=>{
-                            console.log(res);
-                            if (res.data.res==='error')
-                                alarm('ошибка при передаче', 'error')
+                data.append('file', files[i]);       
+                map1.set(files[i].name, 0);
+                setProgressProps(map1);
+                const response = axios.post((window.location.href.slice(0,22)==='http://localhost:8799/')?
+                    'http://localhost:8800/upload':
+                    '/upload', data, {
+                        onUploadProgress: (e: any) => {
+                            let val = Math.round(e.loaded * 100 / e.total);
+                            /*console.log(val);
+                            console.log(e);*/
+                            map1.set(files[i].name, val);
+                            setProgressProps(map1);
+                            console.log('map set');
+                            //setProgressProps({visible: true, value: val, name: files[i].name})
+                        },
+                        headers: {
+                            folder: encodeURI((notVerify?'':(userData.login+'/'))+(path==='/'?'':path)),
+                            fname: encodeURI(files[i].name),
+                            user: encodeURI(userData.login),
+                            token: encodeURI(User.getToken())
+                        }
+                    });
+                response.then((res: any)=>{
+                    console.log(res);
+                    if (res.data.res==='error')
+                        alarm('ошибка при передаче', 'error')
 
-                        })
-                        response.catch((e: any) => {
-                            console.log(e);
-                            alarm('ошибка при передаче', 'error')
-                        })
-                        response.finally(()=>{                            
-                            setProgressProps({visible: false, value: 0, name: ''})
-                        })
-                    //const res = await response//.json();
-                    /*console.log(response);
-                    if (response.data.res==='error')
-                        alarm('ошибка при передаче', 'error')*/
+                })
+                response.catch((e: any) => {
+                    console.log(e);
+                    alarm('ошибка при передаче', 'error')
+                })
+                response.finally(()=>{      
+                    console.log('done')                      
+                    //setProgressProps({visible: false, value: 0, name: ''})
+                })
+                //const res = await response//.json();
+                /*console.log(response);
+                if (response.data.res==='error')
+                    alarm('ошибка при передаче', 'error')*/
                 folder(path);
             }
             const oPath = path;            
@@ -159,7 +162,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
 
   return (
     <Box>
-        {progressProps&&progressProps.visible&&<Progress value={progressProps.value} name={progressProps.name} />}
+        {progressProps&&progressProps.size>0&&<Progress mapVal={progressProps} setMapVal={setProgressProps} />}
         <Box sx={{  }}>
         {open&&<Backdrop open={open||dialogOpen} sx={{zIndex: 1}}/>}
             <SpeedDial
