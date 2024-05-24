@@ -4,6 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import copy from 'fast-copy';
 
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number, name: string }) {
     return (
@@ -23,18 +24,32 @@ function LinearProgressWithLabel(props: LinearProgressProps & { value: number, n
     );
   }
 
-export default function Progress ({mapVal, setMapVal, value, name}: {mapVal: Map<string, number>, setMapVal: (buf: Map<string, number>)=>void, value?: number, name?: string}) {
+export default function Progress ({mapVal, setMapVal, value, name}: {mapVal: any, setMapVal: (buf: any)=>void, value?: number, name?: string}) {
 
-    const [closeButton, setCloseButton] = React.useState<boolean>(true);
+    const [closeButton, setCloseButton] = React.useState<boolean>(false);
 
     React.useEffect(()=>{
-        console.log(mapVal.keys())
-        for (let val of Array.from(mapVal.values())){
-            console.log(val)
-            if (val!==100) return
-        }
-        setCloseButton(true);
+              
+        setCloseButton(controlClose(mapVal));
     }, [mapVal])
+
+    const updVal = (mapValD: Map<string, number>) =>{
+        console.log('updVal')
+        if (!closeButton) {
+            console.log('open')
+            let buf = copy(mapValD);
+            setMapVal(buf)
+            setTimeout(updVal, 1000);
+        }
+    }
+
+    const controlClose = (mapValD: any) => {
+        for (let val in mapValD){
+            console.log(val)
+            if (mapValD[val]!==100) return false
+        }
+        return true
+    }
 
     return (
         <Box>
@@ -79,8 +94,8 @@ export default function Progress ({mapVal, setMapVal, value, name}: {mapVal: Map
                     boxShadow: '0 0 10px darkgrey',
                     borderRadius: '20px'
                 }}>
-                    {Array.from(mapVal).map((item: any[]) => { return (
-                        <LinearProgressWithLabel value={item[1]} name={item[0]} key={item[1]} />
+                    {Object.keys(mapVal).map((item: string) => { return (
+                        <LinearProgressWithLabel value={mapVal[item]} name={item} key={item} />
                     )})}
                 </Box>
             </Box>

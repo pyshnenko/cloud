@@ -95,23 +95,26 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
         input.multiple = true;
         input.onchange = async (e: any) => {
             let files = e.target.files;
-            console.log(files)
-            let map1 = new Map();
+            //console.log(files)
+            let map1: any = {};
             for (let i = 0; i<files.length; i++) {
-                console.log(files)
+                //console.log(files)
                 let data = new FormData();
                 data.append('file', files[i]);       
-                map1.set(files[i].name, 0);
+                map1[files[i].name] = 0;
                 setProgressProps(map1);
                 const response = axios.post((window.location.href.slice(0,22)==='http://localhost:8799/')?
                     'http://localhost:8800/upload':
                     '/upload', data, {
                         onUploadProgress: (e: any) => {
                             let val = Math.round(e.loaded * 100 / e.total);
-                            /*console.log(val);
-                            console.log(e);*/
-                            map1.set(files[i].name, val);
-                            setProgressProps(map1);
+                            /*console.log(val);*/
+                            console.log(e);
+                            if (files[i].name){
+                                map1 = {...map1, [files[i].name]: Math.round(e.loaded * 100 / e.total)};
+                                console.log(map1)
+                                setProgressProps(map1);
+                            }
                             console.log('map set');
                             //setProgressProps({visible: true, value: val, name: files[i].name})
                         },
@@ -162,7 +165,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
 
   return (
     <Box>
-        {progressProps&&progressProps.size>0&&<Progress mapVal={progressProps} setMapVal={setProgressProps} />}
+        {progressProps&&Object.keys(progressProps).length>0&&<Progress mapVal={progressProps} setMapVal={setProgressProps} />}
         <Box sx={{  }}>
         {open&&<Backdrop open={open||dialogOpen} sx={{zIndex: 1}}/>}
             <SpeedDial
