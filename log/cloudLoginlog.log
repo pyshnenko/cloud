@@ -484,3 +484,152 @@
 [2024-05-22T12:48:32.149] [DEBUG] cApi - Записей: 1
 [2024-05-22T16:39:43.092] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
 [2024-05-22T16:39:43.193] [DEBUG] cApi - Записей: 1
+[2024-05-25T17:44:10.806] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-05-25T17:44:10.904] [DEBUG] cApi - Записей: 1
+[2024-05-25T17:44:11.386] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-25T17:44:11.391] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-25T17:44:11.414] [INFO] cApi - undefined
+[2024-05-25T17:44:11.416] [INFO] cApi - spamigor
+[2024-05-25T17:44:11.417] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-05-25T17:44:32.608] [INFO] cApi - {
+  location: 'пульт УК17-04-2024/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-05-25T17:44:32.634] [INFO] cApi - spamigor
+[2024-05-25T17:44:32.635] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/пульт УК17-04-2024/
+[2024-05-25T17:45:03.609] [INFO] cApi - {
+  location: 'пульт УК17-04-2024/',
+  action: 'mkdir',
+  name: 'Для контроля приводов без УК',
+  incognit: false
+}
+[2024-05-25T17:45:03.630] [INFO] cApi - spamigor
+[2024-05-25T17:45:03.631] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/пульт УК17-04-2024/
+[2024-05-25T17:45:03.631] [DEBUG] cApi - folder for spamigor created
+[2024-05-25T17:45:03.701] [INFO] cApi - {
+  location: 'пульт УК17-04-2024//Для контроля приводов без УК',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-05-25T17:45:03.724] [INFO] cApi - spamigor
+[2024-05-25T17:45:03.724] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/пульт УК17-04-2024/Для контроля приводов без УК
+[2024-05-25T17:45:07.899] [INFO] cApi - {
+  location: '/пульт УК17-04-2024',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-05-25T17:45:07.923] [INFO] cApi - spamigor
+[2024-05-25T17:45:07.923] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/пульт УК17-04-2024
+[2024-05-25T17:45:09.431] [INFO] cApi - {
+  location: '/пульт УК17-04-2024/Для контроля приводов без УК/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-05-25T17:45:09.452] [INFO] cApi - spamigor
+[2024-05-25T17:45:09.452] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/пульт УК17-04-2024/Для контроля приводов без УК/
+[2024-05-25T17:45:44.644] [INFO] cApi - {
+  location: '/пульт УК17-04-2024/Для контроля приводов без УК/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-05-25T17:45:44.670] [INFO] cApi - spamigor
+[2024-05-25T17:45:44.671] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/пульт УК17-04-2024/Для контроля приводов без УК/
+[2024-05-25T17:45:44.686] [INFO] cApi - {
+  location: '/пульт УК17-04-2024/Для контроля приводов без УК/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-05-25T17:45:44.689] [INFO] cApi - {
+  location: '/пульт УК17-04-2024/Для контроля приводов без УК/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-05-25T17:45:44.699] [INFO] cApi - {
+  location: '/пульт УК17-04-2024/Для контроля приводов без УК/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-05-25T17:45:44.714] [INFO] cApi - undefined
+[2024-05-25T17:45:44.715] [INFO] cApi - undefined
+[2024-05-25T17:45:44.716] [INFO] cApi - spamigor
+[2024-05-25T17:45:44.716] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/пульт УК17-04-2024/Для контроля приводов без УК/
+[2024-05-25T17:45:52.022] [INFO] cApi - {
+  location: '/пульт УК17-04-2024',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-05-25T17:45:52.046] [INFO] cApi - spamigor
+[2024-05-25T17:45:52.047] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/пульт УК17-04-2024
+[2024-05-25T17:45:53.040] [INFO] cApi - {
+  location: '/пульт УК17-04-2024/Для контроля приводов без УК/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-05-25T17:45:53.064] [INFO] cApi - spamigor
+[2024-05-25T17:45:53.064] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/пульт УК17-04-2024/Для контроля приводов без УК/
+[2024-05-25T17:56:24.857] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-25T17:56:24.862] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-25T17:56:24.881] [INFO] cApi - undefined
+[2024-05-25T17:56:24.882] [INFO] cApi - spamigor
+[2024-05-25T17:56:24.887] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-05-25T17:56:31.045] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-25T17:56:31.047] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-25T17:56:31.067] [INFO] cApi - undefined
+[2024-05-25T17:56:31.068] [INFO] cApi - spamigor
+[2024-05-25T17:56:31.068] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-05-25T17:56:37.872] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-05-25T17:56:37.949] [DEBUG] cApi - Записей: 1
+[2024-05-25T17:56:38.549] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-25T17:56:38.551] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-25T17:56:38.565] [INFO] cApi - undefined
+[2024-05-25T17:56:38.566] [INFO] cApi - spamigor
+[2024-05-25T17:56:38.566] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-05-25T17:56:50.308] [INFO] cApi - {
+  location: '/',
+  action: 'rm',
+  name: 'spamigor-archive.zip',
+  incognit: false
+}
+[2024-05-25T17:56:50.332] [INFO] cApi - spamigor
+[2024-05-25T17:56:50.332] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-05-25T17:56:50.335] [INFO] cApi - File /home/spamigor/next/cloud/data/spamigor//spamigor-archive.zip deleted by spamigor
+[2024-05-25T17:56:50.382] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-25T17:56:50.406] [INFO] cApi - spamigor
+[2024-05-25T17:56:50.407] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-05-25T17:57:02.532] [INFO] cApi - {
+  location: 'пульт УК17-04-2024/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-05-25T17:57:02.553] [INFO] cApi - spamigor
+[2024-05-25T17:57:02.554] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/пульт УК17-04-2024/
+[2024-05-25T17:57:04.308] [INFO] cApi - {
+  location: 'пульт УК17-04-2024/Для контроля приводов без УК/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-05-25T17:57:04.332] [INFO] cApi - spamigor
+[2024-05-25T17:57:04.333] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/пульт УК17-04-2024/Для контроля приводов без УК/
+[2024-05-25T17:57:15.774] [INFO] cApi - {
+  location: 'пульт УК17-04-2024/Для контроля приводов без УК/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-05-25T17:57:15.796] [INFO] cApi - spamigor
+[2024-05-25T17:57:15.796] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/пульт УК17-04-2024/Для контроля приводов без УК/
+[2024-05-27T12:59:04.168] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-05-27T12:59:04.307] [DEBUG] cApi - Записей: 1

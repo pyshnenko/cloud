@@ -589,3 +589,9 @@
 [2024-05-24T13:52:07.136] [INFO] cApi - undefined
 [2024-05-24T13:52:07.137] [INFO] cApi - spamigor
 [2024-05-24T13:52:07.137] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-05-24T14:52:16.434] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzE2NTQ3OTEzLCJleHAiOjE3MTY1NTE1MTN9.mwpqfcsql0I6TxK_9ym3Rcj4nMy95w8hHlyd-YzIVco'
+}
+[2024-05-24T14:52:16.484] [DEBUG] cApi - Записей: 1
+[2024-05-27T12:59:01.486] [INFO] cApi - { atoken: '', oldToken: '' }
