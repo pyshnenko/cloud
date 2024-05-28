@@ -15,7 +15,7 @@ import download_file from '../frontMech/downloadFile';
 import { useLoading } from '../hooks/useLoading';
 import { useAlarm } from './alarm';
 import axios from 'axios';
-import Progress from './progress';
+import {useProgressBar} from './progress';
 
 const actions = [
   { icon: <FileUploadIcon />, name: 'Загрузить файл' },
@@ -36,10 +36,11 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
     const [open, setOpen] = React.useState(false);
     const [dialogResult, setDialogResult] = React.useState<{ready: boolean, text?: string, numb?: number}>({ready: false});
     const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
-    const [progressProps, setProgressProps] = React.useState<Map<string, number>>();
+    //const [progressProps, setProgressProps] = React.useState<Map<string, number>>();
     //const [progressProps, setProgressProps] = React.useState<{visible: Boolean, value: number, name: string}>();
     const loading = useLoading;
     const alarm = useAlarm;
+    const progress = useProgressBar;
 
     React.useEffect(()=>{
         if (dialogResult.ready) {
@@ -61,9 +62,9 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
         }
     }, [dialogResult])
 
-    React.useEffect(()=>{
+    /*React.useEffect(()=>{
         console.log(progressProps)
-    }, [progressProps])
+    }, [progressProps])*/
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -89,34 +90,29 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
     }
 
     const attFile = async () => {
-        //loading(true, 'attFile');
         let input = document.createElement('input');
         input.type = 'file';
         input.multiple = true;
         input.onchange = async (e: any) => {
             let files = e.target.files;
-            //console.log(files)
             let map1: any = {};
             for (let i = 0; i<files.length; i++) {
-                //console.log(files)
                 let data = new FormData();
                 data.append('file', files[i]);       
                 map1[files[i].name] = 0;
-                setProgressProps(map1);
+                progress(map1);
                 const response = axios.post((window.location.href.slice(0,22)==='http://localhost:8799/')?
                     'http://localhost:8800/upload':
                     '/upload', data, {
                         onUploadProgress: (e: any) => {
                             let val = Math.round(e.loaded * 100 / e.total);
-                            /*console.log(val);*/
                             console.log(e);
                             if (files[i].name){
                                 map1 = {...map1, [files[i].name]: Math.round(e.loaded * 100 / e.total)};
                                 console.log(map1)
-                                setProgressProps(map1);
+                                progress(map1);
                             }
                             console.log('map set');
-                            //setProgressProps({visible: true, value: val, name: files[i].name})
                         },
                         headers: {
                             folder: encodeURI((notVerify?'':(userData.login+'/'))+(path==='/'?'':path)),
@@ -136,19 +132,11 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
                     alarm('ошибка при передаче', 'error')
                 })
                 response.finally(()=>{      
-                    console.log('done')                      
-                    //setProgressProps({visible: false, value: 0, name: ''})
+                    console.log('done')   
+                    alarm('Файл загружен')
                 })
-                //const res = await response//.json();
-                /*console.log(response);
-                if (response.data.res==='error')
-                    alarm('ошибка при передаче', 'error')*/
-                folder(path);
             }
-            const oPath = path;            
-            //loading(false, 'attFile');
-            setPath('');
-            setPath(path);
+            setTimeout((path: string)=>folder(path+'/'), 500, path);
         } 
         loading(false, 'attFile');        
         input.click();
@@ -165,7 +153,6 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
 
   return (
     <Box>
-        {progressProps&&Object.keys(progressProps).length>0&&<Progress mapVal={progressProps} setMapVal={setProgressProps} />}
         <Box sx={{  }}>
         {open&&<Backdrop open={open||dialogOpen} sx={{zIndex: 1}}/>}
             <SpeedDial

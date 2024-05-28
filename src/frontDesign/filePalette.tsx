@@ -13,6 +13,9 @@ import TextField from '@mui/material/TextField';
 import { useLoading } from '../hooks/useLoading';
 import {User, userData} from '../frontMech/user';
 import UploadDiv from './uploadDiv';
+import {useProgressBar} from './progress';
+import { useAlarm } from './alarm';
+import axios from 'axios';
 
 export default function FilePalette ({files, path, setSelectedId, selectedId, setAnchorEl, setPath, animIn, fileType, datal, notVerify, folder}: any) {
 
@@ -21,6 +24,9 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
     const username = useRef(datal);
     const folderPath = useRef(path);
     let inputIdTrig = useRef<any>(null);
+
+    const progress = useProgressBar;
+    const alarm = useAlarm;
 
     const loading = useLoading;
 
@@ -164,9 +170,9 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                     reading++;                    
                     entry.file((file: any) => {
                         reading--;
-                        const newFileName = entry.fullPath;
+                        const newFileName = entry.fullPath.slice(1);
                         //file.name = entry.fullPath;
-                        contents.push({file, fileName: file.name, path: folderPath.current+entry.fullPath.slice(0, entry.fullPath.length-file.name.length-1)});
+                        contents.push({file, fileName: file.name, path: folderPath.current+entry.fullPath.slice(0, entry.fullPath.length-file.name.length-1), filePath: newFileName});
                         if (reading === 0) {
                             resolve(contents);
                         }
@@ -192,40 +198,50 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
     };
 
     const attFile = async (files: any[]) => {
-        console.log(files)
-        for (let i = 0; i<files.length; i++) {
+            let map1: any = {};
             console.log(files)
-            let data = new FormData();
-            data.append('file', files[i].file);
-            const options = {
-                method: 'POST',
-                headers: {
-                    folder: encodeURI(userData.login+'/'+files[i].path),
-                    fname: encodeURI(files[i].fileName),
-                    user: encodeURI(userData.login),
-                    token: encodeURI(User.getToken())
-                },
-                body: data,
-            }                
-            try{
-                const response = await fetch((window.location.href.slice(0,22)==='http://localhost:8799/')?
+            for (let i = 0; i<files.length; i++) {
+                let data = new FormData();
+                data.append('file', files[i].file);       
+                map1[files[i].filePath] = 0;
+                progress(map1);
+                const response = axios.post((window.location.href.slice(0,22)==='http://localhost:8799/')?
                     'http://localhost:8800/upload':
-                    '/upload', options);//http://localhost:8800/upload
-                const res = await response.json();
-                console.log(res);
+                    '/upload', data, {
+                        onUploadProgress: (e: any) => {
+                            console.log(files[i].fileName);
+                            console.log(typeof(files[i].fileName));
+                            if (files[i].fileName){
+                                map1 = {...map1, [files[i].filePath]: Math.round(e.loaded * 100 / e.total)};
+                                console.log(map1)
+                                progress(map1);
+                            }
+                            console.log('map set');
+                        },
+                        headers: {
+                            folder: encodeURI(userData.login+'/'+files[i].path),
+                            fname: encodeURI(files[i].fileName),
+                            user: encodeURI(userData.login),
+                            token: encodeURI(User.getToken())
+                        }
+                    });
+                response.then((res: any)=>{
+                    console.log(res);
+                    if (res.data.res==='error')
+                        alarm('ошибка при передаче', 'error')
+
+                })
+                response.catch((e: any) => {
+                    console.log(e);
+                    alarm('ошибка при передаче', 'error')
+                })
+                response.finally(()=>{      
+                    console.log('done')   
+                    alarm('Файл загружен')
+                })
             }
-            catch (e: any) {}
-            //folder(path);
-        }
-        const oPath = folderPath.current;            
-        loading(false, 'attFile');
-        setPath('//');
-        setTimeout(()=>{
-            setPath(oPath);
-            loading(false, 'attFile');
-        }, 1000);
-        console.log(oPath);
-        //setPath(oPath);
+            console.log(path);
+            setTimeout((path: string)=>folder(folderPath.current+'/'), 500, path);  
     }
 
     const pasteMove = (evt: any) => {

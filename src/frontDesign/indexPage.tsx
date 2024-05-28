@@ -17,6 +17,7 @@ import Cookies from 'universal-cookie';
 import download_file from '../frontMech/downloadFile';
 import {Loading, useLoading} from '../hooks/useLoading';
 import { AlarmBar, useAlarm } from './alarm';
+import { Progress } from './progress';
 
 const options = [
     'Открыть',
@@ -322,6 +323,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
             </div>
             <Loading />
             <AlarmBar />
+            <Progress />
         </Box>
     )
 }
