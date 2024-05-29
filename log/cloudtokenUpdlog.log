@@ -595,3 +595,13 @@
 }
 [2024-05-24T14:52:16.484] [DEBUG] cApi - Записей: 1
 [2024-05-27T12:59:01.486] [INFO] cApi - { atoken: '', oldToken: '' }
+[2024-05-29T12:34:31.388] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwiZmlyc3RfbmFtZSI6InMiLCJsYXN0X25hbWUiOiJjIiwiaWQiOjEsImdvbGQiOjAsImlhdCI6MTcxNjkwMDg0NywiZXhwIjoxNzE2OTA0NDQ3fQ.qQoTDFngcG0mBLRz3Q4cas5zgvDlUJgVFwOpssbXQtY'
+}
+[2024-05-29T12:34:33.978] [DEBUG] cApi - Записей: 1
+[2024-05-29T13:57:46.912] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzE2OTc1MjczLCJleHAiOjE3MTY5Nzg4NzN9.W-FUJbfbySWwC3gJ3hsoir9RKmvvGXQkqPHE8BkNfUA'
+}
+[2024-05-29T13:57:47.552] [DEBUG] cApi - Записей: 1

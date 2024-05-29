@@ -249,7 +249,8 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
         console.log(files)
         let upFiles: any[] = [];
         for (let i = 0; i< files.length; i++) {
-            upFiles.push({file: files[i], fileName: files[i].name==='image.png'?String(files[i].lastModified)+'.png':files[i].name, path: folderPath.current});
+            let name = files[i].name==='image.png'?String(files[i].lastModified)+'.png':files[i].name;
+            upFiles.push({file: files[i], fileName: name, path: folderPath.current, filePath: name});
         }
         attFile(upFiles);
     }
@@ -295,14 +296,14 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                                         width: '85px', 
                                         backgroundColor: index==selectedId?'blanchedalmond':'transparent', 
                                         opacity: 0.8,
-                                        fontSize: '0.95rem'
+                                        fontSize: '0.85rem'
                                     }} 
                                     title={item}>
                                         {((item.length>15)&&(index!==selectedId))?(item.slice(0, 12) + `${item.length>12?'...':''}`):item}
                                 </Typography>
                             </Button>
                             <IconButton
-                                sx={{position: 'relative', right: '15px', top: '0px', padding: '0px'}}
+                                sx={{position: 'relative', right: '15px', top: '0px', padding: '0px', margin: '-3px'}}
                                 aria-haspopup="true"
                                 onClick={(event: React.MouseEvent<HTMLElement>)=>setAnchorEl({elem: event.currentTarget, index: index})}
                             >
@@ -345,7 +346,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                                         width: '85px', 
                                         backgroundColor: (index+files.directs.length)==selectedId?'blanchedalmond':'transparent', 
                                         opacity: 0.8,
-                                        fontSize: '0.95rem'
+                                        fontSize: '0.85rem'
                                     }} 
                                     title={item}
                                 >
@@ -354,7 +355,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                             </Button>
                             
                             <IconButton
-                                sx={{position: 'relative', right: '15px', top: 0, padding: '0px'}}
+                                sx={{position: 'relative', right: '15px', top: 0, padding: '0px', margin: '-3px'}}
                                 aria-haspopup="true"
                                 onClick={(event: React.MouseEvent<HTMLElement>)=>{
                                     setAnchorEl({elem: event.currentTarget, index: index+files.directs.length}); 
