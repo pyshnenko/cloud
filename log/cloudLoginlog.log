@@ -633,3 +633,49 @@
 [2024-05-25T17:57:15.796] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/пульт УК17-04-2024/Для контроля приводов без УК/
 [2024-05-27T12:59:04.168] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
 [2024-05-27T12:59:04.307] [DEBUG] cApi - Записей: 1
+[2024-05-28T16:47:56.322] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-05-28T16:47:56.395] [DEBUG] cApi - Записей: 1
+[2024-05-28T16:47:56.649] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-28T16:47:56.654] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-28T16:47:56.676] [INFO] cApi - undefined
+[2024-05-28T16:47:56.677] [INFO] cApi - spamigor
+[2024-05-28T16:47:56.677] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-05-29T05:02:44.853] [INFO] cApi - { atoken: 'null', oldToken: 'null' }
+[2024-05-29T05:02:44.878] [DEBUG] cApi - Записей: 0
+[2024-05-29T08:11:47.847] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzE2OTAzMzg5LCJleHAiOjE3MTY5MDY5ODl9.BPpdoQ1F5GY4F5yShcoBTZxaarCoYQR3FetTuZu7kKc'
+}
+[2024-05-29T08:11:47.871] [DEBUG] cApi - Записей: 1
+[2024-05-29T08:11:48.005] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-29T08:11:48.027] [INFO] cApi - spamigor
+[2024-05-29T08:11:48.028] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-05-29T11:52:56.202] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzE2OTU5NTA3LCJleHAiOjE3MTY5NjMxMDd9.pZ6JEmuO8kTV5bwBfiQcBfNDuw5yko0xIVPMHHQkMWA'
+}
+[2024-05-29T11:52:56.225] [DEBUG] cApi - Записей: 1
+[2024-05-29T11:52:56.364] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-29T11:52:56.387] [INFO] cApi - spamigor
+[2024-05-29T11:52:56.388] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-05-29T13:50:27.099] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-05-29T13:50:27.175] [DEBUG] cApi - Записей: 1
+[2024-05-29T13:50:27.362] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-29T13:50:27.366] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-29T13:50:27.386] [INFO] cApi - undefined
+[2024-05-29T13:50:27.387] [INFO] cApi - spamigor
+[2024-05-29T13:50:27.388] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-05-29T13:50:33.201] [INFO] cApi - { location: '//', action: 'ls', name: '', incognit: false }
+[2024-05-29T13:50:33.222] [INFO] cApi - spamigor
+[2024-05-29T13:50:33.222] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-05-29T13:51:23.199] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImEiLCJsb2dpbiI6InNwYW1pZ29yIiwicGFzc3dvcmQiOiIkMmIkMTAkMUtuU3duYUVSb2M0blh6c3l1UGNwZU4yUEtPdWtFSC9LYXlMT3RtVUdGcC5qTFJwUUdFaDIiLCJmaXJzdF9uYW1lIjoicyIsImxhc3RfbmFtZSI6ImMiLCJpZCI6MSwiZ29sZCI6MCwiaWF0IjoxNzE2OTcyNzc2LCJleHAiOjE3MTY5NzYzNzZ9.RuQs9eTyxuXg86xKpQTtC3fzE9I3LmoxC-TQSheQTeQ'
+}
+[2024-05-29T13:51:23.221] [DEBUG] cApi - Записей: 1
+[2024-05-29T13:51:23.361] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-05-29T13:51:23.383] [INFO] cApi - spamigor
+[2024-05-29T13:51:23.383] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-05-29T13:52:33.771] [INFO] cApi - { location: '//', action: 'ls', name: '', incognit: false }
+[2024-05-29T13:52:33.792] [INFO] cApi - spamigor
+[2024-05-29T13:52:33.793] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
