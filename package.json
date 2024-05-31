@@ -27,6 +27,7 @@
     "file-saver": "^2.0.5",
     "fs": "^0.0.1-security",
     "ioredis": "^5.4.1",
+    "is-mobile": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
     "jszip": "^3.10.1",
     "log4js": "^6.9.1",

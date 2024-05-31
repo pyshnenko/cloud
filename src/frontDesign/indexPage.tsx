@@ -252,7 +252,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
     }
 
     return (
-        <Box sx={{display: 'flex', flexDirection: 'column', height: '98vh'}}>
+        <Box sx={{display: 'flex', flexDirection: 'column', minHeight: '98vh'}}>
             {files&&<AddButton path={path} setPath={setPath} files={files} folder={folder} notVerify={notVerify}/>}
             <Box sx={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap', alignItems: 'center'}}>
                 {!notVerify?<Box sx={{display: 'flex', width: '100%', flexDirection: 'row', justifyContent: 'space-between'}}>

@@ -16,10 +16,12 @@ import UploadDiv from './uploadDiv';
 import {useProgressBar} from './progress';
 import { useAlarm } from './alarm';
 import axios from 'axios';
+import mobile from 'is-mobile';
 
 export default function FilePalette ({files, path, setSelectedId, selectedId, setAnchorEl, setPath, animIn, fileType, datal, notVerify, folder}: any) {
 
     const [ fileDrag, setFileDrag ] = useState<boolean>(false);
+    const [ isMobile, setIsMobile ] = useState<boolean>(false);
 
     const username = useRef(datal);
     const folderPath = useRef(path);
@@ -53,6 +55,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
 
         if (dropZone&&dropZone2) {
             let hoverClassName = 'hover';
+            setIsMobile(mobile());
         
             dropZone.addEventListener("dragenter", function(e) {
                 e.preventDefault();
@@ -261,6 +264,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
             alignItems: 'flex-start', 
             flexWrap: 'wrap', 
             height: '100%', 
+            minHeight: '86vh',
             backgroundColor: 'floralwhite', 
             padding: '8px', 
             margin: '8px',
@@ -272,7 +276,15 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
             onClick={()=>{setSelectedId(-1); inputIdTrig.current?.focus()}}
         >
             <UploadDiv fileDrag={fileDrag} />
-            <TextField sx={{position: 'absolute', top: '-100px', width: 0, height: 0, zIndex: -1}} id='hiddenInput' onPasteCapture={pasteMove} hidden={true} autoFocus={false}/>
+            {!isMobile&&<TextField 
+                autoComplete="off" 
+                sx={{position: 'absolute', top: '-100px', width: 0, height: 0, zIndex: -1}} 
+                id='hiddenInput' 
+                onPasteCapture={pasteMove} 
+                hidden={true} 
+                autoFocus={false} 
+                aria-readonly={true}
+            />}
             {files?.directs.map((item: string, index: number)=> {
                 return (
                     <Fade in={animIn} timeout={index*300} key={item}>
