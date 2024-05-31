@@ -272,7 +272,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
             onClick={()=>{setSelectedId(-1); inputIdTrig.current?.focus()}}
         >
             <UploadDiv fileDrag={fileDrag} />
-            <TextField sx={{position: 'absolute', top: '-100px'}} id='hiddenInput' onPasteCapture={pasteMove} hidden={true}/>
+            <TextField sx={{position: 'absolute', top: '-100px'}} id='hiddenInput' onPasteCapture={pasteMove} hidden={true} autoFocus={false}/>
             {files?.directs.map((item: string, index: number)=> {
                 return (
                     <Fade in={animIn} timeout={index*300} key={item}>
