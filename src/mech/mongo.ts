@@ -32,7 +32,13 @@ class mongoFunc {
         }catch(err) {
             extBuf=[];
         } finally {
-            await mongoClient.close();
+            try {
+                await mongoClient.close();
+            }
+            catch(err)
+            {
+                console.log(err)
+            }
             return extBuf;
         }
     }

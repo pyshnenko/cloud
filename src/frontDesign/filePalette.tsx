@@ -38,15 +38,15 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
 
     useEffect(()=>{
         folderPath.current=path;
-        console.log(path)
+        //console.log(path)
     }, [path])
 
     useEffect(()=>{
-        console.log(fileDrag)
+        //console.log(fileDrag)
     }, [fileDrag])
     
     useEffect(()=>{
-        console.log("user: " + datal);
+        //console.log("user: " + datal);
         const dropZone = document.getElementById('folderBox');
         const dropZone2 = document.getElementById('folderBox2');
         const inputElem = document.getElementById('hiddenInput');
@@ -78,13 +78,30 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
             // Это самое важное событие, событие, которое дает доступ к файлам
             dropZone2.addEventListener("drop", async function(e: any) {
                 e.preventDefault();
+                //e.defaultPrevented(false);
                 setFileDrag(false);
-
-                const files = Array.from(e.dataTransfer.files);
-                console.log(files);
+                console.log(e);
                 attFile(await getFileAsync(e.dataTransfer));
+                //const files = Array.from(e.dataTransfer.files);
+                /*const items = Array.from(e.dataTransfer.items);
+                let updItems: any[] = [];
+                let updfiles: any[] = [];
+                console.log(items);
+                items.map((einp: any, index: number)=>{
+                    if (einp.webkitGetAsEntry().isFile) {
+                        updfiles.push(e.dataTransfer.files[index])
+                    }
+                    else updItems.push(einp)
+                })
+                console.log(updfiles);
+                console.log(updItems);
+                if (updfiles.length) pasteMove(updfiles);
+                console.log(updItems);
+                await attFile(await getFileAsync({items: updItems}));*/
+                /*files.length>1?
+                    pasteMove(e) :
+                    attFile(await getFileAsync(e.dataTransfer));*/
                 //console.log(await getFileAsync(e.dataTransfer));
-                // TODO что-то делает с файлами...
             });            
         }
     }, [])
@@ -212,14 +229,14 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                     'http://localhost:8800/upload':
                     '/upload', data, {
                         onUploadProgress: (e: any) => {
-                            console.log(files[i].fileName);
-                            console.log(typeof(files[i].fileName));
+                            //console.log(files[i].fileName);
+                            //console.log(typeof(files[i].fileName));
                             if (files[i].fileName){
                                 map1 = {...map1, [files[i].filePath]: Math.round(e.loaded * 100 / e.total)};
-                                console.log(map1)
+                                //console.log(map1)
                                 progress(map1);
                             }
-                            console.log('map set');
+                            //console.log('map set');
                         },
                         headers: {
                             folder: encodeURI(userData.login+'/'+files[i].path),
@@ -229,7 +246,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                         }
                     });
                 response.then((res: any)=>{
-                    console.log(res);
+                    //console.log(res);
                     if (res.data.res==='error')
                         alarm('ошибка при передаче', 'error')
 
@@ -239,16 +256,16 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                     alarm('ошибка при передаче', 'error')
                 })
                 response.finally(()=>{      
-                    console.log('done')   
+                    //console.log('done')   
                     alarm('Файл загружен')
                 })
             }
-            console.log(path);
+            //console.log(path);
             setTimeout((path: string)=>folder(folderPath.current+'/'), 500, path);  
     }
 
     const pasteMove = (evt: any) => {
-        let files = evt.clipboardData.files;
+        let files = evt.hasOwnProperty('clipboardData')? evt.clipboardData.files : evt.hasOwnProperty('dataTransfer')?evt.dataTransfer.files:evt;
         console.log(files)
         let upFiles: any[] = [];
         for (let i = 0; i< files.length; i++) {

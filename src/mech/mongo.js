@@ -54,14 +54,14 @@ var mongoFunc = /** @class */ (function () {
     }
     mongoFunc.prototype.find = function (obj) {
         return __awaiter(this, void 0, void 0, function () {
-            var extBuf, err_1;
+            var extBuf, err_1, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         extBuf = [];
                         _a.label = 1;
                     case 1:
-                        _a.trys.push([1, 7, 8, 10]);
+                        _a.trys.push([1, 7, 8, 12]);
                         return [4 /*yield*/, mongoClient.connect()];
                     case 2:
                         _a.sent();
@@ -74,23 +74,30 @@ var mongoFunc = /** @class */ (function () {
                     case 5:
                         extBuf = _a.sent();
                         _a.label = 6;
-                    case 6: return [3 /*break*/, 10];
+                    case 6: return [3 /*break*/, 12];
                     case 7:
                         err_1 = _a.sent();
                         extBuf = [];
-                        return [3 /*break*/, 10];
-                    case 8: return [4 /*yield*/, mongoClient.close()];
+                        return [3 /*break*/, 12];
+                    case 8:
+                        _a.trys.push([8, 10, , 11]);
+                        return [4 /*yield*/, mongoClient.close()];
                     case 9:
                         _a.sent();
-                        return [2 /*return*/, extBuf];
-                    case 10: return [2 /*return*/];
+                        return [3 /*break*/, 11];
+                    case 10:
+                        err_2 = _a.sent();
+                        console.log(err_2);
+                        return [3 /*break*/, 11];
+                    case 11: return [2 /*return*/, extBuf];
+                    case 12: return [2 /*return*/];
                 }
             });
         });
     };
     mongoFunc.prototype.updateOne = function (oldObj, obj) {
         return __awaiter(this, void 0, void 0, function () {
-            var userLogin, err_2;
+            var userLogin, err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -103,8 +110,8 @@ var mongoFunc = /** @class */ (function () {
                         _a.sent();
                         return [3 /*break*/, 6];
                     case 3:
-                        err_2 = _a.sent();
-                        console.log(err_2);
+                        err_3 = _a.sent();
+                        console.log(err_3);
                         return [3 /*break*/, 6];
                     case 4: return [4 /*yield*/, mongoClient.close()];
                     case 5:
@@ -117,7 +124,7 @@ var mongoFunc = /** @class */ (function () {
     };
     mongoFunc.prototype.incertOne = function (obj) {
         return __awaiter(this, void 0, void 0, function () {
-            var err_3;
+            var err_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -130,8 +137,8 @@ var mongoFunc = /** @class */ (function () {
                         _a.sent();
                         return [3 /*break*/, 6];
                     case 3:
-                        err_3 = _a.sent();
-                        console.log(err_3);
+                        err_4 = _a.sent();
+                        console.log(err_4);
                         return [3 /*break*/, 6];
                     case 4: return [4 /*yield*/, mongoClient.close()];
                     case 5:

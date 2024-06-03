@@ -15,14 +15,14 @@ let setMapValGlob: (buf: any)=>void;
 
 export function useProgressBar (mapVal: any) {
     let bufG: any = {};
-    console.log(mapVal)
+    //console.log(mapVal)
     for (let item in mapVal) {
-        console.log(item)
+        //console.log(item)
         let addr: string[] = [];
         if (item.includes('/')) {
             addr = item.split('/');
             if (addr.length>2) {
-                console.log(bufG[addr[1]])
+                //console.log(bufG[addr[1]])
                 if (bufG.hasOwnProperty(addr[1]))
                     bufG[addr[1]] = bufG[addr[1]].hasOwnProperty('%%%total')? {
                         ...bufG[addr[1]], 
@@ -56,7 +56,7 @@ export function useProgressBar (mapVal: any) {
             bufG[item]= mapVal[item]  
         }
     }
-    console.log(bufG)
+    //console.log(bufG)
     //setMapValGlob(mapVal);
     setMapValGlob(bufG);
 }
@@ -120,7 +120,7 @@ export function Progress () {
     }, [])
 
     React.useEffect(()=>{              
-        console.log(mapVal)
+        //console.log(mapVal)
         setCloseButton(controlClose(mapVal));
     }, [mapVal])
 
