@@ -210,7 +210,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                 console.log(action + ' ' + path + (objName));
                 const cookies = new Cookies(null, {path: '/'});
                 cookies.set('token', User.getToken());
-                const fileAddr: string = encodeURI(`${window.location.href==='http://localhost:8799/'?'http://localhost:8800':''}/data/${path}${objName}`);
+                const fileAddr: string = encodeURI(`${window.location.href==='http://localhost:8799/'?'http://localhost:8800':''}/data/${path}/${objName}`);
                 download_file(fileAddr, objName);
                 console.log(fileAddr);
             }
