@@ -376,13 +376,13 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                                     fileType(item)==='picture'? 
                                         <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                             <Box sx={{width: '60px', height: '60px'}}>
-                                                <img style={{width: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${item}`} />
+                                                <img style={{width: '100%', maxHeight: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${item}`} />
                                             </Box>
                                         </Box> :
                                     fileType(item)==='video'? 
                                     <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                         <Box sx={{width: '60px', height: '60px'}}>
-                                            <video style={{width: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${item}`} autoPlay={selectedId===index+files.directs.length?true:false} muted={true} is="x-muted" loop={true} />
+                                            <video style={{width: '100%', maxHeight: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${item}`} autoPlay={selectedId===index+files.directs.length?true:false} muted={true} is="x-muted" loop={true} />
                                         </Box>
                                     </Box> :
                                     <InsertDriveFileIcon sx={{zoom: 2.5, color: '#0AD58D'}} />}
