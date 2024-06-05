@@ -21,12 +21,17 @@ const askLS = (data: string, location: string = '/', action: string = 'ls', name
     return privateApi(data).post('/fs', {location, action, name, incognit});
 }
 
+const uplByUrl = (token: string, data: {fname: string, url: string, location?: string, login?: string}) => {
+    return privateApi(token).post('/uploadByUrl', data);
+}
+
 const Api = {
     login,
     register,
     tokenUPD,
     askLS,
-    askSimpleTok
+    askSimpleTok,
+    uplByUrl
 }
 
 export default Api;

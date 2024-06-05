@@ -17,6 +17,7 @@ import {useProgressBar} from './progress';
 import { useAlarm } from './alarm';
 import axios from 'axios';
 import mobile from 'is-mobile';
+import Api from '../frontMech/api';
 
 export default function FilePalette ({files, path, setSelectedId, selectedId, setAnchorEl, setPath, animIn, fileType, datal, notVerify, folder}: any) {
 
@@ -278,10 +279,9 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
         if (files.length)
             attFile(upFiles);
         else if (tpast.length) {
-            console.log(tpast);
-            fetch(tpast)
-                .then((res)=>console.log(res))
-                .catch((err)=>console.log(err))
+            console.log(Number(new Date())+tpast.slice(tpast.lastIndexOf('.')));
+            Api.uplByUrl(User.getToken(), {fname: String(Number(new Date())+tpast.slice(tpast.lastIndexOf('.'))), url: tpast, location: folderPath.current})
+            .then((res: any)=>setPath(folderPath.current+'/'));
         }
     }
     
@@ -379,6 +379,12 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                                                 <img style={{width: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${item}`} />
                                             </Box>
                                         </Box> :
+                                    fileType(item)==='video'? 
+                                    <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                        <Box sx={{width: '60px', height: '60px'}}>
+                                            <video autoPlay={selectedId===index+files.directs.length} muted={true} controls={false} loop={true} style={{width: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${item}`} />
+                                        </Box>
+                                    </Box> :
                                     <InsertDriveFileIcon sx={{zoom: 2.5, color: '#0AD58D'}} />}
                                 <Typography 
                                     sx={{

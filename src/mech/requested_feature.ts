@@ -3,7 +3,7 @@ import { FSType } from "../types/api/types";
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-const {FSType} = require('../types/api/types');
+//const {FSType} = require('../types/api/types');
 
 const dir = process.cwd();
 

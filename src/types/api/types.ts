@@ -43,3 +43,10 @@ export interface FSType {
     name?: string, 
     incognit?: boolean
 }
+
+export interface UbyURL {
+    location: string,
+    fname: string,
+    login?: string,
+    url: string
+}

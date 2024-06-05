@@ -40,6 +40,11 @@ const archEnd = [
     'zip'
 ]
 
+const vidEnd = [
+    '.mp4',
+    '.gif'
+]
+
 export default function Index({exPath, notVerify, bbPath}: {exPath?: string, notVerify?: boolean, bbPath?: string }) {
     const [datal, setDatal] = useState<string>();
     const [path, setPath] = useState<string>(exPath || '/');
@@ -195,6 +200,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
             let endText = 'other'
             imgEnd.forEach((itemP: string)=>{if (name.includes(itemP)) endText='picture'})
             archEnd.forEach((itemP: string)=>{if (name.includes(itemP)) endText='archive'})
+            vidEnd.forEach((itemP: string)=>{if (name.includes(itemP)) endText='video'})
             return endText
         }
         /*if (imgEnd.includes(item)) return 'picture'
