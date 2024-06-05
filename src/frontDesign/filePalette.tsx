@@ -265,6 +265,9 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
     }
 
     const pasteMove = (evt: any) => {
+        evt.preventDefault();
+        const tpast: string = evt.clipboardData.getData("text");
+        console.log(tpast);
         let files = evt.hasOwnProperty('clipboardData')? evt.clipboardData.files : evt.hasOwnProperty('dataTransfer')?evt.dataTransfer.files:evt;
         console.log(files)
         let upFiles: any[] = [];
@@ -272,7 +275,14 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
             let name = files[i].name==='image.png'?String(files[i].lastModified)+'.png':files[i].name;
             upFiles.push({file: files[i], fileName: name, path: folderPath.current, filePath: name});
         }
-        attFile(upFiles);
+        if (files.length)
+            attFile(upFiles);
+        else if (tpast.length) {
+            console.log(tpast);
+            fetch(tpast)
+                .then((res)=>console.log(res))
+                .catch((err)=>console.log(err))
+        }
     }
     
     return (
