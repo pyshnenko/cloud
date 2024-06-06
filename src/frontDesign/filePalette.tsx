@@ -18,6 +18,7 @@ import { useAlarm } from './alarm';
 import axios from 'axios';
 import mobile from 'is-mobile';
 import Api from '../frontMech/api';
+import { urlCheck } from '../frontMech/checkMech';
 
 export default function FilePalette ({files, path, setSelectedId, selectedId, setAnchorEl, setPath, animIn, fileType, datal, notVerify, folder}: any) {
 
@@ -83,26 +84,6 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                 setFileDrag(false);
                 console.log(e);
                 attFile(await getFileAsync(e.dataTransfer));
-                //const files = Array.from(e.dataTransfer.files);
-                /*const items = Array.from(e.dataTransfer.items);
-                let updItems: any[] = [];
-                let updfiles: any[] = [];
-                console.log(items);
-                items.map((einp: any, index: number)=>{
-                    if (einp.webkitGetAsEntry().isFile) {
-                        updfiles.push(e.dataTransfer.files[index])
-                    }
-                    else updItems.push(einp)
-                })
-                console.log(updfiles);
-                console.log(updItems);
-                if (updfiles.length) pasteMove(updfiles);
-                console.log(updItems);
-                await attFile(await getFileAsync({items: updItems}));*/
-                /*files.length>1?
-                    pasteMove(e) :
-                    attFile(await getFileAsync(e.dataTransfer));*/
-                //console.log(await getFileAsync(e.dataTransfer));
             });            
         }
     }, [])
@@ -121,13 +102,6 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                 if (typeof item.webkitGetAsEntry === 'function'){
                     const entry = item.webkitGetAsEntry();
                     console.log(entry);
-                    /*const entryContent: any = await filesFromFolders(entry);
-                    console.log(entryContent)
-                    entryContent.map((itemMap: any)=> {
-                        console.log(itemMap)
-                        if (itemMap) files.push(itemMap);
-                    })
-                    console.log(files)*/
                     const entryContent: any = await readEntryContentAsync(entry);
                     console.log(entryContent)
                     files.push(...entryContent);
@@ -144,15 +118,6 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
         console.log(files)
         return files;
     };
-
-    const filesFromFolders = async (entry: any) => {
-        console.log(entry);
-        const contents: any[] = [];
-        await readEntry(contents, entry);
-        console.log(contents)
-        return contents;
-        
-    }
 
     async function readEntry(contents: any[], inpEntry: any, fstSt: boolean = true) {
         console.log(inpEntry);
@@ -278,7 +243,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
         }
         if (files.length)
             attFile(upFiles);
-        else if (tpast.length) {
+        else if ((tpast.length)&&(urlCheck(tpast))) {
             console.log(Number(new Date())+tpast.slice(tpast.lastIndexOf('.')));
             Api.uplByUrl(User.getToken(), {fname: String(Number(new Date())+tpast.slice(tpast.lastIndexOf('.'))), url: tpast, location: folderPath.current})
             .then((res: any)=>setPath(folderPath.current+'/'));

@@ -16,9 +16,11 @@ import { useLoading } from '../hooks/useLoading';
 import { useAlarm } from './alarm';
 import axios from 'axios';
 import {useProgressBar} from './progress';
+import { attFile } from '../frontMech/mechanics';
 
 const actions = [
   { icon: <FileUploadIcon />, name: 'Загрузить файл' },
+  { icon: <FileUploadIcon />, name: 'Загрузить по URL' },
   { icon: <DownloadIcon />, name: 'Скачать содержимое' },
   { icon: <AddIcon />, name: 'Создать папку' },
   { icon: <ShareIcon />, name: 'Поделиться' },
@@ -35,7 +37,7 @@ interface props {
 export default function SpeedDialTooltipOpen({path, setPath, files, folder, notVerify}: props) {
     const [open, setOpen] = React.useState(false);
     const [dialogResult, setDialogResult] = React.useState<{ready: boolean, text?: string, numb?: number}>({ready: false});
-    const [dialogOpen, setDialogOpen] = React.useState<boolean>(false);
+    const [dialogOpen, setDialogOpen] = React.useState<{visible: boolean, lbl: string, text: string}>({visible: false, lbl: '', text: ''});
     //const [progressProps, setProgressProps] = React.useState<Map<string, number>>();
     //const [progressProps, setProgressProps] = React.useState<{visible: Boolean, value: number, name: string}>();
     const loading = useLoading;
@@ -43,12 +45,12 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
     const progress = useProgressBar;
 
     React.useEffect(()=>{
-        if (dialogResult.ready) {
+        if ((dialogResult.ready)&&(dialogOpen.lbl==='folder')) {
             console.log(dialogResult.text);
             if (dialogResult.text&&dialogResult.text!=='') {
                 console.log('aaa');
                 createFolder(dialogResult.text);
-                setDialogOpen(false);
+                setDialogOpen({visible: false, lbl: '', text: ''});
                 handleClose();
                 //setPath(path+'/'+dialogResult.text);
                 setDialogResult({ready: false});
@@ -56,7 +58,24 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
             else if (!dialogResult.text) {
                 console.log('bbb');
                 setDialogResult({ready: false});
-                setDialogOpen(false);
+                setDialogOpen({visible: false, lbl: '', text: ''});
+                handleClose();
+            }
+        }
+        if ((dialogResult.ready)&&(dialogOpen.lbl==='url')) {
+            console.log(dialogResult.text);
+            if (dialogResult.text&&dialogResult.text!=='') {
+                console.log('aaa');
+                urlEnter(dialogResult.text);
+                setDialogOpen({visible: false, lbl: '', text: ''});
+                handleClose();
+                //setPath(path+'/'+dialogResult.text);
+                setDialogResult({ready: false});
+            }
+            else if (!dialogResult.text) {
+                console.log('bbb');
+                setDialogResult({ready: false});
+                setDialogOpen({visible: false, lbl: '', text: ''});
                 handleClose();
             }
         }
@@ -70,11 +89,15 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
     const handleClose = () => setOpen(false);
 
     const handleAction = (action: string) => {
-        if (action === actions[2].name) {
+        if (action === actions[3].name) {
             setDialogResult({ready: false});
-            setDialogOpen(true);
+            setDialogOpen({visible: true, lbl: 'folder', text: 'Новая папка'});
         }
         else if (action === actions[1].name) {
+            setDialogResult({ready: false});
+            setDialogOpen({visible: true, lbl: 'url', text: 'Введи URL'});
+        }
+        else if (action === actions[2].name) {
             loading(true, 'tar');
             Api.askLS(User.getToken(), path, 'tar')
             .then((res: any)=>{
@@ -84,12 +107,12 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
             }).catch((e: any)=>console.log(e)).finally(()=>loading(false, 'tar'))
         }
         else if (action === actions[0].name) {
-            attFile();
+            attFile({notVerify: !!notVerify, path, folder});
             handleClose();
         }
     }
 
-    const attFile = async () => {
+    /*const attFile2 = async () => {
         let input = document.createElement('input');
         input.type = 'file';
         input.multiple = true;
@@ -140,14 +163,23 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
         } 
         loading(false, 'attFile');        
         input.click();
-    }
+    }*/
 
     const createFolder = (name: string) => {
         Api.askLS(User.getToken(), path, 'mkdir', name)
         .then((res: any)=>{
             console.log(res);
             setPath(path+'/'+name);
-            setDialogOpen(false);
+            setDialogOpen({visible: false, lbl: '', text: ''});
+        }).catch((e: any)=>console.log(e));
+    }
+
+    const urlEnter = (name: string) => {
+        Api.uplByUrl(User.getToken(), {fname: String(Number(new Date())) + name.slice(name.lastIndexOf('.')), url: name, location: path })
+        .then((res: any)=>{
+            console.log(res);
+            setPath(path+'/');
+            setDialogOpen({visible: false, lbl: '', text: ''});
         }).catch((e: any)=>console.log(e));
     }
 
@@ -174,7 +206,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
                 ))}
             </SpeedDial>
         </Box>
-        {dialogOpen&&<Dialog text={'Новая папка'} files={files} setResult={setDialogResult}/>}
+        {dialogOpen.visible&&<Dialog text={dialogOpen.text} files={files} setResult={setDialogResult} />}
     </Box>
   );
 }
