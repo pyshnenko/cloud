@@ -19,6 +19,7 @@ import axios from 'axios';
 import mobile from 'is-mobile';
 import Api from '../frontMech/api';
 import { urlCheck } from '../frontMech/checkMech';
+import { readEntryContentAsync, getFileAsync } from '../frontMech/mechanics';
 
 export default function FilePalette ({files, path, setSelectedId, selectedId, setAnchorEl, setPath, animIn, fileType, datal, notVerify, folder}: any) {
 
@@ -31,8 +32,6 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
 
     const progress = useProgressBar;
     const alarm = useAlarm;
-
-    const loading = useLoading;
 
     useEffect(()=>{
         username.current=datal;
@@ -83,12 +82,12 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                 //e.defaultPrevented(false);
                 setFileDrag(false);
                 console.log(e);
-                attFile(await getFileAsync(e.dataTransfer));
+                attFile(await getFileAsync(e.dataTransfer, folderPath));
             });            
         }
     }, [])
 
-    const getFileAsync = async (dataTranfer: any) => {
+    /*const getFileAsync = async (dataTranfer: any) => {
         const files = [];
         let itemInp = [];
         let itemL = dataTranfer.items.length;
@@ -102,7 +101,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                 if (typeof item.webkitGetAsEntry === 'function'){
                     const entry = item.webkitGetAsEntry();
                     console.log(entry);
-                    const entryContent: any = await readEntryContentAsync(entry);
+                    const entryContent: any = await readEntryContentAsync(entry, folderPath);
                     console.log(entryContent)
                     files.push(...entryContent);
 
@@ -117,9 +116,9 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
         }
         console.log(files)
         return files;
-    };
+    };*/
 
-    async function readEntry(contents: any[], inpEntry: any, fstSt: boolean = true) {
+    /*async function readEntry(contents: any[], inpEntry: any, fstSt: boolean = true) {
         console.log(inpEntry);
         if (inpEntry.isFile) {                    
             inpEntry.file((file: any) => {
@@ -139,10 +138,10 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                     if (fstSt) return contents
                 })
         }
-    }
+    }*/
     
     // Возвращает Promise со всеми файлами иерархии каталогов
-    const readEntryContentAsync = async (entry: any) => {
+    const readEntryContentAsync2 = async (entry: any) => {
         console.log(entry);
         return new Promise((resolve, reject) => {
             let reading = 0;
