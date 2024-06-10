@@ -79,7 +79,7 @@ function LinearProgressWithLabel2(props: LinearProgressProps & { value: number, 
     );
   }
   
-  function LinearProgressWithLabel(props: LinearProgressProps & { value: number, name: string, err: string }) {
+  function LinearProgressWithLabel(props: LinearProgressProps & { value: number, name: string, err?: string }) {
     return (
         <Box sx={{width: '100%', margin: '4px', minHeight: '48px', padding: 0}}>
         <LinearProgress variant="determinate" {...props} sx={{
