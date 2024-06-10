@@ -45,7 +45,6 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
                 createFolder(dialogResult.text);
                 setDialogOpen({visible: false, lbl: '', text: ''});
                 handleClose();
-                //setPath(path+'/'+dialogResult.text);
                 setDialogResult({ready: false});
             }
             else if (!dialogResult.text) {
@@ -62,7 +61,6 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
                 urlEnter(dialogResult.text);
                 setDialogOpen({visible: false, lbl: '', text: ''});
                 handleClose();
-                //setPath(path+'/'+dialogResult.text);
                 setDialogResult({ready: false});
             }
             else if (!dialogResult.text) {
@@ -73,10 +71,6 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
             }
         }
     }, [dialogResult])
-
-    /*React.useEffect(()=>{
-        console.log(progressProps)
-    }, [progressProps])*/
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -96,7 +90,6 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
             .then((res: any)=>{
                 console.log(res.data.addr);
                 download_file((window.location.href==='http://localhost:8799/'?'http://localhost:8800/':'/') + res.data.addr);
-                //window.open((window.location.href==='http://localhost:8799/'?'http://localhost:8800/':'/') + res.data.addr)
             }).catch((e: any)=>console.log(e)).finally(()=>loading(false, 'tar'))
         }
         else if (action === actions[0].name) {

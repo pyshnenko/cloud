@@ -10,16 +10,14 @@ import FolderZipIcon from '@mui/icons-material/FolderZip';
 import Typography from '@mui/material/Typography';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import TextField from '@mui/material/TextField';
-import { useLoading } from '../hooks/useLoading';
-import {User, userData} from '../frontMech/user';
+import {User} from '../frontMech/user';
 import UploadDiv from './uploadDiv';
 import {useProgressBar} from './progress';
 import { useAlarm } from './alarm';
-import axios from 'axios';
 import mobile from 'is-mobile';
 import Api from '../frontMech/api';
 import { urlCheck } from '../frontMech/checkMech';
-import { readEntryContentAsync, getFileAsync, attFileSend } from '../frontMech/mechanics';
+import { getFileAsync, attFileSend } from '../frontMech/mechanics';
 
 export default function FilePalette ({files, path, setSelectedId, selectedId, setAnchorEl, setPath, animIn, fileType, datal, notVerify, folder}: any) {
 
@@ -86,101 +84,6 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
             });            
         }
     }, [])
-
-    /*const getFileAsync = async (dataTranfer: any) => {
-        const files = [];
-        let itemInp = [];
-        let itemL = dataTranfer.items.length;
-        console.log(itemL);
-        for (var i = 0; i < dataTranfer.items.length; i++) 
-            itemInp.push(dataTranfer.items[i]);
-        console.log(itemInp);
-        for (var i = 0; i < itemInp.length; i++) {
-            const item = itemInp[i];
-            if (item.kind === 'file') {
-                if (typeof item.webkitGetAsEntry === 'function'){
-                    const entry = item.webkitGetAsEntry();
-                    console.log(entry);
-                    const entryContent: any = await readEntryContentAsync(entry, folderPath);
-                    console.log(entryContent)
-                    files.push(...entryContent);
-
-                    continue;
-                }
-    
-                const file = item.getAsFile();
-                console.log(file)
-                if (file) { files.push(file); }
-            }
-            else console.log(item.kind)
-        }
-        console.log(files)
-        return files;
-    };*/
-
-    /*async function readEntry(contents: any[], inpEntry: any, fstSt: boolean = true) {
-        console.log(inpEntry);
-        if (inpEntry.isFile) {                    
-            inpEntry.file((file: any) => {
-                //const newFileName = entry.fullPath;
-                //file.name = entry.fullPath;
-                contents.push({file, fileName: file.name, path: folderPath.current+inpEntry.fullPath.slice(0, inpEntry.fullPath.length-file.name.length-1)});
-                console.log(contents)
-                if (fstSt) return contents;
-            });
-        }
-        else if (inpEntry.isDirectory) {
-            inpEntry.createReader()
-                .readEntries(async function(entries: any) {
-                    for (const entry of entries) {
-                        contents.push(await readEntry(contents, entry, false));
-                    }console.log(contents)
-                    if (fstSt) return contents
-                })
-        }
-    }
-    
-    // Возвращает Promise со всеми файлами иерархии каталогов
-    const readEntryContentAsync2 = async (entry: any) => {
-        console.log(entry);
-        return new Promise((resolve, reject) => {
-            let reading = 0;
-            const contents: any[] = [];
-    
-            readEntry(entry);
-    
-            function readEntry(entry: any) {
-                //console.log(entry)
-                if (entry.isFile) {
-                    reading++;                    
-                    entry.file((file: any) => {
-                        reading--;
-                        const newFileName = entry.fullPath.slice(1);
-                        //file.name = entry.fullPath;
-                        contents.push({file, fileName: file.name, path: folderPath.current+entry.fullPath.slice(0, entry.fullPath.length-file.name.length-1), filePath: newFileName});
-                        if (reading === 0) {
-                            resolve(contents);
-                        }
-                    });
-                } else if (entry.isDirectory) {
-                    readReaderContent(entry.createReader());
-                }
-            };
-          
-            function readReaderContent(reader: any) {
-                reading++;
-                reader.readEntries(function(entries: any) {
-                    reading--;
-                    for (const entry of entries) {
-                        readEntry(entry);
-                    }
-                    if (reading === 0) {
-                        resolve(contents);
-                    }
-                });
-            };
-        });
-    };*/
 
     const pasteMove = (evt: any) => {
         evt.preventDefault();

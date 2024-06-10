@@ -125,16 +125,6 @@ export function Progress () {
         setCloseButton(controlClose(mapVal));
     }, [mapVal])
 
-    /*const updVal = (mapValD: Map<string, number>) =>{
-        console.log('updVal')
-        if (!closeButton) {
-            console.log('open')
-            let buf = copy(mapValD);
-            setMapVal(buf)
-            setTimeout(updVal, 1000);
-        }
-    }*/
-
     const controlClose = (mapValD: any) => {
         for (let val in mapValD){
             if (typeof(mapValD[val])==='number') 
