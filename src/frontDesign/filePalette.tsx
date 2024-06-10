@@ -19,7 +19,7 @@ import axios from 'axios';
 import mobile from 'is-mobile';
 import Api from '../frontMech/api';
 import { urlCheck } from '../frontMech/checkMech';
-import { readEntryContentAsync, getFileAsync } from '../frontMech/mechanics';
+import { readEntryContentAsync, getFileAsync, attFileSend } from '../frontMech/mechanics';
 
 export default function FilePalette ({files, path, setSelectedId, selectedId, setAnchorEl, setPath, animIn, fileType, datal, notVerify, folder}: any) {
 
@@ -82,7 +82,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                 //e.defaultPrevented(false);
                 setFileDrag(false);
                 console.log(e);
-                attFile(await getFileAsync(e.dataTransfer, folderPath));
+                attFileSend(await getFileAsync(e.dataTransfer, folderPath), folderPath.current, folder);
             });            
         }
     }, [])
@@ -138,7 +138,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                     if (fstSt) return contents
                 })
         }
-    }*/
+    }
     
     // Возвращает Promise со всеми файлами иерархии каталогов
     const readEntryContentAsync2 = async (entry: any) => {
@@ -180,54 +180,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                 });
             };
         });
-    };
-
-    const attFile = async (files: any[]) => {
-            let map1: any = {};
-            console.log(files)
-            for (let i = 0; i<files.length; i++) {
-                let data = new FormData();
-                data.append('file', files[i].file);       
-                map1[files[i].filePath] = 0;
-                progress(map1);
-                const response = axios.post((window.location.href.slice(0,22)==='http://localhost:8799/')?
-                    'http://localhost:8800/upload':
-                    '/upload', data, {
-                        onUploadProgress: (e: any) => {
-                            //console.log(files[i].fileName);
-                            //console.log(typeof(files[i].fileName));
-                            if (files[i].fileName){
-                                map1 = {...map1, [files[i].filePath]: Math.round(e.loaded * 100 / e.total)};
-                                //console.log(map1)
-                                progress(map1);
-                            }
-                            //console.log('map set');
-                        },
-                        headers: {
-                            folder: encodeURI(userData.login+'/'+files[i].path),
-                            fname: encodeURI(files[i].fileName),
-                            user: encodeURI(userData.login),
-                            token: encodeURI(User.getToken())
-                        }
-                    });
-                response.then((res: any)=>{
-                    //console.log(res);
-                    if (res.data.res==='error')
-                        alarm('ошибка при передаче', 'error')
-
-                })
-                response.catch((e: any) => {
-                    console.log(e);
-                    alarm('ошибка при передаче', 'error')
-                })
-                response.finally(()=>{      
-                    //console.log('done')   
-                    alarm('Файл загружен')
-                })
-            }
-            //console.log(path);
-            setTimeout((path: string)=>folder(folderPath.current+'/'), 500, path);  
-    }
+    };*/
 
     const pasteMove = (evt: any) => {
         evt.preventDefault();
@@ -237,11 +190,11 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
         console.log(files)
         let upFiles: any[] = [];
         for (let i = 0; i< files.length; i++) {
-            let name = files[i].name==='image.png'?String(files[i].lastModified)+'.png':files[i].name;
+            let name = ((files[i].name==='image.png')&&(files.length===1))?String(files[i].lastModified)+'.png':files[i].name;
             upFiles.push({file: files[i], fileName: name, path: folderPath.current, filePath: name});
         }
         if (files.length)
-            attFile(upFiles);
+            attFileSend(upFiles, path, folder);
         else if ((tpast.length)&&(urlCheck(tpast))) {
             console.log(Number(new Date())+tpast.slice(tpast.lastIndexOf('.')));
             Api.uplByUrl(User.getToken(), {fname: String(Number(new Date())+tpast.slice(tpast.lastIndexOf('.'))), url: tpast, location: folderPath.current})

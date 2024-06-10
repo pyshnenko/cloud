@@ -79,7 +79,7 @@ function LinearProgressWithLabel2(props: LinearProgressProps & { value: number, 
     );
   }
   
-  function LinearProgressWithLabel(props: LinearProgressProps & { value: number, name: string }) {
+  function LinearProgressWithLabel(props: LinearProgressProps & { value: number, name: string, err: string }) {
     return (
         <Box sx={{width: '100%', margin: '4px', minHeight: '48px', padding: 0}}>
         <LinearProgress variant="determinate" {...props} sx={{
@@ -88,8 +88,9 @@ function LinearProgressWithLabel2(props: LinearProgressProps & { value: number, 
                 width: '98%', 
                 height: '100%', 
                 minHeight: '10px',
-                boxShadow: '0 0 4px blue', 
-                borderRadius: '10px'
+                boxShadow: props.err==='false'?'0 0 4px blue':'0 0 4px red', 
+                borderRadius: '10px',
+                backgroundColor: props.err==='false'?'rgb(167, 202, 237)':'red'
         }}/>
             <Box sx={{ 
                 display: 'flex', 
@@ -137,9 +138,9 @@ export function Progress () {
     const controlClose = (mapValD: any) => {
         for (let val in mapValD){
             if (typeof(mapValD[val])==='number') 
-                if (mapValD[val]!==100) return false
+                if ((mapValD[val]!==100)&&(mapValD[val]!==-1)) return false
             else for (let valInp in mapValD[val])
-                if (mapValD[val][valInp]!==100) return false
+                if ((mapValD[val][valInp]!==100)&&(mapValD[val]!==-1)) return false
         }
         return true
     }
@@ -193,14 +194,26 @@ export function Progress () {
                     }}>
                         {Object.keys(mapVal).map((item: string) => { 
                             return (typeof(mapVal[item])==='number' ? 
-                                <LinearProgressWithLabel value={mapVal[item]} name={item} key={item} sx={{width: '97%', height: '100%'}} /> :
+                                <LinearProgressWithLabel 
+                                    value={mapVal[item]===-1?0:mapVal[item]} 
+                                    name={item} 
+                                    key={item} 
+                                    sx={{width: '97%', height: '100%'}} 
+                                    err={(mapVal[item]===-1).toString()} 
+                                /> :
                                     <Accordion elevation={3} sx={{backgroundColor: 'antiquewhite', padding: 0}}>
                                         <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{width: '97%', padding: 0, margin: 0}}>
                                             <LinearProgressWithLabel value={mapVal[item]['%%%total']} name={item} key={item+'%%%total'} sx={{width: '97%', height: '100%'}} />
                                         </AccordionSummary>
                                         <AccordionDetails sx={{padding: 0, margin: 0}}>                                            
                                             {Object.keys(mapVal[item]).map((item2: string) => { if (item2!=='%%%total') return (
-                                                <LinearProgressWithLabel value={mapVal[item][item2]} name={item2} key={item2} sx={{width: '97%', height: '100%'}} />)})}
+                                                <LinearProgressWithLabel 
+                                                    value={mapVal[item][item2]===-1?0:mapVal[item][item2]} 
+                                                    name={item2} 
+                                                    key={item2} 
+                                                    sx={{width: '97%', height: '100%'}} 
+                                                    err={(mapVal[item][item2]===-1).toString()} 
+                                                />)})}
                                         </AccordionDetails>
                                     </Accordion>
                                 )

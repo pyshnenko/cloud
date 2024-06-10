@@ -9,12 +9,14 @@ const loading = useLoading;
 const alarm = useAlarm;
 
 export async function attFile({notVerify, path, folder}: {notVerify: boolean, path: string, folder: (vr: string)=>void}) {
+    console.log(path)
     let input = document.createElement('input');
     input.type = 'file';
     input.multiple = true;
     input.onchange = async (e: any) => {
-        let files = e.target.files;
-        let map1: any = {};
+        console.log(path)
+        attFileSend(e.target.files, path, folder);
+        /*let map1: any = {};
         for (let i = 0; i<files.length; i++) {
             let data = new FormData();
             data.append('file', files[i]);       
@@ -55,10 +57,65 @@ export async function attFile({notVerify, path, folder}: {notVerify: boolean, pa
                 alarm('Файл загружен')
             })
         }
-        setTimeout((path: string)=>folder(path+'/'), 500, path);
+        setTimeout((path: string)=>folder(path+'/'), 500, path);*/
     } 
     loading(false, 'attFile');        
     input.click();
+}
+
+export async function attFileSend(files: any[], path: string, folder: (p: string)=>void, notVerify?:boolean) {
+    let map1: any = {};
+    console.log(files)
+    for (let i = 0; i<files.length; i++) {
+        let data = new FormData();
+        data.append('file',  files[i].hasOwnProperty('file')?files[i].file:files[i]);       
+        map1[files[i].filePath||files[i].name] = 0;
+        progress(map1);
+        console.log(userData.login+'/'+(files[i].path||path))
+        try {
+            const response = axios.post((window.location.href.slice(0,22)==='http://localhost:8799/')?
+                'http://localhost:8800/upload':
+                '/upload', data, {
+                    onUploadProgress: (e: any) => {
+                        //console.log(files[i].fileName);
+                        //console.log(typeof(files[i].fileName));
+                        if (files[i].fileName||files[i].name){
+                            map1 = {...map1, [files[i].filePath||files[i].name]: Math.round(e.loaded * 100 / e.total)};
+                            //console.log(map1)
+                            progress(map1);
+                        }
+                        //console.log('map set');
+                    },
+                    headers: {
+                        folder: encodeURI((notVerify?'':(userData.login+'/'))+(path==='/'?'':(files[i].path||path))),
+                        fname: encodeURI(files[i].fileName||files[i].name),
+                        user: encodeURI(userData.login),
+                        token: encodeURI(User.getToken())
+                    }
+                });
+            response.then((res: any)=>{
+                //console.log(res);
+                if (res.data.res==='error')
+                    alarm('ошибка при передаче', 'error')
+                else alarm('Файл загружен')
+
+            })
+            response.catch((e: any) => {
+                console.log(e);
+                console.log(decodeURI(e.config.headers.fname));
+                map1 = {...map1, [decodeURI(e.config.headers.fname)]: -1};
+                progress(map1);
+                alarm('ошибка при передаче', 'error')
+            })
+            response.finally(()=>{      
+                //console.log('done')   
+                //alarm('Файл загружен')
+            })
+        }
+        catch(e: any) {console.log(e)}
+    }
+    //console.log(path);
+    setTimeout((path: string)=>folder(path+'/'), 500, path);  
 }
 
 export async function readEntryContentAsync(entry: any, folderPath: {current: string}) {
