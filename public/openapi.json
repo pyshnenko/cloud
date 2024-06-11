@@ -1,0 +1,366 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API для облака",
+    "description": "https://cloud.spamigor.ru",
+    "termsOfService": "https://cloud.spamigor.ru",
+    "contact": {
+      "email": "pyshnenko94@yandex.ru"
+    },
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "https://cloud.spamigor.ru/api",
+      "variables": {},
+      "description": "Основной"
+    },
+    {
+      "url": "http://localhost:8799/api",
+      "variables": {},
+      "description": "Дев"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Операции с пользователями",
+      "description": "действия",
+      "externalDocs": {
+        "description": "Развернуть",
+        "url": "http://cloud.spamigor.ru/api/"
+      }
+    },
+    {
+      "name": "Операции с файлами",
+      "description": "Операции с файлами",
+      "externalDocs": {
+        "description": "Развернуть",
+        "url": "http://cloud.spamigor.ru/api/"
+      }
+    },
+    {
+      "name": "Секретка",
+      "description": "Операции с токенами",
+      "externalDocs": {
+        "description": "Развернуть",
+        "url": "http://cloud.spamigor.ru/api/"
+      }
+    }
+  ],
+  "paths": {
+    "/fs": {
+      "post": {
+        "tags": [
+          "Операции с файлами"
+        ],
+        "summary": "Операции с файловой системой",
+        "operationId": "fs",
+        "description": "Варианты параметра action - mkdir, rm, chmod, ls, tar",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "location": {
+                    "type": "string",
+                    "example": "/"
+                  },
+                  "token": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "action": {
+                    "type": "string",
+                    "example": "ls"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "incognit": {
+                    "type": "boolean",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Выполнено"
+          },
+          "401": {
+            "description": "Ошибка запроса"
+          },
+          "404": {
+            "description": "Не найдено"
+          },
+          "500": {
+            "description": "Ошибка сервера"
+          }
+        },
+        "security": [
+          {
+            "B_auth": []
+          }
+        ]
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "Операции с пользователями"
+        ],
+        "summary": "Логин",
+        "operationId": "login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "login": {
+                    "type": "string",
+                    "example": "spamigor"
+                  },
+                  "pass": {
+                    "type": "string",
+                    "example": "12101994a"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Выполнено"
+          },
+          "401": {
+            "description": "Недостаточно прав"
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "tags": [
+          "Операции с пользователями"
+        ],
+        "summary": "Регистрация",
+        "operationId": "register",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "first_name": {
+                    "type": "string",
+                    "example": "Антон"
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "example": "Пышненко"
+                  },
+                  "login": {
+                    "type": "string",
+                    "example": "spamigor"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "pyshnenko94@yandex.ru"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "12101994a"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Выполнено"
+          },
+          "401": {
+            "description": "Занято"
+          }
+        }
+      }
+    },
+    "/secure": {
+      "post": {
+        "tags": [
+          "Секретка"
+        ],
+        "summary": "Запрос открытого ключа",
+        "operationId": "simpleTok",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "act": {
+                    "type": "string",
+                    "example": "ls"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Выполнено"
+          },
+          "401": {
+            "description": "Занято"
+          }
+        }
+      }
+    },
+    "/tokenUpd": {
+      "post": {
+        "tags": [
+          "Секретка"
+        ],
+        "summary": "Обновить токен",
+        "operationId": "tokenUpd",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "oldToken": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "atoken": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Выполнено"
+          },
+          "401": {
+            "description": "Ошибка запроса"
+          },
+          "402": {
+            "description": "Ошибка авторизации"
+          }
+        },
+        "security": [
+          {
+            "B_auth": []
+          }
+        ]
+      }
+    },
+    "/uploadByUrl": {
+      "post": {
+        "tags": [
+          "Операции с файлами"
+        ],
+        "summary": "Загрузить файл в облако по URL",
+        "operationId": "uploadByUrl",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "location": {
+                    "type": "string",
+                    "example": "/"
+                  },
+                  "fname": {
+                    "type": "string",
+                    "example": "171804004514087898.jpg"
+                  },
+                  "login": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "url": {
+                    "type": "string",
+                    "example": "https://cs15.pikabu.ru/post_img/2024/06/10/10/171804004514087898.jpg"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Выполнено"
+          },
+          "401": {
+            "description": "Ошибка запроса"
+          }
+        },
+        "security": [
+          {
+            "B_auth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "register": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "example": "test_name"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "tast_lname"
+          },
+          "password": {
+            "type": "string",
+            "example": "test"
+          },
+          "login": {
+            "type": "string",
+            "example": "Spamigor"
+          },
+          "email": {
+            "type": "string",
+            "example": "Pyshnenko94@yandex.ru"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "B_auth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
