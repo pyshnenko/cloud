@@ -133,6 +133,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                         lined={files?.lined} 
                         selected={index==selectedId} 
                         folder={true}
+                        key={item}
                     />
                 )
             })}
@@ -149,6 +150,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                         lined={files?.lined} 
                         selected={(index+files.directs.length)==selectedId} 
                         folder={false}
+                        key={item}
                     />                    
                 )
             })}
