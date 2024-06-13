@@ -36,6 +36,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 require('dotenv').config();
 var MongoClient = require("mongodb").MongoClient;
+var Redis = require("ioredis");
+var redis = new Redis({
+    port: Number(process.env.REDIS_PORT),
+    host: String(process.env.REDIS_HOST),
+    password: String(process.env.REDIS_PASS),
+    db: 1
+});
 var mongoClient;
 var db;
 var collection;
@@ -45,6 +52,7 @@ var username = process.env.MONGO_USERNAME;
 var password = process.env.MONGO_PASS;
 var authMechanism = "DEFAULT";
 var uri = "mongodb://".concat(username, ":").concat(password, "@").concat(url, "/?authMechanism=").concat(authMechanism);
+var cashTokenList = {};
 var mongoFunc = /** @class */ (function () {
     function mongoFunc() {
         mongoClient = new MongoClient(uri);
@@ -52,45 +60,85 @@ var mongoFunc = /** @class */ (function () {
         collection = db.collection("gfUsers");
         usersCollection = db.collection("cloudUsers");
     }
-    mongoFunc.prototype.find = function (obj) {
-        return __awaiter(this, void 0, void 0, function () {
-            var extBuf, err_1, err_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+    mongoFunc.prototype.find = function (obj_1) {
+        return __awaiter(this, arguments, void 0, function (obj, onlyTok) {
+            var extBuf, mongoconnect, login, err_1, err_2;
+            var _a;
+            if (onlyTok === void 0) { onlyTok = false; }
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         extBuf = [];
-                        _a.label = 1;
+                        mongoconnect = false;
+                        console.log(cashTokenList);
+                        _b.label = 1;
                     case 1:
-                        _a.trys.push([1, 7, 8, 12]);
-                        return [4 /*yield*/, mongoClient.connect()];
+                        _b.trys.push([1, 11, 12, 17]);
+                        console.log(obj);
+                        if (!(onlyTok && (obj === null || obj === void 0 ? void 0 : obj.token))) return [3 /*break*/, 5];
+                        if (!cashTokenList[obj.token]) return [3 /*break*/, 2];
+                        extBuf.push({ login: cashTokenList[obj.token].login });
+                        return [3 /*break*/, 5];
                     case 2:
-                        _a.sent();
-                        if (!obj) return [3 /*break*/, 4];
-                        return [4 /*yield*/, collection.find(obj).toArray()];
+                        if (!(obj === null || obj === void 0 ? void 0 : obj.token)) return [3 /*break*/, 4];
+                        return [4 /*yield*/, redis.get(obj.token)];
                     case 3:
-                        extBuf = _a.sent();
-                        return [3 /*break*/, 6];
-                    case 4: return [4 /*yield*/, collection.find().toArray()];
+                        login = _b.sent();
+                        if (login !== null) {
+                            extBuf.push({ login: login });
+                            cashTokenList[obj.token] = {
+                                login: login,
+                                timer: setTimeout(function () { return delete (cashTokenList[obj.token]); }, 1000 * 60 * 10)
+                            };
+                        }
+                        else
+                            mongoconnect = true;
+                        return [3 /*break*/, 5];
+                    case 4:
+                        mongoconnect = true;
+                        _b.label = 5;
                     case 5:
-                        extBuf = _a.sent();
-                        _a.label = 6;
-                    case 6: return [3 /*break*/, 12];
+                        if (!(mongoconnect || !onlyTok)) return [3 /*break*/, 10];
+                        console.log('mongoconnect');
+                        return [4 /*yield*/, mongoClient.connect()];
+                    case 6:
+                        _b.sent();
+                        if (!obj) return [3 /*break*/, 8];
+                        return [4 /*yield*/, collection.find(obj).toArray()];
                     case 7:
-                        err_1 = _a.sent();
-                        extBuf = [];
-                        return [3 /*break*/, 12];
-                    case 8:
-                        _a.trys.push([8, 10, , 11]);
-                        return [4 /*yield*/, mongoClient.close()];
+                        extBuf = _b.sent();
+                        if (extBuf.length && ((_a = extBuf[0]) === null || _a === void 0 ? void 0 : _a.login)) {
+                            redis.set(obj.token, extBuf[0].login, 'EX', 600);
+                            cashTokenList[obj.token] = {
+                                login: extBuf[0].login,
+                                timer: setTimeout(function () { return delete (cashTokenList[obj.token]); }, 1000 * 60 * 10)
+                            };
+                        }
+                        return [3 /*break*/, 10];
+                    case 8: return [4 /*yield*/, collection.find().toArray()];
                     case 9:
-                        _a.sent();
-                        return [3 /*break*/, 11];
-                    case 10:
-                        err_2 = _a.sent();
+                        extBuf = _b.sent();
+                        _b.label = 10;
+                    case 10: return [3 /*break*/, 17];
+                    case 11:
+                        err_1 = _b.sent();
+                        extBuf = [];
+                        return [3 /*break*/, 17];
+                    case 12:
+                        if (!mongoconnect) return [3 /*break*/, 16];
+                        _b.label = 13;
+                    case 13:
+                        _b.trys.push([13, 15, , 16]);
+                        return [4 /*yield*/, mongoClient.close()];
+                    case 14:
+                        _b.sent();
+                        return [3 /*break*/, 16];
+                    case 15:
+                        err_2 = _b.sent();
                         console.log(err_2);
-                        return [3 /*break*/, 11];
-                    case 11: return [2 /*return*/, extBuf];
-                    case 12: return [2 /*return*/];
+                        return [3 /*break*/, 16];
+                    case 16: return [2 /*return*/, extBuf];
+                    case 17: return [2 /*return*/];
                 }
             });
         });

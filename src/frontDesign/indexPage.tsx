@@ -46,7 +46,7 @@ const vidEnd = [
 export default function Index({exPath, notVerify, bbPath}: {exPath?: string, notVerify?: boolean, bbPath?: string }) {
     const [datal, setDatal] = useState<string>();
     const [path, setPath] = useState<string>(exPath || '/');
-    const [files, setFiles] = useState<{directs: string[], files: string[]}>();
+    const [files, setFiles] = useState<{directs: string[], files: string[], lined?: boolean}>();
     const [anchorEl, setAnchorEl] = useState<{elem: null | HTMLElement, index: number}>({elem: null, index: -1});
     const [animIn, setAnimIn] = useState<boolean>(false);
     const [selectedId, setSelectedId] = useState<number>(-1);
@@ -257,7 +257,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
 
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', minHeight: '98vh'}}>
-            {files&&<AddButton path={path} setPath={setPath} files={files} folder={folder} notVerify={notVerify}/>}
+            {files&&<AddButton path={path} setPath={setPath} files={files} folder={folder} notVerify={notVerify} setFiles={setFiles} />}
             <Box sx={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap', alignItems: 'center'}}>
                 {!notVerify?<Box sx={{display: 'flex', width: '100%', flexDirection: 'row', justifyContent: 'space-between'}}>
                     <h1 style={{margin: '4px'}}>{datal}</h1>

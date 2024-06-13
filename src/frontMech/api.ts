@@ -25,13 +25,18 @@ const uplByUrl = (token: string, data: {fname: string, url: string, location?: s
     return privateApi(token).post('/uploadByUrl', data);
 }
 
+const searchName = (token: string, data: {name: string, location: string}) => {
+    return privateApi(token).post('/search', data);
+}
+
 const Api = {
     login,
     register,
     tokenUPD,
     askLS,
     askSimpleTok,
-    uplByUrl
+    uplByUrl,
+    searchName
 }
 
 export default Api;

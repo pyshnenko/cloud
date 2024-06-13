@@ -33,7 +33,7 @@ export default async function handler(req: any, res: any) {
         logger.info(req.body);
         const buf: FSType = body_data(req.body);
         const oldToken: string = req.headers.hasOwnProperty('authorization')? (req.headers?.authorization.slice(7) || buf?.token || ''): buf?.token || '';
-        let dat = await mongoS.find({token: oldToken});
+        let dat = await mongoS.find({token: oldToken}, true);
         let access: {result: boolean, login?: string} = (dat.length===0||buf?.incognit)?access_check(buf.location, buf?.name||'/', true) as {result: boolean, login?: string}:{result: false};
         if (access.result===true) dat[0] = {login: access.login};
         logger.info(dat[0]?.login);

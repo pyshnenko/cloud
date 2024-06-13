@@ -49,13 +49,6 @@ var mongo = require('./src/mech/mongo');
 var mongoS = new mongo();
 var jwt = require('jsonwebtoken');
 var access_check = require('./src/mech/requested_feature').access_check;
-var Redis = require("ioredis");
-var redis = new Redis({
-    port: Number(process.env.REDIS_PORT),
-    host: String(process.env.REDIS_HOST),
-    password: String(process.env.REDIS_PASS),
-    db: 1
-});
 var dir = process.cwd();
 app.use(cors());
 app.use(cookieParser('secret key'));
@@ -115,7 +108,7 @@ app.get("/oneTime*", function (req, res) {
                     console.log('oneTime');
                     filePath = '', login = '', access = false;
                     if (!((req === null || req === void 0 ? void 0 : req.cookies) && ((_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token) !== '')) return [3 /*break*/, 2];
-                    return [4 /*yield*/, mongoS.find({ token: req.cookies.token })];
+                    return [4 /*yield*/, mongoS.find({ token: req.cookies.token }, true)];
                 case 1:
                     dat = _b.sent();
                     if (dat.length) {
@@ -160,12 +153,13 @@ app.get("/data*", function (req, res) {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
+                    console.log('data');
                     filePath = '';
                     access = false, login = '';
                     if (!((req === null || req === void 0 ? void 0 : req.cookies) && ((_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token) !== '')) return [3 /*break*/, 2];
-                    return [4 /*yield*/, mongoS.find({ token: req.cookies.token })];
+                    return [4 /*yield*/, mongoS.find({ token: req.cookies.token }, true)];
                 case 1:
-                    dat = _b.sent();
+                    dat = (_b.sent());
                     if (dat.length) {
                         access = true;
                         login = dat[0].login;

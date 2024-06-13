@@ -11,14 +11,6 @@ const mongo = require('./src/mech/mongo');
 const mongoS = new mongo();
 const jwt = require('jsonwebtoken');
 const {access_check} = require('./src/mech/requested_feature');
-const Redis = require("ioredis");
-
-const redis = new Redis({
-    port: Number(process.env.REDIS_PORT),
-    host: String(process.env.REDIS_HOST),
-    password: String(process.env.REDIS_PASS),
-    db: 1
-})
 
 export {};
 const dir = process.cwd();
@@ -63,7 +55,7 @@ app.get("/oneTime*", async function (req: any, res: any) {
     console.log('oneTime');
     let filePath: string = '', login: string='', access: boolean = false;
     if (req?.cookies && req.cookies?.token !== '') {
-        let dat: {login: string}[] = await mongoS.find({ token: req.cookies.token }) as {login: string}[];
+        let dat: {login: string}[] = await mongoS.find({ token: req.cookies.token }, true) as {login: string}[];
         if (dat.length) {access = true; login = dat[0].login}
         console.log(req.cookies.token);
         console.log(dat);
@@ -91,10 +83,11 @@ app.get("/oneTime*", async function (req: any, res: any) {
 })
 
 app.get("/data*", async function (req: any, res: any) {
+    console.log('data');
     var filePath = '';
     let access: boolean = false, login: string = '';    
     if (req?.cookies && req.cookies?.token !== '') {
-        let dat: {login: string}[] = await mongoS.find({ token: req.cookies.token }) as {login: string}[];
+        let dat: {login: string}[] = (await mongoS.find({ token: req.cookies.token }, true)) as {login: string}[];
         if (dat.length) {access = true; login = dat[0].login}
         console.log(req.cookies.token);
         console.log(dat);

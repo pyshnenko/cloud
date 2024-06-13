@@ -45,6 +45,8 @@ export default function Dialog({files, text, setResult}: {files: {files: string[
                         <IconButton onClick={()=>setResult({ready: true, text: inpText})}><CheckIcon sx={{zoom: 2}} color="success"/></IconButton>:
                         ((text==='Введи URL')&&urlCheck(inpText))?
                             <IconButton onClick={()=>setResult({ready: true, text: inpText})} ><CheckIcon sx={{zoom: 2}} color="success"/></IconButton>:
+                        ((text==='Поиск')&&(inpText!==''))?
+                            <IconButton onClick={()=>setResult({ready: true, text: inpText})} ><CheckIcon sx={{zoom: 2}} color="success"/></IconButton>:
                         <Box />}
                     <IconButton onClick={()=>setResult({ready: true, text: undefined})}><CloseIcon sx={{zoom: 2}} color="error" /></IconButton>
                 </Box>

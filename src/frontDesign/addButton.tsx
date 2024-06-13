@@ -14,6 +14,8 @@ import Dialog from './dialog';
 import download_file from '../frontMech/downloadFile';
 import { useLoading } from '../hooks/useLoading';
 import { attFile } from '../frontMech/mechanics';
+import SearchIcon from '@mui/icons-material/Search';
+import { useAlarm } from './alarm';
 
 const actions = [
   { icon: <FileUploadIcon />, name: 'Загрузить файл' },
@@ -21,34 +23,35 @@ const actions = [
   { icon: <DownloadIcon />, name: 'Скачать содержимое' },
   { icon: <AddIcon />, name: 'Создать папку' },
   { icon: <ShareIcon />, name: 'Поделиться' },
+  { icon: <SearchIcon />, name: 'Поиск' },
 ];
 
 interface props {
     path: string, 
     setPath: (d: string)=>void, 
-    files: {directs: string[], files: string[]}, 
+    files: {directs: string[], files: string[], lined?: boolean}, 
     folder: (p: string)=>void,
-    notVerify?: boolean
+    notVerify?: boolean,
+    setFiles: (arr: {files: string[], directs: string[], lined?: boolean})=>void
 }
 
-export default function SpeedDialTooltipOpen({path, setPath, files, folder, notVerify}: props) {
+export default function SpeedDialTooltipOpen({path, setPath, files, folder, notVerify, setFiles}: props) {
     const [open, setOpen] = React.useState(false);
     const [dialogResult, setDialogResult] = React.useState<{ready: boolean, text?: string, numb?: number}>({ready: false});
     const [dialogOpen, setDialogOpen] = React.useState<{visible: boolean, lbl: string, text: string}>({visible: false, lbl: '', text: ''});
-    const loading = useLoading;
+    const loading = useLoading;    
+    const alarm = useAlarm;
 
     React.useEffect(()=>{
         if ((dialogResult.ready)&&(dialogOpen.lbl==='folder')) {
             console.log(dialogResult.text);
             if (dialogResult.text&&dialogResult.text!=='') {
-                console.log('aaa');
                 createFolder(dialogResult.text);
                 setDialogOpen({visible: false, lbl: '', text: ''});
                 handleClose();
                 setDialogResult({ready: false});
             }
             else if (!dialogResult.text) {
-                console.log('bbb');
                 setDialogResult({ready: false});
                 setDialogOpen({visible: false, lbl: '', text: ''});
                 handleClose();
@@ -57,14 +60,27 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
         if ((dialogResult.ready)&&(dialogOpen.lbl==='url')) {
             console.log(dialogResult.text);
             if (dialogResult.text&&dialogResult.text!=='') {
-                console.log('aaa');
                 urlEnter(dialogResult.text);
                 setDialogOpen({visible: false, lbl: '', text: ''});
                 handleClose();
                 setDialogResult({ready: false});
             }
             else if (!dialogResult.text) {
-                console.log('bbb');
+                setDialogResult({ready: false});
+                setDialogOpen({visible: false, lbl: '', text: ''});
+                handleClose();
+            }
+        }
+        if ((dialogResult.ready)&&(dialogOpen.lbl==='search')) {
+            console.log(dialogResult.text);
+            if (dialogResult.text&&dialogResult.text!=='') {
+                loading(true, 'search');
+                searchEnter(dialogResult.text);
+                setDialogOpen({visible: false, lbl: '', text: ''});
+                handleClose();
+                setDialogResult({ready: false});
+            }
+            else if (!dialogResult.text) {
                 setDialogResult({ready: false});
                 setDialogOpen({visible: false, lbl: '', text: ''});
                 handleClose();
@@ -76,6 +92,10 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
     const handleClose = () => setOpen(false);
 
     const handleAction = (action: string) => {
+        if (action === actions[5].name) {
+            setDialogResult({ready: false});
+            setDialogOpen({visible: true, lbl: 'search', text: 'Поиск'});
+        }
         if (action === actions[3].name) {
             setDialogResult({ready: false});
             setDialogOpen({visible: true, lbl: 'folder', text: 'Новая папка'});
@@ -114,6 +134,19 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
             setPath(path+'/');
             setDialogOpen({visible: false, lbl: '', text: ''});
         }).catch((e: any)=>console.log(e));
+    }
+
+    const searchEnter = (name: string) => {
+        Api.searchName(User.getToken(), {name: name, location: path})
+        .then((res: {data: {directs: string[], files: string[]}}) => {
+            console.log(res.data);
+            if ((res.data.files.length)||(res.data.directs.length)) setFiles({...res.data, lined: true})
+            else alarm('Ничего не найдено', 'info')
+            //setPath(path+'/');
+        }).catch((e: any)=>{
+            console.log(e);
+            
+        }).finally(()=>{loading(false, 'search');})
     }
 
   return (

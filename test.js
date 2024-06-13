@@ -1,6 +1,15 @@
+require('dotenv').config();
 const dir = process.cwd();
 const fs = require('fs');
 const path = require('path');
+const Redis = require("ioredis");
+
+const redis = new Redis({
+    port: Number(process.env.REDIS_PORT),
+    host: String(process.env.REDIS_HOST),
+    password: String(process.env.REDIS_PASS),
+    db: 1
+})
 
 function searchFilesRecurs(pathF, text, recursePath) {
     let arr = [];
@@ -39,4 +48,9 @@ function searchFolderRecurs(pathF, text, recursePath) {
     return arr
 }
 
-console.log({files: searchFilesRecurs('spamigor', 'УмП'), folders: searchFolderRecurs('spamigor', 'УмП')})
+console.log({files: searchFilesRecurs('spamigor', 'АБГМ'), folders: searchFolderRecurs('spamigor', 'АБГМ')})
+async function redisSet() {
+    await redis.set("key", '123', 'EX', 60);
+    setInterval(async ()=>{console.log(await redis.get('key'))}, 5000)
+}
+//redisSet();
