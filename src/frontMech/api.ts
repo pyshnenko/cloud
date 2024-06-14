@@ -9,6 +9,10 @@ const login = (data: loginType) => {
     return loginApi().post('/login', data);
 }
 
+const resetPassword = (data: loginType) => {
+    return loginApi().post('/resetPassword', data);
+}
+
 const register = (data: RegisterReqData) => {
     return loginApi().post('/register', data);
 }
@@ -30,6 +34,7 @@ const searchName = (token: string, data: {name: string, location: string}) => {
 }
 
 const Api = {
+    resetPassword,
     login,
     register,
     tokenUPD,

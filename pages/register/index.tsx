@@ -10,17 +10,18 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import { EMAIL_REGEXP } from '../../src/types/api/regex';
 
 interface passControl {
     first: string,
     last: string
 }
 
-const textValues: {name: string, label: string}[] = [
-    {name: 'login', label: 'Логин'},
-    {name:"email", label:"Email"},
-    {name:"first_name", label:"Имя"},
-    {name:"last_name", label:"Фамилия"}
+const textValues: {name: string, label: string, type: string}[] = [
+    {name: 'login', label: 'Логин', type: 'text'},
+    {name:"email", label:"Email", type: 'email'},
+    {name:"first_name", label:"Имя", type: 'text'},
+    {name:"last_name", label:"Фамилия", type: 'text'}
 ]
 
 export default function Registration () {
@@ -71,6 +72,10 @@ export default function Registration () {
             if (((data as any)[dd]==='')&&dd!=='password') {
                 (errObj as any)[dd] = true;
                 readyToSend = false;
+            }
+            if ((dd==='email')&&(!EMAIL_REGEXP.test((data as any)[dd]))) {
+                readyToSend = false;
+                errObj={...errObj, email: true}
             }
         }
         setErrorState(errObj);
@@ -125,9 +130,9 @@ export default function Registration () {
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{display: 'grid', justifyContent: 'center', margin: 2}}>
                     <Box sx={{display: 'grid', justifyContent: 'center', margin: 2, justifyItems: 'center'}}>
                         {loginBored?<Typography sx={{zIndex: 5, width: '50%', textAlign: 'center', backgroundColor: 'white', borderRadius: '20px', boxShadow: '0 0 12px 8px white'}} color='error'>Логин занят</Typography>:<Box sx={{height: '24px'}} />}
-                        {textValues.map((item: {name: string, label: string}, index: number)=>{
+                        {textValues.map((item: {name: string, label: string, type: string}, index: number)=>{
                             return (<Fade in={open} timeout={index*500} key={item.name}>
-                                <TextField sx={textSX} name={item.name} label={item.label} error={(errorState as any)[item.name]}/>
+                                <TextField sx={textSX} name={item.name} label={item.label} error={(errorState as any)[item.name]} type={item.type}/>
                             </Fade>)
                         })}
                         <Fade in={open} timeout={textValues.length * 500}>

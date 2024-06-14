@@ -19,7 +19,8 @@ export interface RegisterReqSucc {
     last_name: String, 
     id: Number, 
     login: String, 
-    email: String 
+    email: String,
+    valid?: Boolean 
 }
 
 export interface TokenLocalData {
@@ -29,7 +30,8 @@ export interface TokenLocalData {
     iat: number,
     id: number,
     last_name: string,
-    login: string
+    login: string,
+    valid?: Boolean 
 }
 
 export interface ReqSecType {

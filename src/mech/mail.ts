@@ -68,7 +68,7 @@ class mailFunction {
             subject: 'Подтверждение почты',
             text: `Подтвердите почту ${addr} пройдя по ссылке ${myURL}?name=${hashS}&addr=${hashA}`,
             html:
-            `<h1>Приветствуем в золотолесье!</h1>
+            `<h1>Приветствуем в облачке!</h1>
             Подтвердите почту ${addr} пройдя по ссылке <a href="${myURL}?name=${hashS}&addr=${hashA}">тыкни сюда</a>`,
         }).catch((e: any) => {console.log('error',e)});
     }

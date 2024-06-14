@@ -60,24 +60,6 @@ export function useProgressBar (mapVal: any) {
     //setMapValGlob(mapVal);
     setMapValGlob(bufG);
 }
-
-function LinearProgressWithLabel2(props: LinearProgressProps & { value: number, name: string }) {
-    return (
-        <Box sx={{width: '100%'}}>
-            <Typography variant="h6" sx={{overflowWrap: 'break-word', fontSize:'0.85rem'}}>{props.name}</Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                <Box sx={{ width: '100%', mr: 1 }}>
-                    <LinearProgress variant="determinate" {...props} sx={{opacity: 0.7}}/>
-                </Box>
-                <Box sx={{ minWidth: 35 }}>
-                    <Typography variant="body2" color="text.secondary">{`${Math.round(
-                        props.value,
-                    )}%`}</Typography>
-                </Box>
-            </Box>
-        </Box>
-    );
-  }
   
   function LinearProgressWithLabel(props: LinearProgressProps & { value: number, name: string, err?: string }) {
     return (
