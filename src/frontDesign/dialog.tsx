@@ -11,6 +11,25 @@ export default function Dialog({files, text, setResult}: {files: {files: string[
 
     const [inpText, setInpText] = useState<string>('');
 
+    const inpTextRef = useRef<string>('');
+
+    useEffect(()=>{
+
+        const onKeypress = ({code}: KeyboardEvent) => {
+            if (code==='Enter') setResult({ready: true, text: inpTextRef.current})
+        }
+
+        document.addEventListener('keypress', onKeypress);
+
+        return () => {
+            document.removeEventListener('keypress', onKeypress);
+        };
+    },[])
+
+    useEffect(()=>{
+        inpTextRef.current = inpText
+    }, [inpText])
+
     return (
         <Box sx={{position: 'fixed', width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', zIndex: 10}}>
             <Box sx={{    
@@ -23,6 +42,7 @@ export default function Dialog({files, text, setResult}: {files: {files: string[
                 opacity: 0.5,
                 padding: 0,
                 margin: 0}} 
+                onClick={()=>setResult({ready: true, text: undefined})}
             />
             <Box sx={{
                 zIndex: 100, 
@@ -37,7 +57,7 @@ export default function Dialog({files, text, setResult}: {files: {files: string[
                 <Typography sx={{marginBottom: 2}}>{text}</Typography>
                 <TextField 
                     value={inpText} 
-                    error={(text==='Новая папка')?files?.directs.includes(inpText):!urlCheck(inpText)} 
+                    error={(text!=='Поиск')?(text==='Новая папка')?files?.directs.includes(inpText):!urlCheck(inpText):!inpText.length} 
                     onChange={({target}: any)=>setInpText(target.value)}
                 />
                 <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around', width: '100%'}}>

@@ -32,7 +32,8 @@ export default function FileFoldBox({animIn, index, lined, selected, text, setAn
                     alignItems: lined ? 'center' :'flex-start', 
                     zIndex:selected?1:0,
                     width: lined ? '100%' : 'auto',
-                    borderBottom: lined ? '1px solid gray' : 'none'
+                    borderBottom: lined ? '1px solid gray' : 'none',
+                    maxHeight: '110px'
                 }}>
                 <Button                                  
                     onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{setAnchorEl({elem: event.currentTarget, index: index}); event.preventDefault()}}
@@ -47,7 +48,7 @@ export default function FileFoldBox({animIn, index, lined, selected, text, setAn
                         padding: '6px 0px', 
                         backgroundColor: selected?'blanchedalmond':'transparent',
                         flexDirection: !lined ? 'column' : 'row',
-                        justifyContent: lined ? 'flex-start' : 'center'
+                        justifyContent: 'flex-start'
                     }}
                 >
                     {folder?<FolderIcon sx={{zoom: 2.5, color: '#FF9C0C'}} />:

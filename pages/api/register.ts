@@ -1,7 +1,7 @@
 const mongo = require('./../../src/mech/mongo');
 const mailSend = require('./../../src/mech/mail');
 import  {RegisterReqData, RegisterReqSucc} from './../../src/types/api/types';
-const mail = new mailSend('https://cloud.spamigor.ru', process.env.SKEY);
+const mail = new mailSend('https://cloud.spamigor.ru/emailCheck', process.env.SKEY);
 let jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 import NextCors from 'nextjs-cors';
