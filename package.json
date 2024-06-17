@@ -41,6 +41,7 @@
     "nodemailer": "^6.9.7",
     "react": "^18",
     "react-dom": "^18",
+    "react-native": "^0.74.2",
     "styled-components": "^6.1.2",
     "swagger-ui-react": "^5.17.14",
     "three": "^0.161.0",

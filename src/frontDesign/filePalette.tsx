@@ -8,11 +8,13 @@ import Api from '../frontMech/api';
 import { urlCheck } from '../frontMech/checkMech';
 import { getFileAsync, attFileSend } from '../frontMech/mechanics';
 import FileFoldBox from './small/fBox';
+import { ImgWiever, ImgWieverType } from './small/pictureWievew';
 
 export default function FilePalette ({files, path, setSelectedId, selectedId, setAnchorEl, setPath, animIn, fileType, datal, notVerify, folder}: any) {
 
     const [ fileDrag, setFileDrag ] = useState<boolean>(false);
     const [ isMobile, setIsMobile ] = useState<boolean>(false);
+    const [ imgPalette, setImgPalette ] = useState<ImgWieverType>();
 
     const username = useRef(datal);
     const folderPath = useRef(path);
@@ -111,6 +113,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
             onClick={()=>{setSelectedId(-1); inputIdTrig.current?.focus()}}
         >
             <UploadDiv fileDrag={fileDrag} />
+            <ImgWiever props={imgPalette} />
             {!isMobile&&<TextField 
                 autoComplete="off" 
                 sx={{position: 'absolute', top: '-100px', width: 0, height: 0, zIndex: -1}} 
@@ -134,6 +137,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                         selected={index==selectedId} 
                         folder={true}
                         key={item}
+                        setImgPalette={setImgPalette}
                     />
                 )
             })}
@@ -151,6 +155,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                         selected={(index+files.directs.length)==selectedId} 
                         folder={false}
                         key={item}
+                        setImgPalette={setImgPalette}
                     />                    
                 )
             })}
