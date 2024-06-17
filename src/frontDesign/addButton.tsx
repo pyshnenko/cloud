@@ -16,6 +16,7 @@ import { useLoading } from '../hooks/useLoading';
 import { attFile } from '../frontMech/mechanics';
 import SearchIcon from '@mui/icons-material/Search';
 import { useAlarm } from './alarm';
+import Cookies from 'universal-cookie';
 
 const actions = [
   { icon: <FileUploadIcon />, name: 'Загрузить файл' },
@@ -105,12 +106,25 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
             setDialogOpen({visible: true, lbl: 'url', text: 'Введи URL'});
         }
         else if (action === actions[2].name) {
-            loading(true, 'tar');
+            /*loading(true, 'tar');
             Api.askLS(User.getToken(), path, 'tar')
             .then((res: any)=>{
                 console.log(res.data.addr);
                 download_file((window.location.href==='http://localhost:8799/'?'http://localhost:8800/':'/') + res.data.addr);
-            }).catch((e: any)=>console.log(e)).finally(()=>loading(false, 'tar'))
+            }).catch((e: any)=>console.log(e)).finally(()=>loading(false, 'tar'))*/
+            const cookies = new Cookies(null, {path: '/'});
+            cookies.set('token', User.getToken());
+                loading(true, 'save');
+                Api.askLS(User.getToken(), path, 'tar', '', notVerify)
+                .then(async (res: any)=>{
+                    console.log(res.data);
+                    setTimeout((href: string, addr: string)=>
+                        {download_file(encodeURI(href.includes('http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr))); loading(false, 'save')}, 
+                        3000, 
+                        window.location.href, 
+                        res.data.addr) 
+                })
+                .catch((e: any)=> {alarm('Что-то пошло не так', 'error'); console.log(e); loading(false, 'save')});
         }
         else if (action === actions[0].name) {
             attFile({notVerify: !!notVerify, path, folder});
