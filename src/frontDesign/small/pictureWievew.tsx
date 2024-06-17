@@ -152,6 +152,7 @@ export function ImgWiever ({props, src}: {props?:ImgWieverType, src?: string}) {
                                             {...cssforDownBar, backgroundColor: 'darkslategrey', boxShadow: 'darkslategrey 0px 0px 5px 3px', borderRadius: '5px', maxHeight: '90%'}
                                         }                                             
                                         id='imgHover'
+                                        key={src}
                                     />
                                 )
                             })}
