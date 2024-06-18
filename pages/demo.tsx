@@ -16,7 +16,7 @@ import Button from '@mui/material/Button';
 export default function NeonTest () {
 
     useEffect(()=>{
-        let camera: any, stats: any;
+        let camera: any, stats: any, model: any;
 			let composer: any, renderer: any, mixer: any, clock: any;
             let bloomPass: any;
 
@@ -49,8 +49,9 @@ export default function NeonTest () {
 				const loader = new GLTFLoader();
 				const gltf = await loader.loadAsync( '/scene.glb' );//'models/gltf/PrimaryIonDrive.glb''https://spamigor.ru/library/threejs/examples/models/gltf/Parrot.glb'
 
-				const model = gltf.scene;
+				model = gltf.scene;
                 model.position.y = -1;
+                model.position.z = -0.7;
                 model.scale.set(0.5,0.5,0.5);
 				scene.add( model );
 
@@ -147,7 +148,9 @@ export default function NeonTest () {
 			function animate() {
 
 				const delta = clock.getDelta();
-                bloomPass.strength = (Math.sin(Number(new Date())/1000)+1)*3
+				let value = (Math.sin(Number(new Date())/1000)+1)*3;
+                bloomPass.strength = value;
+				model.rotation.y = ((Number(new Date())/1000)+1)/2;
 
 				//mixer.update( delta );
 
