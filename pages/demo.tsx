@@ -38,7 +38,7 @@ export default function NeonTest () {
 				const scene = new THREE.Scene();
 
 				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 100 );
-				camera.position.set( - 5, 2.5, - 3.5 );
+				camera.position.set( 0, 0, -10 );//( - 5, 2.5, - 3.5 );
 				scene.add( camera );
 
 				scene.add( new THREE.AmbientLight( 0xcccccc ) );
@@ -50,16 +50,9 @@ export default function NeonTest () {
 				const gltf = await loader.loadAsync( '/scene.glb' );//'models/gltf/PrimaryIonDrive.glb''https://spamigor.ru/library/threejs/examples/models/gltf/Parrot.glb'
 
 				model = gltf.scene;
-                model.position.y = -1;
-                model.position.z = -0.7;
+                model.position.y = -1.5;
                 model.scale.set(0.5,0.5,0.5);
 				scene.add( model );
-
-				/*mixer = new THREE.AnimationMixer( model );
-				const clip = gltf.animations[ 0 ];
-				mixer.clipAction( clip.optimize() ).play();*/
-
-				//
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -72,7 +65,7 @@ export default function NeonTest () {
 
 				const renderScene = new RenderPass( scene, camera );
 
-				bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
+				bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1, 0.4, 0.85 );
 				bloomPass.threshold = params.threshold;
 				bloomPass.strength = params.strength;
 				bloomPass.radius = params.radius;
@@ -84,49 +77,12 @@ export default function NeonTest () {
 				composer.addPass( bloomPass );
 				composer.addPass( outputPass );
 
-				//
-
 				stats = new Stats();
-				//container?.appendChild( stats.dom );
-
-				//
 
 				const controls = new OrbitControls( camera, renderer.domElement );
 				controls.maxPolarAngle = Math.PI * 1;
 				controls.minDistance = 3;
-				controls.maxDistance = 8;
-
-				//
-
-				/*const gui = new GUI();
-
-				const bloomFolder = gui.addFolder( 'bloom' );
-
-				bloomFolder.add( params, 'threshold', 0.0, 1.0 ).onChange( function ( value ) {
-
-					bloomPass.threshold = Number( value );
-
-				} );
-
-				bloomFolder.add( params, 'strength', 0.0, 3.0 ).onChange( function ( value ) {
-
-					bloomPass.strength = Number( value );
-
-				} );
-
-				gui.add( params, 'radius', 0.0, 1.0 ).step( 0.01 ).onChange( function ( value ) {
-
-					bloomPass.radius = Number( value );
-
-				} );
-
-				const toneMappingFolder = gui.addFolder( 'tone mapping' );
-
-				toneMappingFolder.add( params, 'exposure', 0.1, 2 ).onChange( function ( value ) {
-
-					renderer.toneMappingExposure = Math.pow( value, 4.0 );
-
-				} );*/
+				controls.maxDistance = 10;
 
 				window.addEventListener( 'resize', onWindowResize );
 
@@ -161,6 +117,11 @@ export default function NeonTest () {
 			}
     }, [])
 
+	const style = {
+		margin: 2,
+		position: 'fixed',
+	}
+
     return (
 		<Box>
 			<Box sx={{
@@ -170,33 +131,13 @@ export default function NeonTest () {
 				flexDirection: 'column',
     			alignItems: 'center'
 			}}>
-				<Box>
-					<Button sx={{margin: 2}} variant="contained" onClick={()=>{window.location.href = '/lines'}}>Линии</Button>				
-				</Box>
-				<Box sx={{
-					width: '100%',
-					display: 'flex',
-					justifyContent: 'space-around'
-				}}>
-					<Button sx={{margin: 2}} variant="contained" onClick={()=>{window.location.href = 'https://spamigor.ru'}}>Домой</Button>			
-					<Button sx={{margin: 2}} variant="contained" onClick={()=>{window.location.href = 'https://cloud.spamigor.ru'}}>Облако</Button>	
-				</Box>
-				<Box sx={{
-					width: '100%',
-					display: 'flex',
-					justifyContent: 'space-between'
-				}}>
-					<Button sx={{margin: 2}} variant="contained" onClick={()=>{window.location.href = 'https://ar.spamigor.ru'}}>AR</Button>
-					<Button sx={{margin: 2}} variant="contained" onClick={()=>{window.location.href = '/three'}}>Three</Button>
-				</Box>
-				<Box sx={{
-					width: '100%',
-					display: 'flex',
-					justifyContent: 'space-between'
-				}}>
-					<Button sx={{margin: 2}} variant="contained" onClick={()=>{window.location.href = 'https://github.com/pyshnenko'}}>GIT</Button>
-					<Button sx={{margin: 2}} variant="contained" onClick={()=>{window.location.href = 'https://gf.spamigor.ru'}}>Золотолесье</Button>
-				</Box>
+				<Button sx={{...style}} variant="contained" onClick={()=>{window.location.href = 'https://spamigor.ru'}}>Домой</Button>	
+				<Button sx={{...style, top: '10%', left: '10%'}} variant="contained" onClick={()=>{window.location.href = '/lines'}}>Линии</Button>	
+				<Button sx={{...style, top: '10%', right: '10%'}} variant="contained" onClick={()=>{window.location.href = 'https://cloud.spamigor.ru'}}>Облако</Button>	
+				<Button sx={{...style, top: '20%', left: '10%'}} variant="contained" onClick={()=>{window.location.href = 'https://ar.spamigor.ru'}}>AR</Button>
+				<Button sx={{...style, top: '20%', right: '10%'}} variant="contained" onClick={()=>{window.location.href = '/three'}}>Three</Button>
+				<Button sx={{...style, top: '30%', left: '10%'}} variant="contained" onClick={()=>{window.location.href = 'https://github.com/pyshnenko'}}>GIT</Button>
+				<Button sx={{...style, top: '30%', right: '10%'}} variant="contained" onClick={()=>{window.location.href = 'https://gf.spamigor.ru'}}>Золотолесье</Button>
 			</Box>
         	<Box id='container' style={{position: 'absolute', top: 0, left: 0}} />
 		</Box>
