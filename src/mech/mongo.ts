@@ -23,7 +23,7 @@ const cashTokenList: {[key: string]: {login: string, timer: ReturnType<typeof se
 class mongoFunc {
     constructor() {
         mongoClient = new MongoClient(uri);
-        db = mongoClient.db("gf");
+        db = mongoClient.db("cloud");
         collection = db.collection("gfUsers");
         usersCollection = db.collection("cloudUsers");
     }

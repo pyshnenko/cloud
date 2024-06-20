@@ -56,7 +56,7 @@ var cashTokenList = {};
 var mongoFunc = /** @class */ (function () {
     function mongoFunc() {
         mongoClient = new MongoClient(uri);
-        db = mongoClient.db("gf");
+        db = mongoClient.db("cloud");
         collection = db.collection("gfUsers");
         usersCollection = db.collection("cloudUsers");
     }

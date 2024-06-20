@@ -919,3 +919,103 @@
 [2024-06-11T13:54:40.190] [DEBUG] cApi - Записей: 1
 [2024-06-13T16:23:37.859] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
 [2024-06-13T16:23:37.956] [DEBUG] cApi - Записей: 1
+[2024-06-14T12:34:47.790] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-06-14T12:34:47.890] [DEBUG] cApi - Записей: 1
+[2024-06-14T12:34:48.800] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-06-14T12:34:48.803] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-06-14T12:34:48.827] [INFO] cApi - undefined
+[2024-06-14T12:34:48.828] [INFO] cApi - spamigor
+[2024-06-14T12:34:48.828] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-06-14T12:34:54.809] [INFO] cApi - { location: 'МГТУ/', action: 'ls', name: '', incognit: false }
+[2024-06-14T12:34:54.811] [INFO] cApi - spamigor
+[2024-06-14T12:34:54.811] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/МГТУ/
+[2024-06-14T12:34:59.828] [INFO] cApi - {
+  location: 'МГТУ/УМП сборка от ярослава/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-06-14T12:34:59.830] [INFO] cApi - spamigor
+[2024-06-14T12:34:59.830] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/МГТУ/УМП сборка от ярослава/
+[2024-06-14T14:11:29.360] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-06-14T14:11:29.426] [INFO] cApi - spamigor
+[2024-06-14T14:11:29.426] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-06-14T14:52:14.565] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-06-14T14:52:14.642] [DEBUG] cApi - Записей: 1
+[2024-06-14T14:52:15.127] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-06-14T14:52:15.130] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-06-14T14:52:15.150] [INFO] cApi - undefined
+[2024-06-14T14:52:15.151] [INFO] cApi - spamigor
+[2024-06-14T14:52:15.151] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-06-14T14:52:26.753] [INFO] cApi - { location: 'МГТУ/', action: 'ls', name: '', incognit: false }
+[2024-06-14T14:52:26.754] [INFO] cApi - spamigor
+[2024-06-14T14:52:26.754] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/МГТУ/
+[2024-06-14T15:12:58.340] [INFO] cApi - {
+  location: 'МГТУ/УМП сборка от ярослава/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-06-14T15:12:58.404] [INFO] cApi - spamigor
+[2024-06-14T15:12:58.405] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/МГТУ/УМП сборка от ярослава/
+[2024-06-14T15:13:09.982] [INFO] cApi - {
+  location: 'МГТУ/УМП сборка от ярослава//',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-06-14T15:13:09.983] [INFO] cApi - spamigor
+[2024-06-14T15:13:09.983] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/МГТУ/УМП сборка от ярослава/
+[2024-06-14T15:14:11.404] [INFO] cApi - {
+  location: 'МГТУ/УМП сборка от ярослава//',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-06-14T15:14:11.405] [INFO] cApi - spamigor
+[2024-06-14T15:14:11.405] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/МГТУ/УМП сборка от ярослава/
+[2024-06-14T15:30:41.041] [INFO] cApi - { location: '/МГТУ', action: 'ls', name: '', incognit: false }
+[2024-06-14T15:30:41.139] [INFO] cApi - spamigor
+[2024-06-14T15:30:41.139] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/МГТУ
+[2024-06-18T16:03:33.040] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-06-18T16:03:33.130] [DEBUG] cApi - Записей: 1
+[2024-06-18T16:03:33.581] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-06-18T16:03:33.584] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-06-18T16:03:33.605] [INFO] cApi - undefined
+[2024-06-18T16:03:33.606] [INFO] cApi - spamigor
+[2024-06-18T16:03:33.606] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-06-19T20:21:27.630] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-06-19T20:21:27.719] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:21:36.954] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-06-19T20:21:37.015] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:21:39.829] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-06-19T20:21:39.890] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:21:48.318] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-06-19T20:21:48.381] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:21:59.309] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-06-19T20:21:59.371] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:22:06.909] [INFO] cApi - { pass: 'ugD6s2xz', login: 'spamigor' }
+[2024-06-19T20:22:06.972] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:22:15.428] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-06-19T20:22:15.490] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:22:35.404] [INFO] cApi - { pass: '12101994a', email: 'Pyshnenko94@yandex.ru' }
+[2024-06-19T20:22:36.608] [INFO] cApi - { pass: '12101994a', email: 'Pyshnenko94@yandex.ru' }
+[2024-06-19T20:24:05.992] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-06-19T20:24:06.087] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:24:13.591] [INFO] cApi - { pass: '12101994a', login: 'Spamigor' }
+[2024-06-19T20:24:13.649] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:24:26.907] [INFO] cApi - { pass: '12101994a', login: 'Spamigor' }
+[2024-06-19T20:24:26.966] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:24:36.267] [INFO] cApi - { pass: 'ugD6s2xz', login: 'Spamigor' }
+[2024-06-19T20:24:36.328] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:24:38.349] [INFO] cApi - { pass: 'ugD6s2xz', login: 'Spamigor' }
+[2024-06-19T20:24:38.411] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:25:26.898] [INFO] cApi - { pass: 'ugD6s2xz', login: 'Spamigor' }
+[2024-06-19T20:25:26.995] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:25:35.359] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-06-19T20:25:35.444] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:25:37.027] [INFO] cApi - { pass: '12101994a', login: 'spamigor' }
+[2024-06-19T20:25:37.085] [DEBUG] cApi - Записей: 0
+[2024-06-19T20:30:19.575] [INFO] cApi - { pass: '12101994a', email: 'Pyshnenko94@yandex.ru' }
+[2024-06-19T20:30:20.751] [INFO] cApi - { pass: '12101994a', email: 'Pyshnenko94@yandex.ru' }
+[2024-06-19T20:39:58.231] [INFO] cApi - { pass: '12101994a', email: 'Pyshnenko94@yandex.ru' }
