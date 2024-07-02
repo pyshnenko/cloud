@@ -142,6 +142,7 @@ export default function NeonTest () {
 
 						groupTextOp.position.x = (i===1 ? -1 : 1) * models[i].x;//120 * scale;
 						groupTextOp.position.y = (models[i].y/scale + (i===1 ? 100 : (i ===2 ? -100 : 80))) * scale;//60 * scale;
+						groupTextOp.visible = false;
 
 						groupTextAll.add(groupTextOp)
 					}
