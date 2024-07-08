@@ -66,16 +66,16 @@ export default function FileFoldBox({animIn, index, lined, selected, text, setAn
                         fileType(path, text)==='archive' ? <FolderZipIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
                         fileType(path, text)==='picture'? 
                             <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}} onDoubleClick={()=>{
-                                setImgPalette({addrArray: imgArr, startPosition: imgArr.indexOf(`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${text}`)})
+                                setImgPalette({addrArray: imgArr, startPosition: imgArr.indexOf(`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${text}`)})
                             }}>
                                 <Box sx={{width: '60px', height: '60px'}}>
-                                    <img style={{width: '100%', maxHeight: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${text}`} />
+                                    <img style={{width: '100%', maxHeight: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${text}`} />
                                 </Box>
                             </Box> :
                         fileType(path, text)==='video'? 
                         <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                             <Box sx={{width: '60px', height: '60px'}}>
-                                <video style={{width: '100%', maxHeight: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${text}`} onClick={({target}: any)=>{target.paused?target.play():target.pause()}} />
+                                <video style={{width: '100%', maxHeight: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${text}`} onClick={({target}: any)=>{target.paused?target.play():target.pause()}} />
                             </Box>
                         </Box> :
                         <InsertDriveFileIcon sx={{zoom: 2.5, color: '#0AD58D'}} />}
@@ -125,7 +125,7 @@ const vidEnd = [
 
 const fileType = (path: string, name: string) => {
     let item: string = name.toLocaleLowerCase().slice(-4);
-    const addr: string = `${window.location.href.includes('http://localhost:8799/')?'http://localhost:8800':''}/data/${path}/${name}`;
+    const addr: string = `${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${name}`;
     if (item === 'txt') return 'txt'
     else {
         let endText = 'other'

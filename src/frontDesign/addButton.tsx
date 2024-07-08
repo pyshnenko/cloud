@@ -110,7 +110,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
             Api.askLS(User.getToken(), path, 'tar')
             .then((res: any)=>{
                 console.log(res.data.addr);
-                download_file((window.location.href==='http://localhost:8799/'?'http://localhost:8800/':'/') + res.data.addr);
+                download_file((window.location.href==='http://localhost:8799/'?'http://localhost:8801/':'/') + res.data.addr);
             }).catch((e: any)=>console.log(e)).finally(()=>loading(false, 'tar'))*/
             const cookies = new Cookies(null, {path: '/'});
             cookies.set('token', User.getToken());
@@ -119,7 +119,7 @@ export default function SpeedDialTooltipOpen({path, setPath, files, folder, notV
                 .then(async (res: any)=>{
                     console.log(res.data);
                     setTimeout((href: string, addr: string)=>
-                        {download_file(encodeURI(href.includes('http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr))); loading(false, 'save')}, 
+                        {download_file(encodeURI(href.includes('http://localhost:8799/')? ('http://localhost:8801/'+addr) : ('/'+addr))); loading(false, 'save')}, 
                         3000, 
                         window.location.href, 
                         res.data.addr) 

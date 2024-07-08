@@ -42,12 +42,13 @@
     "react": "^18",
     "react-dom": "^18",
     "react-native": "^0.74.2",
+    "socket.io-client": "^4.7.5",
     "styled-components": "^6.1.2",
     "swagger-ui-react": "^5.17.14",
     "three": "^0.161.0",
     "universal-cookie": "^7.1.4",
     "webgpu": "^0.1.16",
-    "websocket": "^1.0.34"
+    "websocket": "^1.0.35"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.5",

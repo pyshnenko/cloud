@@ -49,6 +49,15 @@ var mongo = require('./src/mech/mongo');
 var mongoS = new mongo();
 var jwt = require('jsonwebtoken');
 var access_check = require('./src/mech/requested_feature').access_check;
+var WebSocketClient = require('websocket').client;
+var socketPort = '8080/';
+var IO = require('socket.io-client');
+var bodyParser = require('body-parser');
+var socketConnect = false;
+var URL = 'https://io.spamigor.ru';
+var socket = IO(URL, {
+    autoConnect: true
+});
 var dir = process.cwd();
 app.use(cors());
 app.use(cookieParser('secret key'));
@@ -224,7 +233,17 @@ app.post("/upload", function (req, res, next) {
         res.send({ res: 'ok', addr: "data/".concat(decodeURI(req.headers.fname)) });
     }
 });
-app.listen(8800, function () { return console.log('start'); });
+//const urlencodedParser = express.urlencoded({extended: true});
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.post("/socket", function (req, res, next) {
+    console.log('\n\nBODY\n\n\n');
+    console.log(req.body);
+    console.log('\n\n\n\n\n');
+    if (socketConnect)
+        socketSend(req.body.login || '', req.body.text);
+});
+app.listen(8801, function () { return console.log('start'); });
 function checkPathCorrect(filePath) {
     var splitPath = path.normalize(filePath).replace(/\\/g, '/').split('/');
     var folder = '';
@@ -240,3 +259,93 @@ function checkPathCorrect(filePath) {
         }
     }
 }
+function onConnect() {
+    console.log('connect');
+    socketConnect = true;
+    socket.emit('otherProject', JSON.stringify({ from: '', text: 'Облако подключено' }));
+}
+socket.on('connect', onConnect);
+function socketSend(user, text) {
+    console.log('connect');
+    socket.emit('otherProject', JSON.stringify({ from: user || 'Некто', text: text }));
+}
+/*
+let client = new WebSocketClient();
+
+client.on('connectFailed', function(error: any) {
+    console.log('Connect Error: ' + error.toString());
+    socketConnect = false;
+    setTimeout(() => {
+        console.log('reconnect');
+        client.connect('wss://spamigor.ru:' + socketPort, 'echo-protocol');
+    }, 10*1000)
+});
+
+client.on('connect', function(connection: any) {
+    socketConnect = true;
+    console.log('WebSocket Client Connected');
+    connection.on('error', function(error: any) {
+        socketConnect = false;
+        console.log("Connection Error: " + error.toString());
+    });
+    connection.on('close', function() {
+        socketConnect = false;
+        console.log('echo-protocol Connection Closed');
+        setTimeout(() => {
+            console.log('reconnect');
+            client.connect('wss://spamigor.ru:' + socketPort, 'echo-protocol');
+        }, 10*1000)
+    });
+    connection.on('message', function(message: any) {
+        socketConnect = true;
+        if (message.type === 'utf8') {
+            /*if (message.utf8Data === 'reboot') {
+                console.log('\x1b[31mREBOOT\x1b[0m');
+                needReb = true;
+                bot.telegram.sendMessage(admin[0], 'REBOOT');
+            }
+            if (message.utf8Data === 'restart') {
+                console.log('restart');
+                connection.sendUTF('TM: pi: restart');
+                needRest = true;
+                bot.telegram.sendMessage(admin[0], 'Restart');
+            }
+            if (message.utf8Data === 'gitPull') {
+                console.log('git pull');
+                connection.sendUTF('TM: pi: pull');
+                bot.telegram.sendMessage(admin[0], 'pull');
+                needPull = true;
+            }
+            if (message.utf8Data === 'gitPush') {
+                console.log('git push');
+                connection.sendUTF('TM: pi: push');
+                bot.telegram.sendMessage(admin[0], 'push');
+                needPush = true;
+            }
+            if (message.utf8Data === 'botReconnect') {
+                console.log('reconnect');
+                connection.sendUTF('TM: pi: reconnect');
+                bot.launch();
+            }
+            else console.log("Received: '" + message.utf8Data + "'");
+        }
+    });
+    
+    socket = connection;
+    
+    function sendNumber() {
+        if (connection.connected) {
+            var number = new Date();
+            connection.sendUTF('cl: ' + (Number(number)).toString());
+            setTimeout(sendNumber, 60*1000);
+        }
+    }
+    sendNumber();
+});
+
+function socketSend (message: string) {
+    if (socketConnect&&socket) socket.sendUTF('TM: cl:  ' + message);
+}
+
+client.connect('wss://spamigor.ru:' + socketPort, 'echo-protocol');
+socketSend('started');*/ 

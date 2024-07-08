@@ -11,6 +11,17 @@ const mongo = require('./src/mech/mongo');
 const mongoS = new mongo();
 const jwt = require('jsonwebtoken');
 const {access_check} = require('./src/mech/requested_feature');
+const WebSocketClient = require('websocket').client;
+const socketPort = '8080/';
+const IO = require ('socket.io-client');
+var bodyParser = require('body-parser');
+
+let socketConnect: boolean = false;
+const URL ='https://io.spamigor.ru';  
+let socket: any = IO(URL, {
+    autoConnect: true
+});
+ 
 
 export {};
 const dir = process.cwd();
@@ -146,7 +157,17 @@ app.post("/upload", function (req: any, res: any, next: any) {
     }
 });
 
-app.listen(8800, ()=>console.log('start'));
+//const urlencodedParser = express.urlencoded({extended: true});
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
+app.post("/socket", function (req: any, res: any, next: any) {
+    console.log('\n\nBODY\n\n\n');
+    console.log(req.body);
+    console.log('\n\n\n\n\n');
+    if (socketConnect) socketSend(req.body.login||'', req.body.text);
+})
+
+app.listen(8801, ()=>console.log('start'));
 
 function checkPathCorrect(filePath: string) {
 
@@ -162,4 +183,97 @@ function checkPathCorrect(filePath: string) {
             console.log('Папка успешно создана');
         }
     }
+}    
+
+function onConnect() {
+    console.log('connect');
+    socketConnect = true;
+    socket.emit('otherProject', JSON.stringify({from: '', text: 'Облако подключено'}));
 }
+
+socket.on('connect', onConnect);
+
+function socketSend(user: string, text: string) {
+    console.log('connect');
+    socket.emit('otherProject', JSON.stringify({from: user||'Некто', text: text}));
+}
+/*
+let client = new WebSocketClient();
+
+client.on('connectFailed', function(error: any) {
+    console.log('Connect Error: ' + error.toString());
+	socketConnect = false;
+	setTimeout(() => {
+		console.log('reconnect');
+		client.connect('wss://spamigor.ru:' + socketPort, 'echo-protocol');
+	}, 10*1000)
+});
+
+client.on('connect', function(connection: any) {
+	socketConnect = true;
+    console.log('WebSocket Client Connected');
+    connection.on('error', function(error: any) {
+		socketConnect = false;
+        console.log("Connection Error: " + error.toString());
+    });
+    connection.on('close', function() {
+		socketConnect = false;
+        console.log('echo-protocol Connection Closed');
+		setTimeout(() => {
+			console.log('reconnect');
+			client.connect('wss://spamigor.ru:' + socketPort, 'echo-protocol');
+		}, 10*1000)
+    });
+    connection.on('message', function(message: any) {
+		socketConnect = true;
+        if (message.type === 'utf8') {
+			/*if (message.utf8Data === 'reboot') {
+				console.log('\x1b[31mREBOOT\x1b[0m');
+				needReb = true;
+				bot.telegram.sendMessage(admin[0], 'REBOOT');
+			}
+			if (message.utf8Data === 'restart') {
+				console.log('restart');
+				connection.sendUTF('TM: pi: restart');
+				needRest = true;
+				bot.telegram.sendMessage(admin[0], 'Restart');
+			}
+			if (message.utf8Data === 'gitPull') {
+				console.log('git pull');
+				connection.sendUTF('TM: pi: pull');
+				bot.telegram.sendMessage(admin[0], 'pull');
+				needPull = true;
+			}
+			if (message.utf8Data === 'gitPush') {
+				console.log('git push');
+				connection.sendUTF('TM: pi: push');
+				bot.telegram.sendMessage(admin[0], 'push');
+				needPush = true;
+			}
+			if (message.utf8Data === 'botReconnect') {
+				console.log('reconnect');
+				connection.sendUTF('TM: pi: reconnect');
+				bot.launch();
+			}
+            else console.log("Received: '" + message.utf8Data + "'");
+        }
+    });
+	
+	socket = connection;
+    
+    function sendNumber() {
+        if (connection.connected) {
+            var number = new Date();
+            connection.sendUTF('cl: ' + (Number(number)).toString());
+            setTimeout(sendNumber, 60*1000);
+        }
+    }
+    sendNumber();
+});
+
+function socketSend (message: string) {
+	if (socketConnect&&socket) socket.sendUTF('TM: cl:  ' + message);
+}
+
+client.connect('wss://spamigor.ru:' + socketPort, 'echo-protocol');
+socketSend('started');*/

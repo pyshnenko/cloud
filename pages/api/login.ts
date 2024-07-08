@@ -5,8 +5,20 @@ let jwt = require('jsonwebtoken');
 import NextCors from 'nextjs-cors';
 const mongoS = new mongo();
 const bcrypt = require('bcrypt');
+const axios = require('axios');
+
+const socketUrl = 'http://localhost:8801/socket'; //'cloud.spamigor.ru/socket
 
 const log4js = require("log4js");
+
+const jsonHeader = {
+    "Content-type": "application/json"
+  };
+  
+const socketApi = () => axios.create({
+    socketUrl,
+    headers: jsonHeader
+});
 
 log4js.configure({
     appenders: { 
@@ -39,6 +51,7 @@ export default async function handler(req: any, res: any) {
             if (login.length!==0) buf.login = login[0].login;
         }
         if (buf.login) {
+            axios.post(socketUrl, {text: `${buf.login} login on cloud`})
             const atoken = await bcrypt.hash((buf.pass+buf.login.trim()), '$2b$10$1'+String(process.env.SALT_CRYPT))
             let dat = await mongoS.find({password: atoken});
             logger.debug('Записей: ' + dat.length);
@@ -54,15 +67,18 @@ export default async function handler(req: any, res: any) {
                     dat[0].atoken = atoken.slice(8);
                 }
                 else dat[0].token=token;
+                axios.post(socketUrl, {text: `${buf.login} login on cloud successfull`})
                 res.status(200).json(dat[0]);
             }
             else {
                 res.status(401).json({res: false});
+                axios.post(socketUrl, {text: `${buf.login} login on cloud error`})
             }
             console.log('\nend\n')
         }
         else {
             res.status(401).json({res: false});
+            socketApi().post('/', {text: `${buf.login} login on cloud error`})
         }
     }
 }

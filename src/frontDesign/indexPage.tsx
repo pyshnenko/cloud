@@ -214,7 +214,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                 console.log(action + ' ' + path + (objName));
                 const cookies = new Cookies(null, {path: '/'});
                 cookies.set('token', User.getToken());
-                const fileAddr: string = encodeURI(`${window.location.href==='http://localhost:8799/'?'http://localhost:8800':''}/data/${path}/${objName}`);
+                const fileAddr: string = encodeURI(`${window.location.href==='http://localhost:8799/'?'http://localhost:8801':''}/data/${path}/${objName}`);
                 download_file(fileAddr, objName);
                 console.log(fileAddr);
             }
@@ -225,7 +225,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                 .then(async (res: any)=>{
                     console.log(res.data);
                     setTimeout((href: string, addr: string)=>
-                        {download_file(encodeURI(href.includes('http://localhost:8799/')? ('http://localhost:8800/'+addr) : ('/'+addr))); loading(false, 'save')}, 
+                        {download_file(encodeURI(href.includes('http://localhost:8799/')? ('http://localhost:8801/'+addr) : ('/'+addr))); loading(false, 'save')}, 
                         3000, 
                         window.location.href, 
                         res.data.addr) 
