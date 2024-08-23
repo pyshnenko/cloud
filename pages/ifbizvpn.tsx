@@ -128,7 +128,7 @@ export default function DedansCharts() {
         else return 0
     }
 
-    const del1024 = ({num, mn}: {num: number, mn: number}) =>{    
+    const del1024: any = ({num, mn}: {num: number, mn: number}) =>{    
         if (num>1024) return del1024({num: (num/1024), mn: mn+1});
         else return {num, mn}
     }
