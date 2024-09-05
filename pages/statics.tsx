@@ -80,7 +80,7 @@ export default function DedansCharts() {
                 ...ffullData.fullData,
                 'spamigor': {interfaces: res.data.interfaces}
             }};
-            if (ffullData.num>=2) setFullData(ffullData.fullData)
+            if (ffullData.num>=3) setFullData(ffullData.fullData)
         });
         
         axios.get('https://spamigor.ru/trafic/euroigor.json')
@@ -89,7 +89,7 @@ export default function DedansCharts() {
                     ...ffullData.fullData,
                     'euroigor': {interfaces: res.data.interfaces}
                 }};
-                if (ffullData.num>=2) setFullData(ffullData.fullData)
+                if (ffullData.num>=3) setFullData(ffullData.fullData)
         });
         
         axios.get('https://spamigor.ru/trafic/ifbizvpn.json')
@@ -98,8 +98,18 @@ export default function DedansCharts() {
                     ...ffullData.fullData,
                     'ifbizvpn': {interfaces: res.data.interfaces}
                 }};
-                if (ffullData.num>=2) setFullData(ffullData.fullData)
+                if (ffullData.num>=3) setFullData(ffullData.fullData)
         });
+        
+        axios.get('https://spamigor.ru/trafic/homeigor.json')
+            .then((res: any)=>{
+                ffullData = {num: ffullData.num+1, fullData: {
+                    ...ffullData.fullData,
+                    'homeigor': {interfaces: res.data.interfaces}
+                }};
+                if (ffullData.num>=3) setFullData(ffullData.fullData)
+        });
+    
         return () => {
             window.removeEventListener('resize', handleResize);
         };
@@ -209,6 +219,7 @@ export default function DedansCharts() {
                             <MenuItem value="spamigor">spamigor.ru</MenuItem>
                             <MenuItem value="euroigor">euroigor.ru</MenuItem>
                             <MenuItem value="ifbizvpn">ifbizvpn.ru</MenuItem>
+                            <MenuItem value="homeigor">homeigor.ru</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
