@@ -17,8 +17,8 @@ export default function SudocuBrootForce () {
     
     const start = () => {
         let buf: number[][] = [];
-        //for (let i = 1; i<=9; i++) buf.push([0,0,0,0,0,0,0,0,0]);    
-        buf.push([9,7,0,4,0,6,0,0,5]); 
+        for (let i = 1; i<=9; i++) buf.push([0,0,0,0,0,0,0,0,0]);    
+        /*buf.push([9,7,0,4,0,6,0,0,5]); 
         buf.push([6,8,2,5,3,0,0,0,0]);
         buf.push([5,0,0,7,0,0,0,9,0]);
         buf.push([0,1,0,0,8,0,0,0,3]);
@@ -26,7 +26,7 @@ export default function SudocuBrootForce () {
         buf.push([7,0,0,0,4,0,0,6,0]);
         buf.push([0,2,0,0,0,0,0,0,9]);
         buf.push([0,0,0,0,9,2,5,4,7]);
-        buf.push([4,0,0,8,0,1,0,2,6]);
+        buf.push([4,0,0,8,0,1,0,2,6]);*/
         return buf;
     }
 
