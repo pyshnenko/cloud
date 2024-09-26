@@ -92,7 +92,7 @@ export default function SudocuBrootForce () {
     }
 
     const brootStep = (arr: number[][], variants: number[][][]) => {
-        for (let i = 0; i < 1000000; i++) {
+        for (let i = 0; i < 10000000; i++) {
             if (brootForceF(arr, variants)===true) {
                 return true
             }
