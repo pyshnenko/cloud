@@ -17,20 +17,52 @@ export default function SudocuBrootForce () {
     
     const start = () => {
         let buf: number[][] = [];
-        for (let i = 1; i<=9; i++) buf.push([0,0,0,0,0,0,0,0,0]);    
-        /*buf.push([2,3,9,0,5,8,1,6,7]);
-        buf.push([0,0,0,1,0,7,0,8,9]);
-        buf.push([8,7,1,3,0,9,2,5,4]);
-        buf.push([7,0,8,2,1,3,0,0,6]);
-        buf.push([4,1,3,9,0,0,7,2,5]);
-        buf.push([9,0,2,5,7,4,8,1,3]);
-        buf.push([6,0,4,7,9,1,5,3,0]);
-        buf.push([3,9,5,0,0,0,6,7,1]);
-        buf.push([1,8,7,6,3,5,0,0,2]);*/
+        //for (let i = 1; i<=9; i++) buf.push([0,0,0,0,0,0,0,0,0]);    
+        buf.push([9,7,0,4,0,6,0,0,5]); 
+        buf.push([6,8,2,5,3,0,0,0,0]);
+        buf.push([5,0,0,7,0,0,0,9,0]);
+        buf.push([0,1,0,0,8,0,0,0,3]);
+        buf.push([8,4,3,2,0,7,9,5,1]);
+        buf.push([7,0,0,0,4,0,0,6,0]);
+        buf.push([0,2,0,0,0,0,0,0,9]);
+        buf.push([0,0,0,0,9,2,5,4,7]);
+        buf.push([4,0,0,8,0,1,0,2,6]);
         return buf;
     }
+
+    const [scelet, setScelet] = useState<number[][]>(start());
+    const [startTrig, setStartTrig] = useState<number>(0);
+
+    useEffect(()=>{
+        if (localStorage.getItem('scelet')) setScelet(JSON.parse(localStorage.getItem('scelet') as string) as number[][]);
+    }, [])
+
+    useEffect(()=>{
+        if (startTrig === 2) {
+            setStartTrig(0);
+            router();
+        }
+        else if (startTrig === 1) {
+            setStartTrig(0);
+            router(true);            
+        }
+    }, [scelet, startTrig])
+
     const steps = useRef<Step[]>([]);
     let startNumbers: number[][] = [];
+
+    const router = (a: boolean = false) => {
+        let arrCheck: {arr:number[][], variants: {arr: number[][][], ended: {x: number, y: number, k: number}[]}} = firstStepCheck();
+        if (!a) {
+            setScelet(arrCheck.arr);
+            if (arrCheck.variants.ended.length) setStartTrig(2);
+            else setStartTrig(1);
+        }
+        else {
+            brootStep(arrCheck.arr, arrCheck.variants.arr);
+            setScelet(arrCheck.arr)
+        }
+    }
     
 
     const firstStepCheck = () => {
@@ -46,16 +78,47 @@ export default function SudocuBrootForce () {
         simpleCheck(simpleBufSQ);
         simpleBufHorizont = horizontToSqare(simpleBufSQ);
         //buf = simplArrToArr(simpleBuf);
-        setScelet(simpleBufHorizont);
         console.log(steps);
-        for (let i = 0; i < 1000000; i++) {
-            if (brootForce(simpleBufHorizont)===true) {
-                //setTimeout(brootForce, 10000, simpleBufHorizont, steps);
-                break;
+        let variants: {arr: number[][][], ended: {x: number, y: number, k: number}[]} = readyToBroot(simpleBufHorizont);
+        seckondStep(simpleBufHorizont, variants.ended);
+        console.log('end')
+        return {arr: simpleBufHorizont, variants}
+    }
+
+    const seckondStep = (arr: number[][], ended: {x: number, y: number, k: number}[]) => {
+        ended.forEach(({x,y,k}: {x: number, y: number, k: number})=>{
+            arr[x][y]=k;
+        })
+    }
+
+    const brootStep = (arr: number[][], variants: number[][][]) => {
+        for (let i = 0; i < 100000; i++) {
+            if (brootForceF(arr, variants)===true) {
+                return true
             }
         }
-        setScelet(simpleBufHorizont);
-        console.log('end')
+        return false
+    }
+
+    const readyToBroot = (arr: number[][]) =>{
+        let extMass: number[][][] = [];
+        let extOneVar: {x: number, y: number, k: number}[] = [];
+        for (let i: number = 0; i<9; i++) {
+            extMass.push([])
+            for (let j: number = 0; j<9; j++) {
+                extMass[i].push([])
+                if (arr[i][j] === 0) {
+                    for (let k: number = 1; k<10; k++){
+                        if (checkNumberAvailabe(arr, k, i, j)) {
+                            extMass[i][j].push(k);
+                        }
+                    }
+                    if (extMass[i][j].length === 1) extOneVar.push({x: i, y: j, k:extMass[i][j][0]});
+                }
+            }
+        }
+        console.log(extMass);
+        return {arr: extMass, ended: extOneVar};
     }
 
     const simpleCheck = (arr:number[][]) => {
@@ -115,6 +178,42 @@ export default function SudocuBrootForce () {
         return true
     }
 
+    const brootForceF = (arr: number[][], variantsArr: number[][][], startNum: number = 0, seccondChanse: boolean = false) => {
+        let extBool: boolean = false;
+        if (seccondChanse) 
+            steps.current.pop();
+        if (checkZerosTotal(arr)) {
+            let posB: {x: number, y: number}|boolean = checkZerosTotal(arr, true);
+            let pos: {x: number, y: number} = posB===true?{x:0, y: 0}:posB as {x: number, y: number};
+            console.log(pos);
+            for (let i = startNum; i<variantsArr[pos.x][pos.y].length; i++) {
+                if (checkNumberAvailabe(arr, variantsArr[pos.x][pos.y][i], pos.x, pos.y)) {
+                    if ((steps.current.length===0)||((steps.current[steps.current.length-1].x!==pos.x)||(steps.current[steps.current.length-1].y!==pos.y))) 
+                        steps.current.push({x:pos.x, y: pos.y, num: i});
+                    arr[pos.x][pos.y] = variantsArr[pos.x][pos.y][i];
+                    break;
+                }
+                else if (i===variantsArr[pos.x][pos.y].length-1) {
+                    console.log('fail');
+                    console.log(seccondChanse + ' ' + steps.current.length)
+                    if (steps.current.length === 0) return true
+                    arr[steps.current[steps.current.length-1].x][steps.current[steps.current.length-1].y] = 0;
+                    extBool = true;
+                    /*if ((seccondChanse)&&(step.length>1)) {
+                        step.pop();
+                        arr[step[step.length-1].x][step[step.length-1].y] = 0
+                    }*/
+                }
+            }
+        }
+        else {
+            return true;
+        }
+        if (extBool) brootForceF(arr, variantsArr, steps.current[steps.current.length-1].num+1, true)
+        //setTimeout(brootForce, 1000, arr, step);
+        else return false;
+    }
+
     const brootForce = (arr: number[][], startNum: number = 1, seccondChanse: boolean = false) => {
         let extBool: boolean = false;
         if (seccondChanse) 
@@ -160,8 +259,6 @@ export default function SudocuBrootForce () {
         return arr.filter((x: number)=>x===num).length
     }
 
-    const [scelet, setScelet] = useState<number[][]>(start());
-
     return (
         <Box>
             <Typography>Заполни исходные данные</Typography>
@@ -196,14 +293,18 @@ export default function SudocuBrootForce () {
             )})}
             <Button onClick={()=>{
                     console.log(scelet);
-                    firstStepCheck();
+                    router();
                 }
             } >Расчет</Button>
-            {steps.current.length>0&&<Button onClick={()=>{
+            <Button onClick={()=>{
                     console.log(startNumbers);
-                    setScelet(startNumbers);
+                    localStorage.setItem('scelet',JSON.stringify(scelet))
                     steps.current = []
                 }
-            } >Сброс</Button>}
+            } >Сохранить</Button>
+            <Button onClick={()=>{
+                    setScelet(start());
+                }
+            } >Очистить</Button>
         </Box>
     )}
