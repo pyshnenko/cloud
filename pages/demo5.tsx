@@ -166,9 +166,9 @@ export default function SudocuBrootForce () {
         <Box>
             <Typography>Заполни исходные данные</Typography>
             {scelet.map((fitem: number[], findex: number)=> { return (
-                <Box sx={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: (9*widthP + 30) + 'px'}}>
+                <Box key={findex} sx={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: (9*widthP + 30) + 'px'}}>
                     {fitem.map((sitem: number, sindex: number)=>{ return (
-                        <Box sx={{
+                        <Box key={sindex} sx={{
                             display: 'flex', 
                             flexDirection: 'row', 
                             flexWrap: 'wrap', 
