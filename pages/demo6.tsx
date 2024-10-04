@@ -93,7 +93,9 @@ export default function Keyboards() {
                         >
                             {item.map((itemCol: number, x: number)=>{
                                 return (
-                                    <Typography sx={{
+                                    <Typography 
+                                        key={itemCol} 
+                                        sx={{
                                         padding: 2,
                                         border: 'solid 1px black',
                                         backgroundColor: ((y===activeStep.y)&&(x===activeStep.x))?'red':'green',
