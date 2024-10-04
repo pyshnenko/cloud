@@ -117,7 +117,7 @@ export default function Keyboards() {
                 onClick={()=>{
                     stepOne(pass[iteration===-1?0:iteration],pass[(iteration===-1?0:iteration)+1])
                     setIteration((iteration>=pass.length-2)?0:iteration+1)
-                }}>{iteration===-1?'Запуск':'Следующий шаг'}</Button>
+                }}>{iteration===0?'Запуск':'Следующий шаг'}</Button>
         </Box>
     )
 }
