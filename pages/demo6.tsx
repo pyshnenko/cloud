@@ -15,11 +15,15 @@ export default function Keyboards() {
     const [iteration, setIteration] = useState<number>(0);
 
     useEffect(()=>{
-        if ((a)&&(b)) setTab(createKeyboard(a,b))
+        if ((a)&&(b)) {
+            setTab(createKeyboard(a,b))
+            setIteration(0)
+        }
     },[a,b])
 
     useEffect(()=>{
         setActiveStep({x: (pass[0]-1)%a, y: Math.floor((pass[0]-1)/a)})
+        setIteration(0)
     }, [pass])
 
     const stepOne = (myNum: number, endNum: number) => {
@@ -112,7 +116,7 @@ export default function Keyboards() {
             <Button 
                 onClick={()=>{
                     stepOne(pass[iteration===-1?0:iteration],pass[(iteration===-1?0:iteration)+1])
-                    setIteration((iteration>=pass.length-2)?-1:iteration+1)
+                    setIteration((iteration>=pass.length-2)?0:iteration+1)
                 }}>{iteration===-1?'Запуск':'Следующий шаг'}</Button>
         </Box>
     )
