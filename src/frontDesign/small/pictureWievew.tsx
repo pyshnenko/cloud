@@ -153,6 +153,7 @@ export function ImgWiever ({props, src}: {props?:ImgWieverType, src?: string}) {
                                         }                                             
                                         id='imgHover'
                                         key={src}
+                                        onClick={()=>setPos(index)}
                                     />
                                 )
                             })}
