@@ -373,3 +373,77 @@
 [2024-09-26T08:19:48.005] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
 [2024-09-26T08:19:48.033] [INFO] cApi - spamigor
 [2024-09-26T08:19:48.034] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-09-30T11:39:24.518] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InB5c2huZW5rbzk0QHlhbmRleC5ydSIsImxvZ2luIjoic3BhbWlnb3IiLCJwYXNzd29yZCI6IiQyYiQxMCQxS25Td25hRVJvYzRuWHpzeXVQY3BlTjJQS091a0VIL0theUxPdG1VR0ZwLmpMUnBRR0VoMiIsImZpcnN0X25hbWUiOiLQkNC90YLQvtC9IiwibGFzdF9uYW1lIjoi0J_Ri9GI0L3QtdC90LrQviIsImlkIjoxLCJnb2xkIjowLCJ2YWxpZCI6ZmFsc2UsImlhdCI6MTcyNzMyNzk4NywiZXhwIjoxNzI3MzMxNTg3fQ.mgX_SLVWtp3Zyyqm6BphtXVT0i_TOOxs21mSqezRf7I'
+}
+[2024-09-30T11:39:24.602] [DEBUG] cApi - Записей: 1
+[2024-10-07T09:19:21.804] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InB5c2huZW5rbzk0QHlhbmRleC5ydSIsImxvZ2luIjoic3BhbWlnb3IiLCJwYXNzd29yZCI6IiQyYiQxMCQxS25Td25hRVJvYzRuWHpzeXVQY3BlTjJQS091a0VIL0theUxPdG1VR0ZwLmpMUnBRR0VoMiIsImZpcnN0X25hbWUiOiLQkNC90YLQvtC9IiwibGFzdF9uYW1lIjoi0J_Ri9GI0L3QtdC90LrQviIsImlkIjoxLCJnb2xkIjowLCJ2YWxpZCI6ZmFsc2UsImlhdCI6MTcyODAyMTE1MywiZXhwIjoxNzI4MDI0NzUzfQ.VMLbO51Wuf5u4ZBzhMs_sESM_HvCChv47Q1qIcFqSL8'
+}
+[2024-10-07T09:19:21.879] [DEBUG] cApi - Записей: 1
+[2024-10-31T20:05:06.733] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InB5c2huZW5rbzk0QHlhbmRleC5ydSIsImxvZ2luIjoic3BhbWlnb3IiLCJwYXNzd29yZCI6IiQyYiQxMCQxS25Td25hRVJvYzRuWHpzeXVQY3BlTjJQS091a0VIL0theUxPdG1VR0ZwLmpMUnBRR0VoMiIsImZpcnN0X25hbWUiOiLQkNC90YLQvtC9IiwibGFzdF9uYW1lIjoi0J_Ri9GI0L3QtdC90LrQviIsImlkIjoxLCJnb2xkIjowLCJ2YWxpZCI6ZmFsc2UsImlhdCI6MTczMDMxMjU4MiwiZXhwIjoxNzMwMzE2MTgyfQ.pmQLaqJe2YyfAq3n8ZFI6lczgq8gDRioOKVxV7wrBRw'
+}
+[2024-10-31T20:05:06.808] [DEBUG] cApi - Записей: 1
+[2024-11-14T20:22:56.439] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InB5c2huZW5rbzk0QHlhbmRleC5ydSIsImxvZ2luIjoic3BhbWlnb3IiLCJwYXNzd29yZCI6IiQyYiQxMCQxS25Td25hRVJvYzRuWHpzeXVQY3BlTjJQS091a0VIL0theUxPdG1VR0ZwLmpMUnBRR0VoMiIsImZpcnN0X25hbWUiOiLQkNC90YLQvtC9IiwibGFzdF9uYW1lIjoi0J_Ri9GI0L3QtdC90LrQviIsImlkIjoxLCJnb2xkIjowLCJ2YWxpZCI6ZmFsc2UsImlhdCI6MTczMTM0MzA5MiwiZXhwIjoxNzMxMzQ2NjkyfQ.Ktk4pV5CFy61ADvm4M0msqZI7YUjn0Mwz5rnCq8Sihk'
+}
+[2024-11-14T20:22:56.461] [DEBUG] cApi - Записей: 1
+[2024-11-14T20:22:56.472] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-11-14T20:22:56.492] [INFO] cApi - spamigor
+[2024-11-14T20:22:56.492] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-11-14T20:22:59.727] [INFO] cApi - { location: 'модельки/', action: 'ls', name: '', incognit: false }
+[2024-11-14T20:22:59.727] [INFO] cApi - spamigor
+[2024-11-14T20:22:59.728] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/модельки/
+[2024-11-14T20:23:01.324] [INFO] cApi - {
+  location: 'модельки/модельки/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-11-14T20:23:01.324] [INFO] cApi - spamigor
+[2024-11-14T20:23:01.325] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/модельки/модельки/
+[2024-11-14T20:23:14.348] [INFO] cApi - {
+  location: 'модельки/модельки/byust-lenina-s-grudyu/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-11-14T20:23:14.349] [INFO] cApi - spamigor
+[2024-11-14T20:23:14.349] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/модельки/модельки/byust-lenina-s-grudyu/
+[2024-11-15T14:21:42.721] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InB5c2huZW5rbzk0QHlhbmRleC5ydSIsImxvZ2luIjoic3BhbWlnb3IiLCJwYXNzd29yZCI6IiQyYiQxMCQxS25Td25hRVJvYzRuWHpzeXVQY3BlTjJQS091a0VIL0theUxPdG1VR0ZwLmpMUnBRR0VoMiIsImZpcnN0X25hbWUiOiLQkNC90YLQvtC9IiwibGFzdF9uYW1lIjoi0J_Ri9GI0L3QtdC90LrQviIsImlkIjoxLCJnb2xkIjowLCJ2YWxpZCI6ZmFsc2UsImlhdCI6MTczMTQ3NTcwMCwiZXhwIjoxNzMxNDc5MzAwfQ.PHezg1ZAsTzwLMfQq6g7Wy9hOB0I4XBGn0CXoZQDLBM'
+}
+[2024-11-15T14:21:42.802] [DEBUG] cApi - Записей: 1
+[2024-11-15T14:21:42.893] [INFO] cApi - { location: '/', action: 'ls', name: '', incognit: false }
+[2024-11-15T14:21:42.911] [INFO] cApi - spamigor
+[2024-11-15T14:21:42.911] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/
+[2024-11-15T14:21:46.954] [INFO] cApi - { location: 'МГТУ/', action: 'ls', name: '', incognit: false }
+[2024-11-15T14:21:46.955] [INFO] cApi - spamigor
+[2024-11-15T14:21:46.955] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/МГТУ/
+[2024-11-15T14:22:00.470] [INFO] cApi - {
+  location: 'МГТУ/power_cable/',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-11-15T14:22:00.471] [INFO] cApi - spamigor
+[2024-11-15T14:22:00.471] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/МГТУ/power_cable/
+[2024-11-15T14:22:23.786] [INFO] cApi - {
+  location: 'МГТУ/power_cable//',
+  action: 'ls',
+  name: '',
+  incognit: false
+}
+[2024-11-15T14:22:23.787] [INFO] cApi - spamigor
+[2024-11-15T14:22:23.787] [DEBUG] cApi - /home/spamigor/next/cloud/data/spamigor/МГТУ/power_cable/
+[2024-11-17T19:41:57.412] [INFO] cApi - {
+  atoken: 'KnSwnaERoc4nXzsyuPcpeN2PKOukEH/KayLOtmUGFp.jLRpQGEh2',
+  oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InB5c2huZW5rbzk0QHlhbmRleC5ydSIsImxvZ2luIjoic3BhbWlnb3IiLCJmaXJzdF9uYW1lIjoi0JDQvdGC0L7QvSIsImxhc3RfbmFtZSI6ItCf0YvRiNC90LXQvdC60L4iLCJpZCI6MSwiZ29sZCI6MCwidmFsaWQiOmZhbHNlLCJpYXQiOjE3MzE3Nzc2MDUsImV4cCI6MTczMTc4MTIwNX0.Z66mbLXIw4jHKFvM-_JvXteDM4_8yZo0ZMKEFJa5pME'
+}
+[2024-11-17T19:41:57.454] [DEBUG] cApi - Записей: 1
