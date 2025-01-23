@@ -52,3 +52,5 @@ export interface UbyURL {
     login?: string,
     url: string
 }
+
+export interface Coupon {price: number, date: Date}
