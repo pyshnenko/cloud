@@ -57,7 +57,7 @@ export default async function handler(req: any, res: any) {
             else res.status(401).json({res: false});
         }
         else if ((buf.oldToken==='')&&(buf.atoken==='t')) {
-            //console.log('li');
+            console.log('li');
             res.status(200).json({ttok: String(process.env.TTOK)});
         }
         else res.status(402).json({res: false});
