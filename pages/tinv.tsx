@@ -57,7 +57,7 @@ export default function TInv() {
     useEffect(() => {
         const tokApi: string = '/api/tokenUpd';
         const tokBody = {oldToken: '', atoken: 't'};
-        askPost(tokApi, tokBody).then((res: string)=>{
+        askPost(tokApi, tokBody).then((res: string)=>{ console.log(red);
             if (res.length>10) dataUpd('Bearer ' + res, askPost)
         })
         //const tok = 'Bearer '+askPost(tokApi, tokBody);
