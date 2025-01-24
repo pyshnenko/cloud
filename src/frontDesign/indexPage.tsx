@@ -315,7 +315,7 @@ export default function Index({exPath, notVerify, bbPath}: {exPath?: string, not
                     }}
                 >
                     {files&&options.map((option: string) => {
-                        if (anchorEl.index<files?.directs.length || option!=="Открыть")
+                        if ((Array.isArray(files?.directs)) && anchorEl.index<files?.directs.length || option!=="Открыть")
                             return <MenuItem 
                                 key={option} 
                                 sx={{color: option==='Удалить'?'red':'inherit'}}

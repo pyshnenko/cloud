@@ -447,3 +447,6 @@
   oldToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InB5c2huZW5rbzk0QHlhbmRleC5ydSIsImxvZ2luIjoic3BhbWlnb3IiLCJmaXJzdF9uYW1lIjoi0JDQvdGC0L7QvSIsImxhc3RfbmFtZSI6ItCf0YvRiNC90LXQvdC60L4iLCJpZCI6MSwiZ29sZCI6MCwidmFsaWQiOmZhbHNlLCJpYXQiOjE3MzE3Nzc2MDUsImV4cCI6MTczMTc4MTIwNX0.Z66mbLXIw4jHKFvM-_JvXteDM4_8yZo0ZMKEFJa5pME'
 }
 [2024-11-17T19:41:57.454] [DEBUG] cApi - Записей: 1
+[2025-01-24T13:07:20.826] [INFO] cApi - { oldToken: '', atoken: 't' }
+[2025-01-24T13:07:22.311] [INFO] cApi - { oldToken: '', atoken: 't' }
+[2025-01-24T13:07:24.438] [INFO] cApi - { oldToken: '', atoken: 't' }

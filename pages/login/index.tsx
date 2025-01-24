@@ -13,6 +13,7 @@ export default function Login () {
     const [error, setError] = useState<{email:boolean, pass: boolean, text: string}>({email: false, pass: false, text: ''});
     const [open, setOpen] = useState<boolean>(false);
     const [email, setEmail] = useState<string>('');
+    const [demo, setDemo] = useState<boolean>(false);
     const [emailresetMessage, setEmailResetMessage] = useState<{visible: boolean, text: string}>({visible: false, text: ''});
 
     useEffect(()=>{
@@ -37,9 +38,10 @@ export default function Login () {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log('push');
-        const form = new FormData(event.currentTarget);
-        const email: string = String(form.get('email'));
-        const password: string = String(form.get('password'));
+        console.log(demo);
+        const form = new FormData(event.currentTarget) || '';
+        const email: string = String(form.get('email')) || (demo ? 'demo' : '');
+        const password: string = String(form.get('password')) || (demo ? 'demodemo' : '');
         if ((email==='')||(password==='')) setError({email: true, pass: true, text: 'Заполни поля'})
         else {
             setError({email: false, pass: false, text: ''})
@@ -77,7 +79,7 @@ export default function Login () {
                 <Box sx={{width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '90vh', justifyContent: 'center', zIndex: 10}} 
                     component="form" noValidate onSubmit={handleSubmit}>
                     {error&&<Typography color="error" sx={{padding: 1, zIndex: 20}}>{error.text}</Typography>}
-                    <TextField error={error.email} sx={textStyle} name="email" label="Логин/email" variant="outlined" onChange={({target}: any)=>{setEmail(target.value)}} />
+                    <TextField error={error.email} sx={textStyle} id="loginBox" name="email" label="Логин/email" variant="outlined" onChange={({target}: any)=>{setEmail(target.value)}} />
                     <TextField error={error.pass} sx={textStyle} type="password" name="password" label="Пароль" variant="outlined" />
                     <Box sx={{zIndex: 20}}>
                         <Button sx={{margin: 1, boxShadow: '0 0 30px 10px white'}} variant="contained" type="submit">Вход</Button>
@@ -87,22 +89,15 @@ export default function Login () {
                                 window.location.href = '/register';
                             }}>Регистрация</Button>
                     </Box>
-                    <Button sx={{margin: 1, boxShadow: '0 0 30px 10px white', zIndex: 1, width: '228px'}} variant="contained" color="secondary"
-                        onClick={(event: React.MouseEvent)=>{
-                            event.preventDefault();
-                            if (email==='') setError({email: true, pass: false, text: 'Введи e-mail'})
-                            else if (!EMAIL_REGEXP.test(email)) setError({email: true, pass: false, text: 'Введи корректный e-mail'})
-                            else {
-                                setError({email: false, pass: false, text: ''})
-                                Api.resetPassword({pass: '', email, login: ''})
-                                .then((res: any)=>{
-                                    console.log(res.data)
-                                })
-                                .catch((e: any)=>{
-                                    console.log(e)
-                                })
-                            }
-                        }}>Забыл пароль</Button>
+                    <Button 
+                    sx={{margin: 1, boxShadow: '0 0 30px 10px white', zIndex: 1, width: '228px'}} 
+                    variant="contained" 
+                    color="secondary"
+                    onClick={()=>{setDemo(true)}} 
+                    type="submit"
+                    >
+                        Демонстрационный режим
+                    </Button>
                 </Box>}
             </Box>
         </Fade>
