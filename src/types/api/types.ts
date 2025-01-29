@@ -53,4 +53,4 @@ export interface UbyURL {
     url: string
 }
 
-export interface Coupon {price: number, date: Date}
+export interface Coupon {price: number, date: Date, done: boolean}

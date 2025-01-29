@@ -1,6 +1,9 @@
 import { Coupon } from "../types/api/types";
 
-export const bondsID: {id: string, totalSum: number, price: number}[] = [{id: 'TCS00A10AA02', totalSum: 4000, price: 1000}];
+export const bondsID: {id: string, totalSum: number, price: number}[] = [
+    {id: 'TCS00A10AA02', totalSum: 4000, price: 1000},
+    {id: 'TCS00A104ZC9', totalSum: 4000, price: 1000}
+];
 
 interface CouponData {couponDate: string, payOneBond: {units: string|number, nano: string|number}}
 
@@ -15,13 +18,14 @@ export const couponCorrectData = (data: CouponData[]) => {
         if (Number(date) < nowDate) totalNow += price;
         if ((last === null && (Number(date) < nowDate)) || (
             last && (Number(last.date) < nowDate) && (Number(date) < nowDate)
-        )) last = {price, date}
-        if ((next === null && (Number(date) >= nowDate)) || (
-            next && (Number(next.date) < nowDate) && (Number(date) < nowDate)
-        )) next = {price, date}
+        )) last = {price, date, done: true}
+        if ((next === null && (Number(date) >= nowDate)) || 
+            (next && (Number(next.date) > nowDate) && (Number(date) > nowDate))
+        ) next = {price, date, done: false}
         return {
             price: price,
-            date: date
+            date: date,
+            done: (Number(date) < nowDate)
         }
     })
     return {hist: extData, totalNow, last, next}
@@ -57,27 +61,31 @@ export const candlesCorrectData = (exdata: CandlesData[]) => {
 }
 
 export const dataUpd = async (ttok: string, askPost: (uel: string, body: any, ttok: string)=>void) => {
-    const body = {figi: bondsID.map((item: {id: string}) => item.id)};
-    const url = 'https://invest-public-api.tinkoff.ru/rest/tinkoff.public.invest.api.contract.v1.MarketDataService/GetLastPrices';
-    await askPost(url, body, ttok);
-    const url2 = 'https://invest-public-api.tinkoff.ru/rest/tinkoff.public.invest.api.contract.v1.InstrumentsService/GetBondCoupons';        
-    await askPost(url2, body, ttok);
-    const oldDate = new Date(Number(new Date())-(1000*60*60*24*30));
-    const url3 = 'https://invest-public-api.tinkoff.ru/rest/tinkoff.public.invest.api.contract.v1.MarketDataService/GetCandles';   
-    const body3 = {
-        figi: "TCS00A10AA02",
-        from: (oldDate).toISOString(),
-        to: (new Date()).toISOString(),
-        interval: "CANDLE_INTERVAL_DAY",
-        instrumentId: "TCS00A10AA02"
-    }        
-    await askPost(url3, body3, ttok);
-    const url4 = 'https://invest-public-api.tinkoff.ru/rest/tinkoff.public.invest.api.contract.v1.InstrumentsService/BondBy';  
-    const body4 = {
-        idType: "INSTRUMENT_ID_TYPE_FIGI",
-        id: "TCS00A10AA02"
+    for (let i = 0; i < bondsID.length; i++) {
+        const body = {instrumentId: [bondsID[i].id]};
+        console.log(body)
+        console.log(ttok)
+        const url = 'https://invest-public-api.tinkoff.ru/rest/tinkoff.public.invest.api.contract.v1.MarketDataService/GetLastPrices';
+        await askPost(url, body, ttok);
+        const url2 = 'https://invest-public-api.tinkoff.ru/rest/tinkoff.public.invest.api.contract.v1.InstrumentsService/GetBondCoupons';        
+        await askPost(url2, body, ttok);
+        const oldDate = new Date(Number(new Date())-(1000*60*60*24*30));
+        const url3 = 'https://invest-public-api.tinkoff.ru/rest/tinkoff.public.invest.api.contract.v1.MarketDataService/GetCandles';   
+        const body3 = {
+            figi: bondsID[i].id,
+            from: (oldDate).toISOString(),
+            to: (new Date()).toISOString(),
+            interval: "CANDLE_INTERVAL_DAY",
+            instrumentId: bondsID[i].id
+        }        
+        await askPost(url3, body3, ttok);
+        const url4 = 'https://invest-public-api.tinkoff.ru/rest/tinkoff.public.invest.api.contract.v1.InstrumentsService/BondBy';  
+        const body4 = {
+            idType: "INSTRUMENT_ID_TYPE_FIGI",
+            id: bondsID[i].id
+        }
+        await askPost(url4, body4, ttok);
     }
-    await askPost(url4, body4, ttok);
 }
 
 export const basicChartState = {
