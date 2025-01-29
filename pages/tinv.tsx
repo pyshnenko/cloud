@@ -35,6 +35,7 @@ export default function TInv() {
     const [coupon, setCoupon] = useState<{hist: Coupon[], totalNow: number, last: Coupon|null, next: Coupon| null}|null>();
     const [ data, setData ] = useState<any>(basicChartState);
     const [cash, setCash] = useState<number>(0);
+    const [bondName, setBondName] = useState<string>('');
 
     const askPost = async (url: string, body: any, auth: string = '') => {
         let resp = await fetch(url, {
@@ -46,11 +47,13 @@ export default function TInv() {
             body: JSON.stringify(body)
         })
         const result = await resp.json();
+        console.log(result)
         if (result?.lastPrices) setActualPrice(Number(result.lastPrices[0].price.units)*10 + 
             Number(String(result.lastPrices[0].price.nano).slice(0,3))/100)
         else if (result?.events) setCoupon(couponCorrectData(result.events))
         else if (result?.candles) setData(candlesCorrectData(result.candles))
         else if (result?.ttok) return result.ttok
+        else if (result?.instrument) setBondName(result.instrument.name)
         else console.log(result)        
     }
 
@@ -76,34 +79,48 @@ export default function TInv() {
     }
 
     return (
-    <Box>
-        <Typography>Цена сейчас: {actualPrice}</Typography>
-        <Box sx={{display: 'inline-flex'}}>
-            <Typography>Мой кошелек сейчас: {cash}</Typography>
-            <Typography color={deltaSum.positive?'green':'error'}>,  {deltaSum.value}</Typography>
-        </Box>
-        <Typography>Купоны:</Typography>
-        {coupon?.last?<Box>
-            <Typography>Предыдущий: {coupon.last?.price} от {coupon.last?.date.toLocaleDateString()}</Typography>
-            <Typography>Размер: {coupon.last?.price*bondsID[0].totalSum} от {coupon.last.date.toLocaleDateString()}</Typography>
-        </Box>:null}
-        {coupon?.next?<Box>
-            <Typography>Предстоящий: {coupon.next.price} от {coupon.next.date.toLocaleDateString()}</Typography>
-            <Typography>Размер: {coupon.next.price*bondsID[0].totalSum} от {coupon.next.date.toLocaleDateString()}</Typography>
-        </Box>:null}
-        <Box>
-            <Typography>Итого </Typography>
-            <Typography>Купонов: {(coupon?.totalNow||0) * bondsID[0].totalSum}</Typography>
-            <Box>
-                <Typography>Кошелек: {((coupon?.totalNow||0) * bondsID[0].totalSum) + cash}</Typography>
-                <Typography color={priceToWiew(
-                    (coupon?.totalNow||0) * bondsID[0].totalSum + deltaSum.price).pos?
-                    'green':
-                    'error'}>
-                        ,  {priceToWiew((coupon?.totalNow||0) * bondsID[0].totalSum + deltaSum.price).value}
-                </Typography>
+        <Box sx={{display: 'flex', justifyContent: 'center'}}>
+            <Box sx={{border: '1px solid lightgray', width: '80%', minWidth: '340px', borderRadius: '20px'}}>
+                <Box sx={{margin: 1}}>
+                    <Typography>{bondName}</Typography>
+                    <Box sx={{marginTop: 1}}>
+                        <Typography>Цена сейчас: {actualPrice}</Typography>
+                        <Box sx={{display: 'inline-flex'}}>
+                            <Typography>Мой кошелек сейчас: {cash}</Typography>
+                            <Typography color={deltaSum.positive?'green':'error'}>,  {deltaSum.value}</Typography>
+                        </Box>
+                    </Box>
+                    <Box sx={{marginTop: 1}}>
+                        <Typography>Купоны:</Typography>
+                        {coupon?.last?<Box>
+                            <Typography>Предыдущий: {coupon.last?.price} от {coupon.last?.date.toLocaleDateString()}</Typography>
+                            <Typography>Размер: {coupon.last?.price*bondsID[0].totalSum} от {coupon.last.date.toLocaleDateString()}</Typography>
+                        </Box>:null}
+                        {coupon?.next?<Box>
+                            <Typography>Предстоящий: {coupon.next.price} от {coupon.next.date.toLocaleDateString()}</Typography>
+                            <Typography>Размер: {coupon.next.price*bondsID[0].totalSum} от {coupon.next.date.toLocaleDateString()}</Typography>
+                        </Box>:null}
+                    </Box>
+                    <Box sx={{marginTop: 1}}>
+                        <Typography>Итого </Typography>
+                        <Typography>Купонов: {(coupon?.totalNow||0) * bondsID[0].totalSum}</Typography>
+                        <Box sx={{display: 'inline-flex'}}>
+                            <Typography>Кошелек: {((coupon?.totalNow||0) * bondsID[0].totalSum) + cash}</Typography>
+                            <Typography color={priceToWiew(
+                                (coupon?.totalNow||0) * bondsID[0].totalSum + deltaSum.price).pos?
+                                'green':
+                                'error'}>
+                                    ,  {priceToWiew((coupon?.totalNow||0) * bondsID[0].totalSum + deltaSum.price).value}
+                            </Typography>
+                        </Box>
+                    </Box>
+                </Box>
+                <Box sx={{marginBottom: 2}}>
+                    <Box sx={{maxWidth: '700px', margin: 0, padding: 0}}>
+                        <Line data={data} />
+                    </Box>
+                </Box>
             </Box>
         </Box>
-        <Line data={data} />
-    </Box>)
+    )
 }

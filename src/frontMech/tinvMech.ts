@@ -72,6 +72,12 @@ export const dataUpd = async (ttok: string, askPost: (uel: string, body: any, tt
         instrumentId: "TCS00A10AA02"
     }        
     await askPost(url3, body3, ttok);
+    const url4 = 'https://invest-public-api.tinkoff.ru/rest/tinkoff.public.invest.api.contract.v1.InstrumentsService/BondBy';  
+    const body4 = {
+        idType: "INSTRUMENT_ID_TYPE_FIGI",
+        id: "TCS00A10AA02"
+    }
+    await askPost(url4, body4, ttok);
 }
 
 export const basicChartState = {
