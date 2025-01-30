@@ -15,6 +15,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Coupon } from '../types/api/types';
 import CheckIcon from '@mui/icons-material/Check';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 
 export default function CouponTable({coupon, bondSum}: {coupon: Coupon[], bondSum: number}) {
     return (<Box>
@@ -39,8 +40,8 @@ export default function CouponTable({coupon, bondSum}: {coupon: Coupon[], bondSu
                                     <TableRow key={bond.date.toLocaleDateString()}>
                                         <TableCell>{bond.date.toLocaleDateString()}</TableCell>
                                         <TableCell>{bond.price}</TableCell>
-                                        <TableCell>{bond.price*bondSum}</TableCell>
-                                        <TableCell>{bond.done&&<CheckIcon sx={{color: 'green'}} />}</TableCell>
+                                        <TableCell>{(bond.price*bondSum).toFixed(2)}</TableCell>
+                                        <TableCell>{bond.done ? (bond.check ? <DoneAllIcon sx={{color: 'green'}} /> :<CheckIcon sx={{color: 'orange'}} />) : null}</TableCell>
                                     </TableRow>
                                 )
                             })}

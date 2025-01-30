@@ -2,10 +2,14 @@ require('dotenv').config();
 import copy from 'fast-copy';
 import { Coupon } from '../src/types/api/types';
 import React, { useEffect, useState, useRef, createContext, useContext } from 'react';
-import { couponCorrectData, candlesCorrectData, bondsID, dataUpd, basicChartState } from '../src/frontMech/tinvMech';
+import { couponCorrectData, candlesCorrectData, bondsIDBase, dataUpd, basicChartState } from '../src/frontMech/tinvMech';
 import { Line, Bar } from 'react-chartjs-2';
 import Typography from '@mui/material/Typography';
 import CouponTable from '../src/frontDesign/couponTable';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import CachedIcon from '@mui/icons-material/Cached';
+import { BondData } from '../src/types/api/types';
 import Box from '@mui/material/Box';
 import {
   Chart as ChartJS,
@@ -34,16 +38,22 @@ interface DSum {positive: boolean, value: string, price: number}
 
 export default function TInv() {
 
-    const [ actualPrice, setActualPrice ] = useState<number[]>([]);
-    const [ deltaSum, setdeltaSum] = useState<DSum[]>([]);
-    const [ coupon, setCoupon ] = useState<{hist: Coupon[], totalNow: number, last: Coupon|null, next: Coupon| null}[]>([]);
-    const [ data, setData ] = useState<any[]>([]);
-    const [ cash, setCash ] = useState<number[]>([]);
-    const [ bondName, setBondName ] = useState<string[]>([]);
-    let actualPriceBuf: number[] = [];
+    const [ actualPrice, setActualPrice ] = useState<{[key: string]: number}>({});
+    const [ deltaSum, setdeltaSum] = useState<{[key: string]:DSum}>({});
+    const [ coupon, setCoupon ] = useState<{[key: string]:{hist: Coupon[], totalNow: number, totalIfStartNow: number, last: Coupon|null, next: Coupon| null}}>({});
+    const [ data, setData ] = useState<{[key: string]: any}>({});
+    const [ cash, setCash ] = useState<{[key: string]: number}>({});
+    const [ bondName, setBondName ] = useState<{[key: string]: {name: string, offDate: Date}}>({});
+    const [ bondsID, setBondsID ] = useState<BondData[]>(bondsIDBase)
 
-    const askPost = async (url: string, body: any, auth: string = '') => {
-        console.log(body)
+    const refBondsValue = useRef<{
+        aPrice?: {[key: string]: number},
+        coup?: {[key: string]:{hist: Coupon[], totalNow: number, totalIfStartNow: number, last: Coupon|null, next: Coupon| null}}, 
+        dt?: {[key: string]: any},
+        bName?: {[key: string]: {name: string, offDate: Date}}
+    }>();
+
+    const askPost = async (url: string, body: any, bondIDNum: number, auth: string = '') => {
         let resp = await fetch(url, {
             method: 'POST',
             headers: {
@@ -54,26 +64,18 @@ export default function TInv() {
         })
         const result = await resp.json();
         console.log(result)
-        if (result?.lastPrices) {
-            actualPriceBuf.push(Number(result.lastPrices[0].price.units)*10 + 
-                Number(String(result.lastPrices[0].price.nano).slice(0,3))/100)
-            setActualPrice(actualPriceBuf)
-        }
+        if (result?.lastPrices)
+            setActualPrice({...refBondsValue.current?.aPrice, [bondsID[bondIDNum].id]: (Number(result.lastPrices[0].price?.units || 0) + 
+                Number(String(result.lastPrices[0].price?.nano || 0).slice(0,3))/1000)/100 * bondsID[bondIDNum].value})
         else if (result?.events) {
-            let buf = copy(coupon);
-            buf.push(couponCorrectData(result.events));
-            setCoupon(buf)
+            setCoupon({...refBondsValue.current?.coup, [bondsID[bondIDNum].id]: couponCorrectData(result.events, bondIDNum, bondsID)})
         }
         else if (result?.candles) {
-            let buf = copy(data);
-            buf.push(candlesCorrectData(result.candles));
-            setData(buf)
+            setData({...refBondsValue.current?.dt, [bondsID[bondIDNum].id]: candlesCorrectData(result.candles)})
         }
         else if (result?.ttok) return result.ttok
         else if (result?.instrument) {
-            let buf = copy(bondName);
-            buf.push(result.instrument.name);
-            setBondName(buf)
+            setBondName({...refBondsValue.current?.bName, [bondsID[bondIDNum].id]: {name: result.instrument.name, offDate: new Date(result.instrument.maturityDate)}})
         }
         else console.log(result)        
     }
@@ -81,74 +83,145 @@ export default function TInv() {
     useEffect(() => {
         const tokApi: string = '/api/tokenUpd';
         const tokBody = {oldToken: '', atoken: 't'};
-        askPost(tokApi, tokBody).then((res: string)=>{ console.log(res);
-            if (res.length>10) dataUpd('Bearer ' + res, askPost)
+        askPost(tokApi, tokBody, -1).then((res: string)=>{ 
+            if (res.length>10) dataUpd('Bearer ' + res, askPost, 0, bondsID)
         })
         //const tok = 'Bearer '+askPost(tokApi, tokBody);
         
     },[])
 
     useEffect(()=> {
-        let dSumBuf: {positive: boolean, value: string, price: number}[] = [];
-        let cashBuf: number[] = [];
-        console.log(actualPrice)
-        actualPrice.map((item: number, index: number)=>{
-            const delta = Math.floor(bondsID[index].price*bondsID[index].totalSum*item/1000 - bondsID[index].price*bondsID[index].totalSum);
+        refBondsValue.current = {...refBondsValue.current, aPrice: actualPrice};
+        let dSumBuf: {[key: string]:{positive: boolean, value: string, price: number}} = {};
+        let cashBuf: {[key: string]: number} = {};
+        Object.keys(actualPrice).map((item: string, index: number)=>{
+            const delta = Math.floor((actualPrice[item] - bondsID[index].price)*bondsID[index].totalSum);
             const value: string = delta > 0 ? `+${delta}` : `${delta}`;
-            dSumBuf.push({positive: delta > 0, value, price: delta})
-            cashBuf.push(Math.floor(bondsID[index].price*bondsID[index].totalSum*item/1000))
+            dSumBuf[item] = {positive: delta > 0, value, price: delta}
+            cashBuf = {...cashBuf, [item]: Math.floor(bondsID[index].totalSum*actualPrice[item])}
         })
         setdeltaSum(dSumBuf)
         setCash(cashBuf)
     }, [actualPrice])
 
-    const priceToWiew = (price: number) => {
-        return {pos: price>0, value: price > 0 ? `+${price}` : `${price}`}
+    useEffect(() => {
+        refBondsValue.current = {...refBondsValue.current, coup: coupon};
+    }, [coupon])
+
+    useEffect(() => {
+        refBondsValue.current = {...refBondsValue.current, dt: data};
+    }, [data])
+
+    useEffect(() => {
+        refBondsValue.current = {...refBondsValue.current, bName: bondName};
+    }, [bondName])
+
+    const priceToWiew = (price: number | string) => {
+        return {pos: Number(price)>0, value: Number(price) > 0 ? `+${price}` : `${price}`}
+    }
+
+    const formUpdate = (evt: React.FormEvent<HTMLFormElement>, id: number) => {
+        evt.preventDefault();
+        const form = new FormData(evt.currentTarget);
+        const value: number = Number(form.get('value'));
+        const price: number = Number(form.get('price'));
+        let buf: BondData[] = copy(bondsID);
+        buf[id].totalSum = value;
+        buf[id].price = price;
+        setBondsID(buf);
+        setActualPrice(copy(actualPrice))
+        console.log(buf)
     }
 
     return (
-        <Box sx={{display: 'flex', justifyContent: 'center', flexDirection: 'row', flexWrap: 'wrap', maxWidth: '400px'}}>
-            {deltaSum.map((item: DSum, index: number) => { return (
-                <Box sx={{border: '1px solid lightgray', width: '80%', minWidth: '340px', borderRadius: '20px'}} key={bondsID[index].id}>
+        <Box sx={{display: 'flex', justifyContent: 'center', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start'}}>
+            {bondsID.map((item: BondData, index: number) => { return (
+                <Box sx={{
+                    border: '1px solid lightgray', 
+                    width: '80%', minWidth: '340px', 
+                    borderRadius: '20px', 
+                    maxWidth: '400px', 
+                    marginBottom: 1,
+                    '@media (min-width: 821px)': {margin: 2}
+                }} key={bondsID[index].id}>
                     <Box sx={{margin: 1}}>
-                        <Typography align='center' component={'h1'} fontSize={'large'}>{bondName}</Typography>
+                        <Typography align='center' component={'h1'} fontSize={'large'}>{bondName[item.id]?.name}</Typography>
+                        {bondName[item.id]?.offDate&&<Typography align='center'>До {bondName[item.id].offDate.toLocaleDateString()}</Typography>}
                         <Box sx={{marginTop: 1}}>
-                            <Typography>Цена сейчас: {actualPrice}</Typography>
+                            <Typography>Цена сейчас: {(actualPrice[item.id]||0).toFixed(2)}</Typography>
+                            <Typography>Цена покупки: {bondsID[index].price}</Typography>
+                            <Box component="form" onSubmit={(evt)=>{formUpdate(evt, index)}}>
+                                <TextField name="value" defaultValue={bondsID[index].totalSum} label="Количество" type="number"/>
+                                <TextField name="price" defaultValue={bondsID[index].price} label="Цена" type="number"/>
+                                <IconButton type="submit">
+                                    <CachedIcon />
+                                </IconButton>
+                            </Box>
+                            <Typography>Количество: {bondsID[index].totalSum}</Typography>
+                            <Typography>Сумма покупки: {bondsID[index].totalSum * bondsID[index].price}</Typography>
+                            {bondsID[index]?.startDate && <Typography>Дата покупки: {(new Date(bondsID[index].startDate)).toLocaleDateString()}</Typography>}
                             <Box sx={{display: 'inline-flex'}}>
-                                <Typography>Мой кошелек сейчас: {cash}</Typography>
-                                <Typography color={item.positive?'green':'error'}>,  {item.value}</Typography>
+                                <Typography>Мой кошелек сейчас: {cash[item.id]}</Typography>
+                                <Typography color={deltaSum[item.id]?.positive?'green':'error'}>,  {deltaSum[item.id]?.value}</Typography>
+                            </Box>
+                            <Box sx={{display: 'inline-flex'}}>
+                                <Typography>При погашении: {bondsID[index].totalSum * bondsID[index].value}</Typography>
+                                <Typography color={(bondsID[index].price < bondsID[index].value) ? 'green' : 'error'}>
+                                    ,  {(bondsID[index].value - bondsID[index].price) * bondsID[index].totalSum}
+                                </Typography>
                             </Box>
                         </Box>
                         <Box sx={{marginTop: 1}}>
                             <Typography>Купоны:</Typography>
-                            {coupon[index]?.last?<Box>
-                                <Typography>Предыдущий: {coupon[index].last?.price} от {coupon[index].last?.date.toLocaleDateString()}</Typography>
-                                <Typography>Размер: {coupon[index].last?.price*bondsID[index].totalSum} от {coupon[index].last.date.toLocaleDateString()}</Typography>
+                            {(coupon[item.id]?.last && coupon[item.id].last !== null)?<Box>
+                                <Typography>Предыдущий: {coupon[item.id].last?.price} от {coupon[item.id].last?.date.toLocaleDateString()}</Typography>
+                                <Typography>Размер: {((coupon[item.id].last?.price||0)*bondsID[index].totalSum).toFixed(2)}</Typography>
                             </Box>:null}
-                            {coupon[index]?.next?<Box>
-                                <Typography>Предстоящий: {coupon[index].next.price} от {coupon[index].next.date.toLocaleDateString()}</Typography>
-                                <Typography>Размер: {coupon[index].next.price*bondsID[index].totalSum} от {coupon[index].next.date.toLocaleDateString()}</Typography>
-                            </Box>:null}
-                            {coupon !== undefined && coupon !== null && coupon[index]?.hist && 
-                                <CouponTable coupon={coupon[index].hist} bondSum={bondsID[index].totalSum} />}
+                            {(coupon[item.id]?.next && coupon[item.id].next?.price) && <Box>
+                                <Typography>Предстоящий: {coupon[item.id].next?.price} от {coupon[item.id].next?.date.toLocaleDateString()}</Typography>
+                                <Typography>Размер: {Math.floor((coupon[item.id].next?.price || 0) * bondsID[index].totalSum)} ({((coupon[item.id].next?.price || 0)*0.87 * bondsID[index].totalSum).toFixed(2)})</Typography>
+                            </Box>}
+                            {coupon && coupon[item.id]?.hist && 
+                                <CouponTable coupon={coupon[item.id].hist} bondSum={bondsID[index].totalSum} />}
                         </Box>
                         <Box sx={{marginTop: 1}}>
                             <Typography>Итого </Typography>
-                            <Typography>Купонов: {(coupon[index]?.totalNow||0) * bondsID[index].totalSum}</Typography>
+                            <Typography>Купонов: {((coupon[item.id]?.totalNow||0) * bondsID[index].totalSum).toFixed(2)}</Typography>
                             <Box sx={{display: 'inline-flex'}}>
-                                <Typography>Кошелек: {((coupon[index]?.totalNow||0) * bondsID[index].totalSum) + cash[index]}</Typography>
+                                <Typography>Кошелек: {(((coupon[item.id]?.totalNow||0) * bondsID[index].totalSum) + (cash[item.id]||0)).toFixed(2)}</Typography>
                                 <Typography color={priceToWiew(
-                                    (coupon[index]?.totalNow||0) * bondsID[index].totalSum + deltaSum[index].price).pos?
+                                    (coupon[item.id]?.totalNow||0) * bondsID[index].totalSum + (deltaSum[item.id]?.price||0)).pos?
                                     'green':
                                     'error'}>
-                                        ,  {priceToWiew((coupon[index]?.totalNow||0) * bondsID[index].totalSum + deltaSum[index].price).value}
+                                        ,  {priceToWiew(((coupon[item.id]?.totalNow||0) * bondsID[index].totalSum + (deltaSum[item.id]?.price||0)).toFixed(2)).value}
+                                </Typography>
+                            </Box>
+                        </Box>
+                        <Box sx={{marginTop: 1}}>
+                            <Typography>Если зайти сейчас</Typography>
+                            <Typography>Купонов: {((coupon[item.id]?.totalIfStartNow||0) * bondsID[index].totalSum).toFixed(2)}</Typography>
+                            <Box sx={{display: 'inline-flex'}}>
+                                <Typography>Кошелек: {(((coupon[item.id]?.totalIfStartNow||0) * bondsID[index].totalSum) + (cash[item.id]||0)).toFixed(2)}</Typography>
+                                <Typography color={priceToWiew(
+                                    (coupon[item.id]?.totalIfStartNow||0) * bondsID[index].totalSum + (deltaSum[item.id]?.price||0)).pos?
+                                    'green':'error'}>
+                                        ,  {priceToWiew(((coupon[item.id]?.totalIfStartNow||0) * bondsID[index].totalSum + (deltaSum[item.id]?.price||0)).toFixed(2)).value}
+                                </Typography>
+                            </Box>                            
+                            <Box sx={{display: 'inline-flex'}}>
+                                <Typography>На выходе: {(((coupon[item.id]?.totalIfStartNow||0) + bondsID[index].value) * bondsID[index].totalSum).toFixed(2)}</Typography>
+                                <Typography color={priceToWiew(
+                                    ((coupon[item.id]?.totalIfStartNow||0) + bondsID[index].value - bondsID[index].price) * bondsID[index].totalSum).pos?
+                                    'green':'error'}>
+                                        ,  {priceToWiew(
+                                    (((coupon[item.id]?.totalIfStartNow||0) + bondsID[index].value - bondsID[index].price) * bondsID[index].totalSum).toFixed(2)).value}
                                 </Typography>
                             </Box>
                         </Box>
                     </Box>
                     <Box sx={{marginBottom: 2}}>
                         <Box sx={{maxWidth: '700px', margin: 0, padding: 0}}>
-                            {data[index] && <Line data={data[index]} />}
+                            {data[item.id] && <Line data={data[item.id]} />}
                         </Box>
                     </Box>
                 </Box>

@@ -53,4 +53,5 @@ export interface UbyURL {
     url: string
 }
 
-export interface Coupon {price: number, date: Date, done: boolean}
+export interface Coupon {price: number, date: Date, done: boolean, check: boolean}
+export interface BondData {id: string, totalSum: number, price: number, startDate?: number, endDate?: number, value: number}
