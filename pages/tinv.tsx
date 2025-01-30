@@ -159,7 +159,7 @@ export default function TInv() {
                             </Box>
                             <Typography>Количество: {bondsID[index].totalSum}</Typography>
                             <Typography>Сумма покупки: {bondsID[index].totalSum * bondsID[index].price}</Typography>
-                            {bondsID[index]?.startDate && <Typography>Дата покупки: {(new Date(bondsID[index].startDate)).toLocaleDateString()}</Typography>}
+                            {bondsID[index]?.startDate && <Typography>Дата покупки: {(new Date(bondsID[index]?.startDate || 0)).toLocaleDateString()}</Typography>}
                             <Box sx={{display: 'inline-flex'}}>
                                 <Typography>Мой кошелек сейчас: {cash[item.id]}</Typography>
                                 <Typography color={deltaSum[item.id]?.positive?'green':'error'}>,  {deltaSum[item.id]?.value}</Typography>
