@@ -28,7 +28,7 @@ export const couponCorrectData = (data: CouponData[], id: number, bondsID: BondD
         }
         if ((last === null && (Number(date) < nowDate)) || (
             last && (Number(last.date) < nowDate) && (Number(date) < nowDate)
-        )) last = {price, date, done: true, check: Boolean(bondsID[id]?.startDate && bondsID[id].startDate < Number(date))}
+        )) last = {price, date, done: true, check: Boolean(bondsID[id]?.startDate !== undefined && bondsID[id].startDate < Number(date))}
         if ((next === null && (Number(date) >= nowDate)) || 
             (next && (Number(next.date) > nowDate) && (Number(date) > nowDate))
         ) next = {price, date, done: false, check: false}
