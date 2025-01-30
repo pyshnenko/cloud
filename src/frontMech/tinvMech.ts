@@ -21,7 +21,7 @@ export const couponCorrectData = (data: CouponData[], id: number, bondsID: BondD
         let price: number = Number((Number(`${String(item.payOneBond.units)}.${String(item.payOneBond.nano)}`)).toFixed(4));
         let date: Date = new Date(item.couponDate);
         if (Number(date) < nowDate) {
-            if ((bondsID[id]?.startDate) && (Number(date) > bondsID[id].startDate)) totalNow += price;
+            if ((bondsID[id]?.startDate) && (Number(date) > bondsID[id]?.startDate)) totalNow += price;
         }
         if (Number(date) >= nowDate) {
             totalIfStartNow += price
