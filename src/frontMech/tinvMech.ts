@@ -36,7 +36,7 @@ export const couponCorrectData = (data: CouponData[], id: number, bondsID: BondD
             price: price,
             date: date,
             done: (Number(date) < nowDate),
-            check: Boolean(bondsID[id]?.startDate!==undefined && bondsID[id].startDate < Number(date))
+            check: Boolean(bondsID[id]?.startDate!==undefined && ((bondsID[id].startDate||0) < Number(date)))
         }
     })
     return {hist: extData, totalNow, last, next, totalIfStartNow}
