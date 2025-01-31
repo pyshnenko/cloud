@@ -3,7 +3,7 @@ import { BondData } from "../types/api/types";
 
 export const bondsIDBase: BondData[] = [
     {id: 'TCS00A10AA02', totalSum: 4000, price: 1000, value: 1000},
-    {id: 'TCS00A104ZC9', totalSum: 1000, price: 1000, value: 1000},
+    {id: 'TCS00A104ZC9', totalSum: 1000, price: 1000, value: 1000, startDate: 1705708800000},
     {id: 'TCS00A10ARS4', totalSum: 2994, price: 1000, startDate: 1738195200000, value: 1000},
     {id: 'TCS00A104YT6', totalSum: Math.floor(1500000/931), price: 931, value: 1000},
     {id: 'TCS00A105518', totalSum: Math.floor(1500000/735), price: 723, value: 750}

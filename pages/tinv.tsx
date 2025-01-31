@@ -44,7 +44,8 @@ export default function TInv() {
     const [ data, setData ] = useState<{[key: string]: any}>({});
     const [ cash, setCash ] = useState<{[key: string]: number}>({});
     const [ bondName, setBondName ] = useState<{[key: string]: {name: string, offDate: Date}}>({});
-    const [ bondsID, setBondsID ] = useState<BondData[]>(bondsIDBase)
+    const [ bondsID, setBondsID ] = useState<BondData[]>(bondsIDBase);
+    const [ reinvCouponSum, setReinvCouponSum ] = useState<{[key: string]: {priceSum: number, sum: number}}>({});
 
     const refBondsValue = useRef<{
         aPrice?: {[key: string]: number},
@@ -150,9 +151,9 @@ export default function TInv() {
                         <Box sx={{marginTop: 1}}>
                             <Typography>Цена сейчас: {(actualPrice[item.id]||0).toFixed(2)}</Typography>
                             <Typography>Цена покупки: {bondsID[index].price}</Typography>
-                            <Box component="form" onSubmit={(evt)=>{formUpdate(evt, index)}}>
-                                <TextField name="value" defaultValue={bondsID[index].totalSum} label="Количество" type="number"/>
-                                <TextField name="price" defaultValue={bondsID[index].price} label="Цена" type="number"/>
+                            <Box sx={{display: 'flex'}} component="form" onSubmit={(evt)=>{formUpdate(evt, index)}}>
+                                <TextField sx={{margin: 1}} name="value" defaultValue={bondsID[index].totalSum} label="Количество" type="number"/>
+                                <TextField sx={{margin: 1}} name="price" defaultValue={bondsID[index].price} label="Цена" type="number"/>
                                 <IconButton type="submit">
                                     <CachedIcon />
                                 </IconButton>
@@ -182,7 +183,13 @@ export default function TInv() {
                                 <Typography>Размер: {Math.floor((coupon[item.id].next?.price || 0) * bondsID[index].totalSum)} ({((coupon[item.id].next?.price || 0)*0.87 * bondsID[index].totalSum).toFixed(2)})</Typography>
                             </Box>}
                             {coupon && coupon[item.id]?.hist && 
-                                <CouponTable coupon={coupon[item.id].hist} bondSum={bondsID[index].totalSum} />}
+                                <CouponTable 
+                                    coupon={coupon[item.id].hist} 
+                                    bondID={item.id} 
+                                    bondSum={bondsID[index].totalSum} 
+                                    bondPrice={bondsID[index].value} 
+                                    reinvSum={reinvCouponSum}
+                                    setReinvSum={setReinvCouponSum} />}
                         </Box>
                         <Box sx={{marginTop: 1}}>
                             <Typography>Итого </Typography>
@@ -197,7 +204,7 @@ export default function TInv() {
                                 </Typography>
                             </Box>
                         </Box>
-                        <Box sx={{marginTop: 1}}>
+                        {(!bondsID[index]?.startDate) && <><Box sx={{marginTop: 1}}>
                             <Typography>Если зайти сейчас</Typography>
                             <Typography>Купонов: {((coupon[item.id]?.totalIfStartNow||0) * bondsID[index].totalSum).toFixed(2)}</Typography>
                             <Box sx={{display: 'inline-flex'}}>
@@ -207,16 +214,40 @@ export default function TInv() {
                                     'green':'error'}>
                                         ,  {priceToWiew(((coupon[item.id]?.totalIfStartNow||0) * bondsID[index].totalSum + (deltaSum[item.id]?.price||0)).toFixed(2)).value}
                                 </Typography>
-                            </Box>                            
+                            </Box>
+                        </Box>
+                        <Box sx={{marginTop: 1}}>
+                            <Typography>Если зайти сейчас с реинвестицией</Typography>
+                            <Typography>Купонов: {(reinvCouponSum[item.id]?.sum||0).toFixed(2)}</Typography>
+                            <Typography>Купонов: {(reinvCouponSum[item.id]?.priceSum||0).toFixed(2)}</Typography>
                             <Box sx={{display: 'inline-flex'}}>
-                                <Typography>На выходе: {(((coupon[item.id]?.totalIfStartNow||0) + bondsID[index].value) * bondsID[index].totalSum).toFixed(2)}</Typography>
+                                <Typography>Кошелек: {((reinvCouponSum[item.id]?.priceSum||0) + (cash[item.id]||0)).toFixed(2)}</Typography>
                                 <Typography color={priceToWiew(
-                                    ((coupon[item.id]?.totalIfStartNow||0) + bondsID[index].value - bondsID[index].price) * bondsID[index].totalSum).pos?
+                                    (reinvCouponSum[item.id]?.priceSum||0) + (deltaSum[item.id]?.price||0)).pos?
                                     'green':'error'}>
-                                        ,  {priceToWiew(
-                                    (((coupon[item.id]?.totalIfStartNow||0) + bondsID[index].value - bondsID[index].price) * bondsID[index].totalSum).toFixed(2)).value}
+                                        ,  {priceToWiew(((reinvCouponSum[item.id]?.priceSum||0) + (deltaSum[item.id]?.price||0)).toFixed(2)).value}
                                 </Typography>
                             </Box>
+                        </Box></>}
+                                                    
+                        <Box sx={{display: 'inline-flex'}}>
+                            <Typography>На выходе: {(((coupon[item.id]?.totalIfStartNow||0) + bondsID[index].value) * bondsID[index].totalSum).toFixed(2)}</Typography>
+                            <Typography color={priceToWiew(
+                                ((coupon[item.id]?.totalIfStartNow||0) + bondsID[index].value - bondsID[index].price) * bondsID[index].totalSum).pos?
+                                'green':'error'}>
+                                    ,  {priceToWiew(
+                                (((coupon[item.id]?.totalIfStartNow||0) + bondsID[index].value - bondsID[index].price) * bondsID[index].totalSum).toFixed(2)).value}
+                            </Typography>
+                        </Box>           
+                        <Typography>На выходе с реинвестицией: </Typography>                 
+                        <Box sx={{display: 'inline-flex'}}>
+                            <Typography>{((reinvCouponSum[item.id]?.priceSum||0) + bondsID[index].value * (bondsID[index].totalSum || 0)).toFixed(2)}</Typography>
+                            <Typography color={priceToWiew(
+                                (reinvCouponSum[item.id]?.priceSum||0) + (bondsID[index].value - bondsID[index].price) * (bondsID[index].totalSum || 0)).pos?
+                                'green':'error'}>
+                                    ,  {priceToWiew(
+                                ((reinvCouponSum[item.id]?.priceSum||0) + (bondsID[index].value - bondsID[index].price) * (bondsID[index].totalSum || 0)).toFixed(2)).value}
+                            </Typography>
                         </Box>
                     </Box>
                     <Box sx={{marginBottom: 2}}>

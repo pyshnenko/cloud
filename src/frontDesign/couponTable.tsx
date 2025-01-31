@@ -17,7 +17,39 @@ import { Coupon } from '../types/api/types';
 import CheckIcon from '@mui/icons-material/Check';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 
-export default function CouponTable({coupon, bondSum}: {coupon: Coupon[], bondSum: number}) {
+const tableSX = {margin: 0, padding: 0};
+
+interface CTable {
+    coupon: Coupon[], 
+    bondSum: number, 
+    bondPrice: number, 
+    bondID: string,
+    reinvSum: {[key: string]: {priceSum: number, sum: number}}, 
+    setReinvSum: (v: {[key: string]: {priceSum: number, sum: number}})=>void
+};
+
+export default function CouponTable({coupon, bondSum, bondPrice, bondID, reinvSum, setReinvSum}: CTable) {
+
+    const [ reinvCoupon, setReinvCoupon ] = useState<number[]>([])
+
+    useEffect(()=> {
+        let buf: number[] = [];
+        buf.push(coupon[coupon.length-1].price*bondSum);
+        let bufCouponReSum: number = bondSum;
+        let reSummary: number = coupon[coupon.length-1].check ? buf[0] : 0;
+        for (let i = coupon.length-2; i >= 0; i--) {
+            console.log(bufCouponReSum)
+            const bufReVal: number = coupon[i].price * bufCouponReSum;
+            buf.unshift(bufReVal);
+            if (((coupon[i].check) || !coupon[i].done)) {
+                reSummary += bufReVal
+                bufCouponReSum += Math.floor(coupon[i].price * bufCouponReSum / bondPrice);
+            }
+        }
+        setReinvCoupon(buf);
+        setReinvSum({...reinvSum, [bondID]: {priceSum: reSummary, sum: bufCouponReSum}})//{priceSum: number, sum: number}
+    }, [coupon])
+
     return (<Box>
         <Accordion sx={{margin: 0, padding: 0}}>
             <AccordionSummary
@@ -27,21 +59,23 @@ export default function CouponTable({coupon, bondSum}: {coupon: Coupon[], bondSu
             </AccordionSummary>
             <AccordionDetails  sx={{margin: 0, padding: 0}}>
                 <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 300 }} aria-label="bond table">
+                    <Table sx={{ minWidth: 300 }} aria-label="bond table" size="small">
                         <TableHead>
-                            <TableCell>Дата</TableCell>
-                            <TableCell>Размер</TableCell>
-                            <TableCell>Сумма</TableCell>
-                            <TableCell></TableCell>
+                            <TableCell sx={tableSX}>Дата</TableCell>
+                            <TableCell sx={tableSX}>Размер</TableCell>
+                            <TableCell sx={tableSX}>Сумма</TableCell>
+                            <TableCell sx={tableSX}>Реинв</TableCell>
+                            <TableCell sx={tableSX}></TableCell>
                         </TableHead>
                         <TableBody>
-                            {coupon.map((bond: Coupon)=>{
+                            {coupon.map((bond: Coupon, index: number)=>{
                                 return (
                                     <TableRow key={bond.date.toLocaleDateString()}>
-                                        <TableCell>{bond.date.toLocaleDateString()}</TableCell>
-                                        <TableCell>{bond.price}</TableCell>
-                                        <TableCell>{(bond.price*bondSum).toFixed(2)}</TableCell>
-                                        <TableCell>{bond.done ? (bond.check ? <DoneAllIcon sx={{color: 'green'}} /> :<CheckIcon sx={{color: 'orange'}} />) : null}</TableCell>
+                                        <TableCell sx={tableSX}>{bond.date.toLocaleDateString()}</TableCell>
+                                        <TableCell sx={tableSX}>{bond.price}</TableCell>
+                                        <TableCell sx={tableSX}>{(bond.price*bondSum).toFixed(2)}</TableCell>
+                                        <TableCell sx={tableSX}>{(reinvCoupon[index] || 0).toFixed(2)}</TableCell>
+                                        <TableCell sx={tableSX}>{bond.done ? (bond.check ? <DoneAllIcon sx={{color: 'green'}} /> :<CheckIcon sx={{color: 'orange'}} />) : null}</TableCell>
                                     </TableRow>
                                 )
                             })}
