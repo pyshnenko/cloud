@@ -44,11 +44,11 @@ export const couponCorrectData = (data: CouponData[], id: number, bondsID: BondD
 
 interface CandlesData {time: string, close: {units: string|number, nano: string|number}}
 
-export const candlesCorrectData = (exdata: CandlesData[]) => {
+export const candlesCorrectData = (exdata: CandlesData[], value: number) => {
     let extData:{price: number, date: Date}[] = exdata.map((item: CandlesData)=>{
         return {
-            price: Number(item.close.units)*10 + 
-                Number(String(item.close.nano).slice(0,3))/100,
+            price: (Number(item.close.units || 0) + 
+                Number('0.'+String(item.close.nano).slice(0,3)))/100*value,
             date: new Date(item.time)
         }
     })

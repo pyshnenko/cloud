@@ -16,39 +16,40 @@ import Paper from '@mui/material/Paper';
 import { Coupon } from '../types/api/types';
 import CheckIcon from '@mui/icons-material/Check';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
+import { BondData } from '../types/api/types';
 
 const tableSX = {margin: 0, padding: 0};
 
 interface CTable {
-    coupon: Coupon[], 
+    coupon: {hist: Coupon[], totalNow: number, totalIfStartNow: number, last: Coupon|null, next: Coupon| null}, 
     bondSum: number, 
     bondPrice: number, 
     bondID: string,
+    bondsID: BondData[],
     reinvSum: {[key: string]: {priceSum: number, sum: number}}, 
     setReinvSum: (v: {[key: string]: {priceSum: number, sum: number}})=>void
 };
 
-export default function CouponTable({coupon, bondSum, bondPrice, bondID, reinvSum, setReinvSum}: CTable) {
+export default function CouponTable({coupon, bondSum, bondPrice, bondID, bondsID, reinvSum, setReinvSum}: CTable) {
 
     const [ reinvCoupon, setReinvCoupon ] = useState<number[]>([])
 
     useEffect(()=> {
         let buf: number[] = [];
-        buf.push(coupon[coupon.length-1].price*bondSum);
+        buf.push(coupon.hist[coupon.hist.length-1].price*bondSum);
         let bufCouponReSum: number = bondSum;
-        let reSummary: number = coupon[coupon.length-1].check ? buf[0] : 0;
-        for (let i = coupon.length-2; i >= 0; i--) {
-            console.log(bufCouponReSum)
-            const bufReVal: number = coupon[i].price * bufCouponReSum;
+        let reSummary: number = coupon.hist[coupon.hist.length-1].check ? buf[0] : 0;
+        for (let i = coupon.hist.length-2; i >= 0; i--) {
+            const bufReVal: number = coupon.hist[i].price * bufCouponReSum;
             buf.unshift(bufReVal);
-            if (((coupon[i].check) || !coupon[i].done)) {
+            if (((coupon.hist[i].check) || !coupon.hist[i].done)) {
                 reSummary += bufReVal
-                bufCouponReSum += Math.floor(coupon[i].price * bufCouponReSum / bondPrice);
+                bufCouponReSum += Math.floor(coupon.hist[i].price * bufCouponReSum / bondPrice);
             }
         }
         setReinvCoupon(buf);
         setReinvSum({...reinvSum, [bondID]: {priceSum: reSummary, sum: bufCouponReSum}})//{priceSum: number, sum: number}
-    }, [coupon])
+    }, [coupon, bondsID])
 
     return (<Box>
         <Accordion sx={{margin: 0, padding: 0}}>
@@ -68,7 +69,7 @@ export default function CouponTable({coupon, bondSum, bondPrice, bondID, reinvSu
                             <TableCell sx={tableSX}></TableCell>
                         </TableHead>
                         <TableBody>
-                            {coupon.map((bond: Coupon, index: number)=>{
+                            {coupon.hist.map((bond: Coupon, index: number)=>{
                                 return (
                                     <TableRow key={bond.date.toLocaleDateString()}>
                                         <TableCell sx={tableSX}>{bond.date.toLocaleDateString()}</TableCell>

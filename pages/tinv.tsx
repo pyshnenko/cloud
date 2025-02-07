@@ -72,7 +72,7 @@ export default function TInv() {
             setCoupon({...refBondsValue.current?.coup, [bondsID[bondIDNum].id]: couponCorrectData(result.events, bondIDNum, bondsID)})
         }
         else if (result?.candles) {
-            setData({...refBondsValue.current?.dt, [bondsID[bondIDNum].id]: candlesCorrectData(result.candles)})
+            setData({...refBondsValue.current?.dt, [bondsID[bondIDNum].id]: candlesCorrectData(result.candles, bondsID[bondIDNum].value)})
         }
         else if (result?.ttok) return result.ttok
         else if (result?.instrument) {
@@ -184,8 +184,9 @@ export default function TInv() {
                             </Box>}
                             {coupon && coupon[item.id]?.hist && 
                                 <CouponTable 
-                                    coupon={coupon[item.id].hist} 
+                                    coupon={coupon[item.id]} 
                                     bondID={item.id} 
+                                    bondsID={bondsID}
                                     bondSum={bondsID[index].totalSum} 
                                     bondPrice={bondsID[index].value} 
                                     reinvSum={reinvCouponSum}
