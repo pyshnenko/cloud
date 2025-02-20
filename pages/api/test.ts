@@ -18,5 +18,6 @@ export default async function handler(req: NextRequest, res: NextApiResponse) {
     }
     else console.log('no cookies');
     //axios.post(socketUrl, {text: `sim800l connected\r\n${req.query.a}\r\nsms: ${req.query.sms}`})
+    console.log('res')
     res.status(200).json({res: new Date().toLocaleString(), cookies: ccc});
 }
