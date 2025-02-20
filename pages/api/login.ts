@@ -1,3 +1,5 @@
+import type {NextApiRequest, NextApiResponse} from 'next';
+import cookie from "cookie";
 const mongo = require('./../../src/mech/mongo');
 import  {loginType} from './../../src/types/api/types';
 const fs = require('fs');
@@ -30,7 +32,7 @@ log4js.configure({
   });
 const logger = log4js.getLogger("cApi");
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log('hello')
     console.log(req.method);
     await NextCors(req, res, {
@@ -68,6 +70,7 @@ export default async function handler(req: any, res: any) {
                 }
                 else dat[0].token=token;
                 axios.post(socketUrl, {text: `${buf.login} login on cloud successfull`})
+                res.setHeader('Set-Cookie', cookie.serialize('token', token))
                 res.status(200).json(dat[0]);
             }
             else {

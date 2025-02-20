@@ -1,4 +1,6 @@
 require('dotenv').config();
+import type {NextApiRequest, NextApiResponse} from 'next';
+import cookie from "cookie";
 const mongo = require('./../../src/mech/mongo');
 const fs = require('fs');
 let jwt = require('jsonwebtoken');
@@ -18,7 +20,7 @@ log4js.configure({
   });
 const logger = log4js.getLogger("cApi");
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log(req.method);
     await NextCors(req, res, {
         methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
@@ -37,7 +39,7 @@ export default async function handler(req: any, res: any) {
         //console.log('buf');
         //console.log(buf);
         //console.log(req.headers?.authorization.slice(7));
-        const oldToken: string = req.headers?.authorization.slice(7) || buf?.oldToken || '';
+        const oldToken: string = req.headers?.authorization?.slice(7) || buf?.oldToken || '';
         //console.log(oldToken);
         if ((oldToken !== '') || (buf?.atoken && buf.atoken!=='' && buf.atoken!=='t')) {    
             //console.log('fi');
@@ -52,6 +54,7 @@ export default async function handler(req: any, res: any) {
                 dat[0].token=nTok;
                 dat[0].atoken = dat[0].password.slice(8);
                 delete(dat[0].password);
+                res.setHeader('Set-Cookie', cookie.serialize('token', nTok))
                 res.status(200).json(dat[0]);
             }
             else res.status(401).json({res: false});

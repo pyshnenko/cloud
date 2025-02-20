@@ -1,3 +1,5 @@
+import type {NextApiRequest, NextApiResponse} from 'next';
+import cookie from "cookie";
 const mongo = require('./../../src/mech/mongo');
 const mailSend = require('./../../src/mech/mail');
 import  {RegisterReqData, RegisterReqSucc} from './../../src/types/api/types';
@@ -20,7 +22,7 @@ log4js.configure({
 const logger = log4js.getLogger("cApi");
 const mails = log4js.getLogger('mailer');
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log('hello')
     console.log(req.method);
     await NextCors(req, res, {
@@ -47,6 +49,7 @@ export default async function handler(req: any, res: any) {
             let token = await jwt.sign(saveData, atoken.slice(8));//String(process.env.SALT_CRYPT));
             if (!(req.headers?.make==='example')) mongoS.incertOne({...saveData, token, password: atoken});
             const reqSucc: RegisterReqSucc = { atoken: atoken.slice(8), token, first_name: buf.first_name, last_name: buf.last_name, id, login: buf.login, email: buf.email, valid: false };
+            res.setHeader('Set-Cookie', cookie.serialize('token', token))
             res.status(200).json(reqSucc)
             console.log('MAIL');
             mail.sendMail(buf.email, buf.login);
