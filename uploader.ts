@@ -114,6 +114,7 @@ app.get("/data*", async function (req: any, res: any) {
         console.log(filePath);
         fs.readFile(filePath, function (error: any, data: any) {
         if (error) {
+            console.log(error)
             res.statusCode = 404;
             res.end("Resourse not found!");
         }
