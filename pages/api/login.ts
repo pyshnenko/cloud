@@ -70,7 +70,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
                 else dat[0].token=token;
                 axios.post(socketUrl, {text: `${buf.login} login on cloud successfull`})
-                res.setHeader('Set-Cookie', cookie.serialize('token', token))
+                res.setHeader('Set-Cookie', cookie.serialize('token', token, {sameSite: 'none'}))
                 res.status(200).json(dat[0]);
             }
             else {

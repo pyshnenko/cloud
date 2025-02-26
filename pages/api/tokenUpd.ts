@@ -54,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 dat[0].token=nTok;
                 dat[0].atoken = dat[0].password.slice(8);
                 delete(dat[0].password);
-                res.setHeader('Set-Cookie', cookie.serialize('token', nTok))
+                res.setHeader('Set-Cookie', cookie.serialize('token', nTok, {sameSite: 'none'}))
                 res.status(200).json(dat[0]);
             }
             else res.status(401).json({res: false});
