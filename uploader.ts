@@ -111,6 +111,7 @@ app.get("/data*", async function (req: any, res: any) {
     console.log(access);
     if (access) {
         filePath = path.normalize(dir+'/data/' + login + '/' + urlPath);
+        console.log(filePath);
         fs.readFile(filePath, function (error: any, data: any) {
         if (error) {
             res.statusCode = 404;
