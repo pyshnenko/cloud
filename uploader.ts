@@ -96,7 +96,7 @@ app.get("/oneTime*", async function (req: any, res: any) {
 app.get("/data*", async function (req: any, res: any) {
     console.log('data');
     let filePath = '';
-    let urlPath = decodeURI(req.url.substr(9)) || '/';
+    let urlPath = decodeURI(req.url.split('?')[0].substr(9)) || '/';// decodeURI(req.url.substr(9)) || '/';
     let access: boolean = false, login: string = '';
     const token: string = req?.cookies?.token || req?.query?.t || null;
     console.log(token)
