@@ -95,19 +95,21 @@ app.get("/oneTime*", async function (req: any, res: any) {
 
 app.get("/data*", async function (req: any, res: any) {
     console.log('data');
-    var filePath = '';
+    let filePath = '';
+    let urlPath = decodeURI(req.url.substr(9)) || '/';
     let access: boolean = false, login: string = '';
     const token: string = req?.cookies?.token || req?.query?.t || null;
     console.log(token)
+    console.log(urlPath)
     if (token) {
         let dat: {login: string}[] = (await mongoS.find({ token }, true)) as {login: string}[];
         if (dat.length) {access = true; login = dat[0].login}
         console.log(dat);
     }
-    else access=access_check(login + '/' + decodeURI(req.url.substr(9)))
+    else access=access_check(login + '/' + urlPath)
     console.log(access);
     if (access) {
-        filePath = path.normalize(dir+'/data/' + login + '/' + decodeURI(req.url.substr(6)));
+        filePath = path.normalize(dir+'/data/' + login + '/' + urlPath);
         fs.readFile(filePath, function (error: any, data: any) {
         if (error) {
             res.statusCode = 404;
