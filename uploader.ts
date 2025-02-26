@@ -96,11 +96,12 @@ app.get("/oneTime*", async function (req: any, res: any) {
 app.get("/data*", async function (req: any, res: any) {
     console.log('data');
     var filePath = '';
-    let access: boolean = false, login: string = '';    
-    if (req?.cookies && req.cookies?.token !== '') {
-        let dat: {login: string}[] = (await mongoS.find({ token: req.cookies.token }, true)) as {login: string}[];
+    let access: boolean = false, login: string = '';
+    const token: string = req?.cookies?.token || req?.query?.t || null;
+    console.log(token)
+    if (token) {
+        let dat: {login: string}[] = (await mongoS.find({ token }, true)) as {login: string}[];
         if (dat.length) {access = true; login = dat[0].login}
-        console.log(req.cookies.token);
         console.log(dat);
     }
     else access=access_check(login + '/' + decodeURI(req.url.substr(9)))
