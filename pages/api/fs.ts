@@ -1,4 +1,6 @@
 require('dotenv').config();
+import type {NextApiRequest, NextApiResponse} from 'next';
+import cookie from "cookie";
 const fs = require('fs');
 const archiver = require('archiver');
 const path = require('path');
@@ -23,7 +25,7 @@ log4js.configure({
   });
 const logger = log4js.getLogger("cApi");
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await NextCors(req, res, {
         methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
         origin: '*',
@@ -32,7 +34,8 @@ export default async function handler(req: any, res: any) {
     if (req.method==='POST'){
         logger.info(req.body);
         const buf: FSType = body_data(req.body);
-        const oldToken: string = req.headers.hasOwnProperty('authorization')? (req.headers?.authorization.slice(7) || buf?.token || ''): buf?.token || '';
+        const oldToken: string = req.headers.hasOwnProperty('authorization')? (
+            (req.headers?.authorization ? req.headers?.authorization.slice(7):null) || buf?.token || ''): buf?.token || '';
         let dat = await mongoS.find({token: oldToken}, true);
         let access: {result: boolean, login?: string} = (dat.length===0||buf?.incognit)?access_check(buf.location, buf?.name||'/', true) as {result: boolean, login?: string}:{result: false};
         if (access.result===true) dat[0] = {login: access.login};
@@ -45,6 +48,7 @@ export default async function handler(req: any, res: any) {
                 try {
                     logger.debug(`folder for ${dat[0].login} created`)
                     await fs.mkdirSync(path.join(location, buf.name));
+                    res.setHeader('Set-Cookie', cookie.serialize('token', dat[0].token))
                     res.status(200).json([]);
                 }
                 catch (e: any) {
@@ -62,6 +66,7 @@ export default async function handler(req: any, res: any) {
                     try {
                         fs.rmdirSync(path.join(location, buf.name), {recursive:true});
                         logger.info(`Directory ${location}/${buf.name} deleted by ${dat[0].login}`);
+                        res.setHeader('Set-Cookie', cookie.serialize('token', dat[0].token))
                         res.status(200).json({});
                     }
                     catch (e: any) {
@@ -74,6 +79,7 @@ export default async function handler(req: any, res: any) {
                     try {
                         fs.unlinkSync(path.join(location, buf.name));
                         logger.info(`File ${location}/${buf.name} deleted by ${dat[0].login}`);
+                        res.setHeader('Set-Cookie', cookie.serialize('token', dat[0].token))
                         res.status(200).json({});
                     }
                     catch (e: any) {
@@ -92,12 +98,14 @@ export default async function handler(req: any, res: any) {
                         files: fs.readdirSync(location, { withFileTypes: true }).filter((d: any) => !d.isDirectory()).map((d: any)=> d.name),
                     }
                     if (userFiles.files.includes('%%%ssystemData.json')) userFiles.files.splice(userFiles.files.indexOf('%%%ssystemData.json'), 1)
+                    res.setHeader('Set-Cookie', cookie.serialize('token', dat[0].token))
                     res.status(200).json(userFiles);
                 }
                 else {
                     try {
                         logger.debug(`folder for ${dat[0].login} created`)
                         await fs.mkdirSync(path.join(dir, 'data', dat[0].login));
+                        res.setHeader('Set-Cookie', cookie.serialize('token', dat[0].token))
                         res.status(200).json([]);
                     }
                     catch (e: any) {
@@ -117,6 +125,7 @@ export default async function handler(req: any, res: any) {
                     }
                     openData[buf.name] = true;
                     fs.writeFileSync(path.join(location, '%%%ssystemData.json'), JSON.stringify(openData));
+                    res.setHeader('Set-Cookie', cookie.serialize('token', dat[0].token))
                     res.status(200).json({
                         tok: jwt.sign({addr: path.normalize(path.join(dat[0].login, path.normalize(buf.location))),//'/'+dat[0].login+'/'+location), 
                             type: (directs.includes(buf.name)||buf.name==='/')?true: false,
@@ -143,6 +152,7 @@ export default async function handler(req: any, res: any) {
                 });
                 makeZip(archive, location, dat[0].login, location);
                 logger.debug('endMakeZip');
+                res.setHeader('Set-Cookie', cookie.serialize('token', dat[0].token))
                 res.status(200).json({addr: 'oneTime/' + buf.location + '/' + 'Archive.zip' })
                 //res.setHeader('Content-disposition', 'attachment; filename=archive.zip');
                 //res.setHeader('Content-type', 'application/zip');
