@@ -97,7 +97,7 @@ app.get("/data*", async function (req: any, res: any) {
     console.log('data');
     let filePath = '';
     console.log(req.url.split('?')[0])
-    let urlPath = decodeURI(req.url.split('?')[0].substr(7)) || '/';// decodeURI(req.url.substr(9)) || '/';
+    let urlPath = decodeURI(req.url.split('?')[0].substr(5)) || '/';// decodeURI(req.url.substr(9)) || '/';
     let access: boolean = false, login: string = '';
     const token: string = req?.cookies?.token || req?.query?.t || null;
     console.log(token)
