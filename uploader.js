@@ -157,36 +157,42 @@ app.get("/oneTime*", function (req, res) {
 });
 app.get("/data*", function (req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var filePath, access, login, dat;
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var filePath, urlPath, access, login, token, dat;
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     console.log('data');
                     filePath = '';
+                    console.log(req.url.split('?')[0]);
+                    urlPath = decodeURI(req.url.split('?')[0].substr(5)) || '/';
                     access = false, login = '';
-                    if (!((req === null || req === void 0 ? void 0 : req.cookies) && ((_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token) !== '')) return [3 /*break*/, 2];
-                    return [4 /*yield*/, mongoS.find({ token: req.cookies.token }, true)];
+                    token = ((_a = req === null || req === void 0 ? void 0 : req.cookies) === null || _a === void 0 ? void 0 : _a.token) || ((_b = req === null || req === void 0 ? void 0 : req.query) === null || _b === void 0 ? void 0 : _b.t) || null;
+                    console.log(token);
+                    console.log(urlPath);
+                    if (!token) return [3 /*break*/, 2];
+                    return [4 /*yield*/, mongoS.find({ token: token }, true)];
                 case 1:
-                    dat = (_b.sent());
+                    dat = (_c.sent());
                     if (dat.length) {
                         access = true;
                         login = dat[0].login;
                     }
-                    console.log(req.cookies.token);
                     console.log(dat);
                     return [3 /*break*/, 3];
                 case 2:
-                    access = access_check(login + '/' + decodeURI(req.url.substr(9)));
-                    _b.label = 3;
+                    access = access_check(login + '/' + urlPath);
+                    _c.label = 3;
                 case 3:
                     console.log(access);
                     if (access) {
-                        filePath = path.normalize(dir + '/data/' + login + '/' + decodeURI(req.url.substr(6)));
+                        filePath = path.normalize(dir + '/data/' + login + '/' + urlPath);
+                        console.log(filePath);
                         fs.readFile(filePath, function (error, data) {
                             if (error) {
-                                res.statusCode = 404;
-                                res.end("Resourse not found!");
+                                console.log(error);
+                                res.statusCode = 401;
+                                res.end("Resourse error!");
                             }
                             else {
                                 //response.sendFile(filePath)

@@ -68,6 +68,7 @@ app.get("/oneTime*", async function (req: any, res: any) {
     if (req?.cookies && req.cookies?.token !== '') {
         let dat: {login: string}[] = await mongoS.find({ token: req.cookies.token }, true) as {login: string}[];
         if (dat.length) {access = true; login = dat[0].login}
+        console.log('i in if')
         console.log(req.cookies.token);
         console.log(dat);
     }
