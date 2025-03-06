@@ -70,12 +70,13 @@ app.get("/oneTime*", async function (req: any, res: any) {
     if (token) {
         let dat: {login: string}[] = await mongoS.find({ token: token }, true) as {login: string}[];
         if (dat.length) {access = true; login = dat[0].login}
-        console.log('oneTime');
+        console.log(login);
         console.log(dat);
     }
     else {
         console.log(login + '/' + urlPath)
         access=access_check(login + '/' + urlPath)
+        console.log(access)
     }
     if (access) {
         filePath = path.normalize(dir+'/data/' + login + '/' + urlPath);
@@ -93,6 +94,7 @@ app.get("/oneTime*", async function (req: any, res: any) {
         });
     }
     else {
+        console.log('not found')
         res.statusCode = 404;
         res.end("Resourse not found!");
     }
