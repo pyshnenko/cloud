@@ -65,14 +65,17 @@ app.get("/openLinc*", async function (req: any, res: any) {
 app.get("/oneTime*", async function (req: any, res: any) {
     console.log('oneTime');
     let filePath: string = '', login: string='', access: boolean = false;
-    if (req?.cookies && req.cookies?.token !== '') {
-        console.log(`token: ${req.cookies.token}`)
-        let dat: {login: string}[] = await mongoS.find({ token: req.cookies.token }, true) as {login: string}[];
+    const token: string = req?.cookies?.token || req?.query?.t || null;
+    if (token) {
+        let dat: {login: string}[] = await mongoS.find({ token: token }, true) as {login: string}[];
         if (dat.length) {access = true; login = dat[0].login}
-        console.log(req.cookies.token);
+        console.log('oneTime');
         console.log(dat);
     }
-    else access=access_check(login + '/' + decodeURI(req.url.substr(9)))
+    else {
+        console.log(login + '/' + decodeURI(req.url.substr(9)))
+        access=access_check(login + '/' + decodeURI(req.url.substr(9)))
+    }
     if (access) {
         filePath = path.normalize(dir+'/data/' + login + '/' + decodeURI(req.url.substr(9)));
         console.log(filePath);
