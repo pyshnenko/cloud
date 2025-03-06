@@ -65,7 +65,7 @@ app.get("/openLinc*", async function (req: any, res: any) {
 app.get("/oneTime*", async function (req: any, res: any) {
     console.log('oneTime');
     let filePath: string = '', login: string='', access: boolean = false;
-    const urlPath = decodeURI(req.url.split('?')[0].substr(5)) || '/';
+    const urlPath = decodeURI(req.url.split('?')[0].substr(9)) || '/';
     const token: string = req?.cookies?.token || req?.query?.t || null;
     if (token) {
         let dat: {login: string}[] = await mongoS.find({ token: token }, true) as {login: string}[];
