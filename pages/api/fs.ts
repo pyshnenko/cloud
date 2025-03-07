@@ -24,7 +24,7 @@ log4js.configure({
                 mailer: { appenders: ['console', 'cApi'], level: 'all' }, },
   });
 const logger = log4js.getLogger("cApi");
-
+//
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await NextCors(req, res, {
         methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
