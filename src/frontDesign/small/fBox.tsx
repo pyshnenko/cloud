@@ -91,29 +91,39 @@ const options = [
   ];
 
 const imgEnd = [
-    '.png',
-    '.jpg',
+    'png',
+    'jpg',
     'jpeg'
 ]
 
 const archEnd = [
     'rar',
-    '.7z',
+    '7z',
     'zip'
 ]
 
 const vidEnd = [
-    '.mp4',
-    '.gif'
+    'mp4',
+    'gif'
 ]
 
 const pdfEnd = [
-    '.pdf'
+    'pdf'
 ]
 
 const fileType = (path: string, name: string) => {
-    let item: string = name.toLocaleLowerCase().slice(-4);
+    let filTypeText: string = name.split('.')[1] || "";
     const addr: string = `${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${name}`;
+    if (imgEnd.includes(filTypeText)) {
+        if (!imgArr.includes(addr)) imgArr.push(addr);
+        return 'picture'
+    }
+    else if (archEnd.includes(filTypeText)) return 'archive'
+    else if (vidEnd.includes(filTypeText)) return 'video'
+    else if (pdfEnd.includes(filTypeText)) return 'pdf'
+    else return 'other'
+
+    /*let item: string = name.toLocaleLowerCase().slice(-4);
     if (item === 'txt') return 'txt'
     else {
         let endText = 'other'
@@ -122,7 +132,7 @@ const fileType = (path: string, name: string) => {
         vidEnd.forEach((itemP: string)=>{if (name.includes(itemP)) endText='video'})
         pdfEnd.forEach((itemP: string)=>{if (name.includes(itemP)) endText='pdf'})
         return endText
-    }
+    }*/
 }
 
 const FolderIconType = (path: string, text: string, setImgPalette: (p: ImgWieverType) => void) => {
