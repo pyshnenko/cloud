@@ -10,6 +10,7 @@ import FolderZipIcon from '@mui/icons-material/FolderZip';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import { ImgWieverType } from './pictureWievew';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 interface props {
     animIn: boolean,
@@ -61,24 +62,7 @@ export default function FileFoldBox({animIn, index, lined, selected, text, setAn
                         justifyContent: 'flex-start'
                     }}
                 >
-                    {folder?<FolderIcon sx={{zoom: 2.5, color: '#FF9C0C'}} />:
-                        fileType(path, text)==='txt'? <TextSnippetIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
-                        fileType(path, text)==='archive' ? <FolderZipIcon sx={{zoom: 2.5, color: '#0AD58D'}} />:
-                        fileType(path, text)==='picture'? 
-                            <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}} onDoubleClick={()=>{
-                                setImgPalette({addrArray: imgArr, startPosition: imgArr.indexOf(`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${text}`)})
-                            }}>
-                                <Box sx={{width: '60px', height: '60px'}}>
-                                    <img style={{width: '100%', maxHeight: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${text}`} />
-                                </Box>
-                            </Box> :
-                        fileType(path, text)==='video'? 
-                        <Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                            <Box sx={{width: '60px', height: '60px'}}>
-                                <video style={{width: '100%', maxHeight: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${text}`} onClick={({target}: any)=>{target.paused?target.play():target.pause()}} />
-                            </Box>
-                        </Box> :
-                        <InsertDriveFileIcon sx={{zoom: 2.5, color: '#0AD58D'}} />}
+                    {folder?<FolderIcon sx={{zoom: 2.5, color: '#FF9C0C'}} />: FolderIconType(path, text, setImgPalette)}
                     <FnamesTypography 
                         isSelected={selected}
                         lined={lined}
@@ -123,6 +107,10 @@ const vidEnd = [
     '.gif'
 ]
 
+const pdfEnd = [
+    '.pdf'
+]
+
 const fileType = (path: string, name: string) => {
     let item: string = name.toLocaleLowerCase().slice(-4);
     const addr: string = `${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${name}`;
@@ -132,6 +120,31 @@ const fileType = (path: string, name: string) => {
         imgEnd.forEach((itemP: string)=>{if (name.includes(itemP)) {endText='picture'; if (!imgArr.includes(addr)) imgArr.push(addr)}})
         archEnd.forEach((itemP: string)=>{if (name.includes(itemP)) endText='archive'})
         vidEnd.forEach((itemP: string)=>{if (name.includes(itemP)) endText='video'})
+        pdfEnd.forEach((itemP: string)=>{if (name.includes(itemP)) endText='pdf'})
         return endText
+    }
+}
+
+const FolderIconType = (path: string, text: string, setImgPalette: (p: ImgWieverType) => void) => {
+
+    const type: string = fileType(path, text)
+
+    switch (type) {
+        case 'txt': return (<TextSnippetIcon sx={{zoom: 2.5, color: '#0AD58D'}} />)
+        case 'archive': return (<FolderZipIcon sx={{zoom: 2.5, color: '#0AD58D'}} />)
+        case 'picture': return (<Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}} onDoubleClick={()=>{
+            setImgPalette({addrArray: imgArr, startPosition: imgArr.indexOf(`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${text}`)})
+        }}>
+            <Box sx={{width: '60px', height: '60px'}}>
+                <img style={{width: '100%', maxHeight: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${text}`} />
+            </Box>
+        </Box>)
+        case 'video': return (<Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            <Box sx={{width: '60px', height: '60px'}}>
+                <video style={{width: '100%', maxHeight: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${text}`} onClick={({target}: any)=>{target.paused?target.play():target.pause()}} />
+            </Box>
+        </Box>)
+        case 'pdf': <PictureAsPdfIcon sx={{zoom: 2.5, color: '#0AD58D'}} />
+        default: <InsertDriveFileIcon sx={{zoom: 2.5, color: '#0AD58D'}} />
     }
 }
