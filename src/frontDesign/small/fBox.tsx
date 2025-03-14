@@ -111,6 +111,12 @@ const pdfEnd = [
     'pdf'
 ]
 
+const textEnd = [
+    'txt',
+    'doc',
+    'docx'
+]
+
 const fileType = (path: string, name: string) => {
     let filTypeText: string = name.split('.')[1] || "";
     const addr: string = `${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${name}`;
