@@ -127,7 +127,7 @@ const fileType = (path: string, name: string) => {
     else if (archEnd.includes(filTypeText)) return 'archive'
     else if (vidEnd.includes(filTypeText)) return 'video'
     else if (pdfEnd.includes(filTypeText)) return 'pdf'
-    else if (textEnd.includes(filTypeText)) return 'pdf'
+    else if (textEnd.includes(filTypeText)) return 'txt'
     else return 'other'
 
     /*let item: string = name.toLocaleLowerCase().slice(-4);
