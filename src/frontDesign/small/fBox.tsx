@@ -144,7 +144,7 @@ const FolderIconType = (path: string, text: string, setImgPalette: (p: ImgWiever
                 <video style={{width: '100%', maxHeight: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${text}`} onClick={({target}: any)=>{target.paused?target.play():target.pause()}} />
             </Box>
         </Box>)
-        case 'pdf': <PictureAsPdfIcon sx={{zoom: 2.5, color: '#0AD58D'}} />
-        default: <InsertDriveFileIcon sx={{zoom: 2.5, color: '#0AD58D'}} />
+        case 'pdf': return (<PictureAsPdfIcon sx={{zoom: 2.5, color: '#0AD58D'}} />)
+        default: return (<InsertDriveFileIcon sx={{zoom: 2.5, color: '#0AD58D'}} />)
     }
 }
