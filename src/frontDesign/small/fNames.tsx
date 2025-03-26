@@ -17,7 +17,7 @@ export default function FnamesTypography ({lined, isSelected, text}: props) {
                 textAlign: lined ? 'left' : 'center'
             }} 
             title={text}>
-                {((text.length>(lined ? 100:15))&&(!isSelected))?(text.slice(0, lined ? 98:12) + `${text.length>(lined ? 98:12)?'...':''}`):text}
+                {((text.length>(lined ? 100:15))&&(!isSelected))?(text.slice(0, lined ? 98:10) + `${text.length>(lined ? 98:10)?'...':''}`):text}
         </Typography>
     )
 }
