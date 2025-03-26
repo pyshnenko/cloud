@@ -118,7 +118,10 @@ const textEnd = [
 ]
 
 const fileType = (path: string, name: string) => {
-    let filTypeText: string = name.split('.')[1] || "";
+    let filTypeText: string = ((fName) => { 
+        let bName: string[] = fName.split('.')
+        return bName[bName.length-1] || ""
+    })(name);
     const addr: string = `${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${name}`;
     if (imgEnd.includes(filTypeText)) {
         if (!imgArr.includes(addr)) imgArr.push(addr);
