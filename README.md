@@ -1,5 +1,5 @@
-# Облако
-
+# ![Облако](public/favicon.ico)
+![](public/screen.gif)
 Файлы хранятся на сервере БЕЗ ШИФРОВАНИЯ
 (это нужно для своих целей)
 
@@ -37,3 +37,7 @@ https://cloud.spamigor.ru/lines
 https://cloud.spamigor.ru/three
 
 Точки в 3D на three.js
+
+##Есть Android-приложение облака, написанно на React-Native, собрано в android studio
+Git: https://github.com/pyshnenko/cloud_react_native
+билд: [Актуальная версия](https://github.com/pyshnenko/cloud_react_native/raw/refs/heads/main/files/cloud_app.apk)
