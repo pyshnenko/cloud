@@ -43,6 +43,7 @@ https://cloud.spamigor.ru/three
 
 # авторешалка судоку
 https://cloud.spamigor.ru/demo6
+![](public/sudocu.gif)
 
 Точки в 3D на three.js
 
