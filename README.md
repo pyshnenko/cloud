@@ -1,5 +1,6 @@
-# ![](public/favicon.ico)Облако
+# Облако ![](public/favicon.ico)
 ![](public/screen.gif)
+
 Файлы хранятся на сервере БЕЗ ШИФРОВАНИЯ
 (это нужно для своих целей)
 
