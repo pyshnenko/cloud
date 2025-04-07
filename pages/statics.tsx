@@ -80,7 +80,7 @@ export default function DedansCharts() {
                 ...ffullData.fullData,
                 'spamigor': {interfaces: res.data.interfaces}
             }};
-            if (ffullData.num>=3) setFullData(ffullData.fullData)
+            if (ffullData.num>=4) setFullData(ffullData.fullData)
         });
         
         axios.get('https://spamigor.ru/trafic/euroigor.json')
@@ -89,7 +89,7 @@ export default function DedansCharts() {
                     ...ffullData.fullData,
                     'euroigor': {interfaces: res.data.interfaces}
                 }};
-                if (ffullData.num>=3) setFullData(ffullData.fullData)
+                if (ffullData.num>=4) setFullData(ffullData.fullData)
         });
         
         axios.get('https://spamigor.ru/trafic/ifbizvpn.json')
@@ -98,7 +98,7 @@ export default function DedansCharts() {
                     ...ffullData.fullData,
                     'ifbizvpn': {interfaces: res.data.interfaces}
                 }};
-                if (ffullData.num>=3) setFullData(ffullData.fullData)
+                if (ffullData.num>=4) setFullData(ffullData.fullData)
         });
         
         axios.get('https://spamigor.ru/trafic/homeigor.json')
@@ -107,7 +107,16 @@ export default function DedansCharts() {
                     ...ffullData.fullData,
                     'homeigor': {interfaces: res.data.interfaces}
                 }};
-                if (ffullData.num>=3) setFullData(ffullData.fullData)
+                if (ffullData.num>=4) setFullData(ffullData.fullData)
+        });
+        
+        axios.get('https://spamigor.ru/trafic/shrekislove.json')
+            .then((res: any)=>{
+                ffullData = {num: ffullData.num+1, fullData: {
+                    ...ffullData.fullData,
+                    'shrekislove': {interfaces: res.data.interfaces}
+                }};
+                if (ffullData.num>=4) setFullData(ffullData.fullData)
         });
     
         return () => {
