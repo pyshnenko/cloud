@@ -65,7 +65,7 @@ export default function Login () {
         
         <>
             <Head>
-                <link rel="shortcut icon" href="/favicon.ico" />
+                <link rel="icon" href="/favicon.ico" />
             </Head>
             <Fade in={open} timeout={500}>
                     <Box>

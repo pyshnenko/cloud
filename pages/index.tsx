@@ -5,7 +5,7 @@ export default function Index () {
     return (
         <div>
             <Head>
-                <link rel="shortcut icon" href="/favicon.ico" />
+                <link rel="icon" href="/favicon.ico" />
             </Head>
             <IndexPage />
         </div>
