@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import Fade from '@mui/material/Fade';
 import { Typography } from '@mui/material';
 import Api from './../../src/frontMech/api';
-import { EMAIL_REGEXP } from '../../src/types/api/regex';
+import Head from 'next/head';
 
 export default function Login () {
 
@@ -63,43 +63,48 @@ export default function Login () {
 
     return (
         <Fade in={open} timeout={500}>
-            <Box>
-                <Box sx={{    
-                    position: 'absolute',
-                    top: '50vh',
-                    left: '50vw',
-                    width: '10px',
-                    height: '10px',
-                    backgroundColor: 'burlywood',
-                    boxShadow: `-10px 0 250px 300px burlywood`,
-                    borderRadius: '100px',
-                    zIndex: 1
-                }}/>
-                {emailresetMessage.visible ? <Typography>{emailresetMessage.text}</Typography>:
-                <Box sx={{width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '90vh', justifyContent: 'center', zIndex: 10}} 
-                    component="form" noValidate onSubmit={handleSubmit}>
-                    {error&&<Typography color="error" sx={{padding: 1, zIndex: 20}}>{error.text}</Typography>}
-                    <TextField error={error.email} sx={textStyle} id="loginBox" name="email" label="Логин/email" variant="outlined" onChange={({target}: any)=>{setEmail(target.value)}} />
-                    <TextField error={error.pass} sx={textStyle} type="password" name="password" label="Пароль" variant="outlined" />
-                    <Box sx={{zIndex: 20}}>
-                        <Button sx={{margin: 1, boxShadow: '0 0 30px 10px white'}} variant="contained" type="submit">Вход</Button>
-                        <Button sx={{margin: 1, boxShadow: '0 0 30px 10px white'}} variant="contained" color="success"
-                            onClick={()=>{
-                                setOpen(false);
-                                window.location.href = '/register';
-                            }}>Регистрация</Button>
-                    </Box>
-                    <Button 
-                    sx={{margin: 1, boxShadow: '0 0 30px 10px white', zIndex: 1, width: '228px'}} 
-                    variant="contained" 
-                    color="secondary"
-                    onClick={()=>{setDemo(true)}} 
-                    type="submit"
-                    >
-                        Демонстрационный режим
-                    </Button>
-                </Box>}
-            </Box>
+            <>
+                <Head>
+                    <link rel="shortcut icon" href="/favicon.ico" />
+                </Head>
+                <Box>
+                    <Box sx={{    
+                        position: 'absolute',
+                        top: '50vh',
+                        left: '50vw',
+                        width: '10px',
+                        height: '10px',
+                        backgroundColor: 'burlywood',
+                        boxShadow: `-10px 0 250px 300px burlywood`,
+                        borderRadius: '100px',
+                        zIndex: 1
+                    }}/>
+                    {emailresetMessage.visible ? <Typography>{emailresetMessage.text}</Typography>:
+                    <Box sx={{width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '90vh', justifyContent: 'center', zIndex: 10}} 
+                        component="form" noValidate onSubmit={handleSubmit}>
+                        {error&&<Typography color="error" sx={{padding: 1, zIndex: 20}}>{error.text}</Typography>}
+                        <TextField error={error.email} sx={textStyle} id="loginBox" name="email" label="Логин/email" variant="outlined" onChange={({target}: any)=>{setEmail(target.value)}} />
+                        <TextField error={error.pass} sx={textStyle} type="password" name="password" label="Пароль" variant="outlined" />
+                        <Box sx={{zIndex: 20}}>
+                            <Button sx={{margin: 1, boxShadow: '0 0 30px 10px white'}} variant="contained" type="submit">Вход</Button>
+                            <Button sx={{margin: 1, boxShadow: '0 0 30px 10px white'}} variant="contained" color="success"
+                                onClick={()=>{
+                                    setOpen(false);
+                                    window.location.href = '/register';
+                                }}>Регистрация</Button>
+                        </Box>
+                        <Button 
+                        sx={{margin: 1, boxShadow: '0 0 30px 10px white', zIndex: 1, width: '228px'}} 
+                        variant="contained" 
+                        color="secondary"
+                        onClick={()=>{setDemo(true)}} 
+                        type="submit"
+                        >
+                            Демонстрационный режим
+                        </Button>
+                    </Box>}
+                </Box>
+            </>
         </Fade>
     )
 }
