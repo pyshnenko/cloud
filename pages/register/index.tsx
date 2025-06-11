@@ -11,6 +11,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import { EMAIL_REGEXP } from '../../src/types/api/regex';
+import Head from 'next/head';
 
 interface passControl {
     first: string,
@@ -108,84 +109,89 @@ export default function Registration () {
     }
 
     return (
-        <Fade in={true}>
-            <Box sx={height>400? 
-                {display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                height: '100vh'} :
-                {}
-            }>
-                <Box sx={{
-                    width: '1px',
-                    height: '300px',
-                    backgroundColor: 'mediumaquamarine',
-                    position: 'absolute',
-                    top: '50vh',
-                    left: '50vw',
-                    transform: 'translateY(-50%)',
-                    boxShadow: '0 0 200px 300px mediumaquamarine',
-                    zIndex: 0
-                }} />
-                <Box component="form" noValidate onSubmit={handleSubmit} sx={{display: 'grid', justifyContent: 'center', margin: 2}}>
-                    <Box sx={{display: 'grid', justifyContent: 'center', margin: 2, justifyItems: 'center'}}>
-                        {loginBored?<Typography sx={{zIndex: 5, width: '50%', textAlign: 'center', backgroundColor: 'white', borderRadius: '20px', boxShadow: '0 0 12px 8px white'}} color='error'>Логин занят</Typography>:<Box sx={{height: '24px'}} />}
-                        {textValues.map((item: {name: string, label: string, type: string}, index: number)=>{
-                            return (<Fade in={open} timeout={index*500} key={item.name}>
-                                <TextField sx={textSX} name={item.name} label={item.label} error={(errorState as any)[item.name]} type={item.type}/>
-                            </Fade>)
-                        })}
-                        <Fade in={open} timeout={textValues.length * 500}>
-                        <TextField 
-                            name="password" 
-                            sx={textSX}
-                            label="Пароль" 
-                            type={showPassword ? 'text' : 'password'}                        
-                            InputProps={{
-                                endAdornment:
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="Не скрывать"
-                                            onClick={handleClickShowPassword}
-                                            onMouseDown={handleMouseDownPassword}
-                                            >
-                                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                            }}
-                            value={passControl.first} 
-                            onChange={({target})=>setPassControl({...passControl, first: target.value})}
-                        /></Fade>
-                        
-                        <Fade in={open} timeout={(textValues.length + 1) * 500}><TextField
-                            error={passControl.first.length>5&&passControl.first!==passControl.last} 
-                            label="Повтори пароль" 
-                            type={showPassword ? 'text' : 'password'}   
-                            sx={textSX}                     
-                            InputProps={{
-                                endAdornment:
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="Скрывать"
-                                            onClick={handleClickShowPassword}
-                                            onMouseDown={handleMouseDownPassword}
-                                            >
-                                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
+        <>
+            <Head>
+                <link rel="shortcut icon" href="/favicon.ico" />
+            </Head>
+            <Fade in={true}>
+                <Box sx={height>400? 
+                    {display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    height: '100vh'} :
+                    {}
+                }>
+                    <Box sx={{
+                        width: '1px',
+                        height: '300px',
+                        backgroundColor: 'mediumaquamarine',
+                        position: 'absolute',
+                        top: '50vh',
+                        left: '50vw',
+                        transform: 'translateY(-50%)',
+                        boxShadow: '0 0 200px 300px mediumaquamarine',
+                        zIndex: 0
+                    }} />
+                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{display: 'grid', justifyContent: 'center', margin: 2}}>
+                        <Box sx={{display: 'grid', justifyContent: 'center', margin: 2, justifyItems: 'center'}}>
+                            {loginBored?<Typography sx={{zIndex: 5, width: '50%', textAlign: 'center', backgroundColor: 'white', borderRadius: '20px', boxShadow: '0 0 12px 8px white'}} color='error'>Логин занят</Typography>:<Box sx={{height: '24px'}} />}
+                            {textValues.map((item: {name: string, label: string, type: string}, index: number)=>{
+                                return (<Fade in={open} timeout={index*500} key={item.name}>
+                                    <TextField sx={textSX} name={item.name} label={item.label} error={(errorState as any)[item.name]} type={item.type}/>
+                                </Fade>)
+                            })}
+                            <Fade in={open} timeout={textValues.length * 500}>
+                            <TextField 
+                                name="password" 
+                                sx={textSX}
+                                label="Пароль" 
+                                type={showPassword ? 'text' : 'password'}                        
+                                InputProps={{
+                                    endAdornment:
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="Не скрывать"
+                                                onClick={handleClickShowPassword}
+                                                onMouseDown={handleMouseDownPassword}
+                                                >
+                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
                                 }}
-                            value={passControl.last} 
-                            onChange={({target})=>setPassControl({...passControl, last: target.value})}
-                        /></Fade>
-                        {passControl.first.length>5&&passControl.first!==passControl.last?
-                            <Typography color='error' sx={{textAlign: 'center', zIndex: 5, width: '60%', backgroundColor: 'white', borderRadius: '20px', boxShadow: '0 0 12px 8px white'}}>Пароли отличаются</Typography>:
-                            <Box sx={{height: '24px'}} />}
+                                value={passControl.first} 
+                                onChange={({target})=>setPassControl({...passControl, first: target.value})}
+                            /></Fade>
+                            
+                            <Fade in={open} timeout={(textValues.length + 1) * 500}><TextField
+                                error={passControl.first.length>5&&passControl.first!==passControl.last} 
+                                label="Повтори пароль" 
+                                type={showPassword ? 'text' : 'password'}   
+                                sx={textSX}                     
+                                InputProps={{
+                                    endAdornment:
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="Скрывать"
+                                                onClick={handleClickShowPassword}
+                                                onMouseDown={handleMouseDownPassword}
+                                                >
+                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }}
+                                value={passControl.last} 
+                                onChange={({target})=>setPassControl({...passControl, last: target.value})}
+                            /></Fade>
+                            {passControl.first.length>5&&passControl.first!==passControl.last?
+                                <Typography color='error' sx={{textAlign: 'center', zIndex: 5, width: '60%', backgroundColor: 'white', borderRadius: '20px', boxShadow: '0 0 12px 8px white'}}>Пароли отличаются</Typography>:
+                                <Box sx={{height: '24px'}} />}
+                        </Box>
+                        <Fade in={passControl.first.length>5&&passControl.first===passControl.last&&open}>
+                            <Button variant="contained" type="submit" sx={{boxShadow: '0 0 10px 8px white'}}>Регистрация</Button>
+                        </Fade>
                     </Box>
-                    <Fade in={passControl.first.length>5&&passControl.first===passControl.last&&open}>
-                        <Button variant="contained" type="submit" sx={{boxShadow: '0 0 10px 8px white'}}>Регистрация</Button>
-                    </Fade>
                 </Box>
-            </Box>
-        </Fade>
+            </Fade>
+        </>
     )
 }
