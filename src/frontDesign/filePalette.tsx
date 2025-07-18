@@ -37,6 +37,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
     
     useEffect(()=>{
         //console.log("user: " + datal);
+
         const dropZone = document.getElementById('folderBox');
         const dropZone2 = document.getElementById('folderBox2');
         const inputElem = document.getElementById('hiddenInput');
@@ -126,44 +127,50 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                 autoFocus={false} 
                 aria-readonly={true}
             />}
-            {files?.directs.map((item: string, index: number)=> {
-                return (
-                    <FileFoldBox 
-                        animIn={animIn} 
-                        text={item} 
-                        index={index} 
-                        setAnchorEl={setAnchorEl} 
-                        path={path} 
-                        setPath={setPath} 
-                        setSelectedId={setSelectedId} 
-                        lined={files?.lined} 
-                        selected={index==selectedId} 
-                        folder={true}
-                        key={item}
-                        setImgPalette={setImgPalette}
-                        setActiveVideo={setActiveVideo}
-                    />
-                )
-            })}
-            {files?.files.map((item: string, index: number)=> {
-                return (
-                    <FileFoldBox 
-                        animIn={animIn} 
-                        text={item} 
-                        index={(index+files.directs.length)} 
-                        setAnchorEl={setAnchorEl} 
-                        path={path} 
-                        setPath={setPath} 
-                        setSelectedId={setSelectedId} 
-                        lined={files?.lined} 
-                        selected={(index+files.directs.length)==selectedId} 
-                        folder={false}
-                        key={item}
-                        setImgPalette={setImgPalette}
-                        setActiveVideo={setActiveVideo}
-                    />                    
-                )
-            })}
+            <Box sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                flexDirection: 'row'
+            }}>
+                {files?.directs.map((item: string, index: number)=> {
+                    return (
+                        <FileFoldBox 
+                            animIn={animIn} 
+                            text={item} 
+                            index={index} 
+                            setAnchorEl={setAnchorEl} 
+                            path={path} 
+                            setPath={setPath} 
+                            setSelectedId={setSelectedId} 
+                            lined={files?.lined} 
+                            selected={index==selectedId} 
+                            folder={true}
+                            key={item}
+                            setImgPalette={setImgPalette}
+                            setActiveVideo={setActiveVideo}
+                        />
+                    )
+                })}
+                {files?.files.map((item: string, index: number)=> {
+                    return (
+                        <FileFoldBox 
+                            animIn={animIn} 
+                            text={item} 
+                            index={(index+files.directs.length)} 
+                            setAnchorEl={setAnchorEl} 
+                            path={path} 
+                            setPath={setPath} 
+                            setSelectedId={setSelectedId} 
+                            lined={files?.lined} 
+                            selected={(index+files.directs.length)==selectedId} 
+                            folder={false}
+                            key={item}
+                            setImgPalette={setImgPalette}
+                            setActiveVideo={setActiveVideo}
+                        />                    
+                    )
+                })}
+            </Box>
         </Box>
     )
 }

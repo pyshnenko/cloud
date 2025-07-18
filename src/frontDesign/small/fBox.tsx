@@ -32,8 +32,23 @@ let imgArr: string[] = [];
 
 export default function FileFoldBox(props: props) {
     const {animIn, index, lined, selected, text, setAnchorEl, setSelectedId, path, setPath, folder, setImgPalette, setActiveVideo} = props
+
+    const [width, setWidth] = useState<number>(window.innerWidth);
+
     useEffect(()=>{
+        const handleResize = (event: any) => {
+            if (event.target.innerWidth!==null) {
+                setWidth(event.target.innerWidth);
+                console.log(event.target.innerWidth)
+            }
+        };
+        window.addEventListener('resize', handleResize);
+
         imgArr = [];
+        
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
     }, [])
 
     return (
@@ -44,9 +59,10 @@ export default function FileFoldBox(props: props) {
                     flexDirection: 'row', 
                     alignItems: lined ? 'center' :'flex-start', 
                     zIndex:selected?1:0,
-                    width: lined ? '100%' : 'auto',
+                    width: `${Math.floor(width/Math.floor(width/104))-16}px`,//lined ? '100%' : 'auto',
                     borderBottom: lined ? '1px solid gray' : 'none',
-                    maxHeight: '110px'
+                    maxHeight: '110px',
+                    justifyContent: 'center'
                 }}>
                 <Button                                  
                     onContextMenu={(event: React.MouseEvent<HTMLElement>)=>{setAnchorEl({elem: event.currentTarget, index: index}); event.preventDefault()}}
