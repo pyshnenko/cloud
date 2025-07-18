@@ -59,7 +59,7 @@ export default function FileFoldBox(props: props) {
                     flexDirection: 'row', 
                     alignItems: lined ? 'center' :'flex-start', 
                     zIndex:selected?1:0,
-                    width: `${Math.floor(width/Math.floor(width/104))-16}px`,//lined ? '100%' : 'auto',
+                    width: `${Math.floor((width-50)/Math.floor(width/115))}px`,//lined ? '100%' : 'auto',
                     borderBottom: lined ? '1px solid gray' : 'none',
                     maxHeight: '110px',
                     justifyContent: 'center'
