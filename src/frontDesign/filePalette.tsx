@@ -9,12 +9,14 @@ import { urlCheck } from '../frontMech/checkMech';
 import { getFileAsync, attFileSend } from '../frontMech/mechanics';
 import FileFoldBox from './small/fBox';
 import { ImgWiever, ImgWieverType } from './small/pictureWievew';
+import VideoPlayer from './small/VideoPlayer';
 
 export default function FilePalette ({files, path, setSelectedId, selectedId, setAnchorEl, setPath, animIn, fileType, datal, notVerify, folder}: any) {
 
     const [ fileDrag, setFileDrag ] = useState<boolean>(false);
     const [ isMobile, setIsMobile ] = useState<boolean>(false);
     const [ imgPalette, setImgPalette ] = useState<ImgWieverType>();
+    const [ activeVideo, setActiveVideo ] = useState<string|null>(null);
 
     const username = useRef(datal);
     const folderPath = useRef(path);
@@ -114,6 +116,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
         >
             <UploadDiv fileDrag={fileDrag} />
             <ImgWiever props={imgPalette} />
+            <VideoPlayer {...{activeVideo, setActiveVideo}} />
             {!isMobile&&<TextField 
                 autoComplete="off" 
                 sx={{position: 'absolute', top: '-100px', width: 0, height: 0, zIndex: -1}} 
@@ -138,6 +141,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                         folder={true}
                         key={item}
                         setImgPalette={setImgPalette}
+                        setActiveVideo={setActiveVideo}
                     />
                 )
             })}
@@ -156,6 +160,7 @@ export default function FilePalette ({files, path, setSelectedId, selectedId, se
                         folder={false}
                         key={item}
                         setImgPalette={setImgPalette}
+                        setActiveVideo={setActiveVideo}
                     />                    
                 )
             })}

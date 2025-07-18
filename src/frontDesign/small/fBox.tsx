@@ -11,6 +11,7 @@ import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import { ImgWieverType } from './pictureWievew';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import { User } from '../../frontMech/user';
 
 interface props {
     animIn: boolean,
@@ -23,13 +24,14 @@ interface props {
     path: string,
     setPath: (s: string)=>void,
     folder: boolean,
-    setImgPalette: (p: ImgWieverType) => void
+    setImgPalette: (p: ImgWieverType) => void,
+    setActiveVideo: (s: string|null)=>void
 }
 
 let imgArr: string[] = [];
 
-export default function FileFoldBox({animIn, index, lined, selected, text, setAnchorEl, setSelectedId, path, setPath, folder, setImgPalette}: props) {
-
+export default function FileFoldBox(props: props) {
+    const {animIn, index, lined, selected, text, setAnchorEl, setSelectedId, path, setPath, folder, setImgPalette, setActiveVideo} = props
     useEffect(()=>{
         imgArr = [];
     }, [])
@@ -62,7 +64,7 @@ export default function FileFoldBox({animIn, index, lined, selected, text, setAn
                         justifyContent: 'flex-start'
                     }}
                 >
-                    {folder?<FolderIcon sx={{zoom: 2.5, color: '#FF9C0C'}} />: FolderIconType(path, text, setImgPalette)}
+                    {folder?<FolderIcon sx={{zoom: 2.5, color: '#FF9C0C'}} />: FolderIconType(path, text, setImgPalette, setActiveVideo)}
                     <FnamesTypography 
                         isSelected={selected}
                         lined={lined}
@@ -145,7 +147,7 @@ const fileType = (path: string, name: string) => {
     }*/
 }
 
-const FolderIconType = (path: string, text: string, setImgPalette: (p: ImgWieverType) => void) => {
+const FolderIconType = (path: string, text: string, setImgPalette: (p: ImgWieverType) => void, setActiveVideo: (s: string)=>void) => {
 
     const type: string = fileType(path, text)
 
@@ -160,7 +162,8 @@ const FolderIconType = (path: string, text: string, setImgPalette: (p: ImgWiever
             </Box>
         </Box>)
         case 'video': return (<Box sx={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-            <Box sx={{width: '60px', height: '60px'}}>
+            <Box sx={{width: '60px', height: '60px'}} onDoubleClick={()=>{
+                setActiveVideo(`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${text}?t=${User.getToken()}`)}}>
                 <video style={{width: '100%', maxHeight: '100%'}} src={`${window.location.href.includes('http://localhost:8799/')?'http://localhost:8801':''}/data/${path}/${text}`} onClick={({target}: any)=>{target.paused?target.play():target.pause()}} />
             </Box>
         </Box>)
