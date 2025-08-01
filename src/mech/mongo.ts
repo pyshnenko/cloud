@@ -1,6 +1,6 @@
 require('dotenv').config();
 const MongoClient = require("mongodb").MongoClient;
-const Redis = require("ioredis");
+import Redis from "ioredis";
 
 const redis = new Redis({
     port: Number(process.env.REDIS_PORT),
@@ -31,7 +31,6 @@ class mongoFunc {
     async find(obj: any, onlyTok: boolean = false) {
         let extBuf:any[] = [];
         let mongoconnect: boolean = false;
-        console.log(cashTokenList);
         try {
             console.log(obj);
             if (onlyTok && obj?.token) {
@@ -50,7 +49,6 @@ class mongoFunc {
                 else mongoconnect = true;
             }
             if (mongoconnect || !onlyTok) {
-                console.log('mongoconnect')
                 await mongoClient.connect();
                 if (obj) {
                     extBuf = await collection.find(obj).toArray();
@@ -111,7 +109,6 @@ class mongoFunc {
             await mongoClient.connect();
             const count: number = await collection.countDocuments();
             await mongoClient.close();
-            console.log('Записей: ' + count)
             return count
         }
         catch(e) {
@@ -121,4 +118,4 @@ class mongoFunc {
     }
 }
 
-module.exports = mongoFunc;
+export default mongoFunc;

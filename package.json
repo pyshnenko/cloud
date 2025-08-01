@@ -57,6 +57,7 @@
     "websocket": "^1.0.35"
   },
   "devDependencies": {
+    "@types/archiver": "^6.0.3",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20",
     "@types/react": "^18",
