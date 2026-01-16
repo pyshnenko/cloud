@@ -85,6 +85,11 @@ export default function DedansCharts() {
         for (let urData of domens) {
             axios.get(urData.url)
                 .then((res: any)=>{
+                    if (urData.code === 'spamigor') {                        
+                        let ifaceNames: string[] = [];
+                        res.data.interfaces.forEach((int: any)=>ifaceNames.push(int.name));
+                        setiFaceList(ifaceNames);
+                    }
                     ffullData = {num: ffullData.num+1, fullData: {
                         ...ffullData.fullData,
                         [urData.code]: {interfaces: res.data.interfaces}
