@@ -80,7 +80,7 @@ export default function DedansCharts() {
                 ...ffullData.fullData,
                 'spamigor': {interfaces: res.data.interfaces}
             }};
-            if (ffullData.num>=5) setFullData(ffullData.fullData)
+            if (ffullData.num>=6) setFullData(ffullData.fullData)
         });
         
         axios.get('https://spamigor.ru/trafic/euroigor.json')
@@ -89,7 +89,7 @@ export default function DedansCharts() {
                     ...ffullData.fullData,
                     'euroigor': {interfaces: res.data.interfaces}
                 }};
-                if (ffullData.num>=5) setFullData(ffullData.fullData)
+                if (ffullData.num>=6) setFullData(ffullData.fullData)
         });
         
         axios.get('https://spamigor.ru/trafic/ifbizvpn.json')
@@ -98,7 +98,7 @@ export default function DedansCharts() {
                     ...ffullData.fullData,
                     'ifbizvpn': {interfaces: res.data.interfaces}
                 }};
-                if (ffullData.num>=5) setFullData(ffullData.fullData)
+                if (ffullData.num>=6) setFullData(ffullData.fullData)
         });
         
         axios.get('https://spamigor.ru/trafic/homeigor.json')
@@ -107,7 +107,7 @@ export default function DedansCharts() {
                     ...ffullData.fullData,
                     'homeigor': {interfaces: res.data.interfaces}
                 }};
-                if (ffullData.num>=5) setFullData(ffullData.fullData)
+                if (ffullData.num>=6) setFullData(ffullData.fullData)
         });
         
         axios.get('https://spamigor.ru/trafic/shrekislove.json')
@@ -116,7 +116,7 @@ export default function DedansCharts() {
                     ...ffullData.fullData,
                     'shrekislove': {interfaces: res.data.interfaces}
                 }};
-                if (ffullData.num>=5) setFullData(ffullData.fullData)
+                if (ffullData.num>=6) setFullData(ffullData.fullData)
         });
         
         axios.get('https://spamigor.ru/trafic/vpn_codegap.json')
@@ -125,7 +125,16 @@ export default function DedansCharts() {
                     ...ffullData.fullData,
                     'vpn_codegap': {interfaces: res.data.interfaces}
                 }};
-                if (ffullData.num>=5) setFullData(ffullData.fullData)
+                if (ffullData.num>=6) setFullData(ffullData.fullData)
+        });
+        
+        axios.get('https://spamigor.ru/trafic/chertolet.json')
+            .then((res: any)=>{
+                ffullData = {num: ffullData.num+1, fullData: {
+                    ...ffullData.fullData,
+                    'chertolet': {interfaces: res.data.interfaces}
+                }};
+                if (ffullData.num>=6) setFullData(ffullData.fullData)
         });
     
         return () => {
@@ -240,6 +249,7 @@ export default function DedansCharts() {
                             <MenuItem value="homeigor">homeigor.ru</MenuItem>
                             <MenuItem value="shrekislove">shrekislove.ru</MenuItem>
                             <MenuItem value="vpn_codegap">vpn.codegap.online</MenuItem>
+                            <MenuItem value="chertolet">chertolet.ru</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
