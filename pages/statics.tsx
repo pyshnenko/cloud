@@ -38,6 +38,17 @@ interface fullData {
 
 const values: string[] = ['b', 'kb', 'Mb', 'Gb', 'Tb', 'Pb'];
 
+const domens: {code: string, url:string}[] = [
+    {code: 'spamigor', url:'https://spamigor.ru/trafic/spamigor.json'},
+    {code: 'euroigor', url:'https://spamigor.ru/trafic/euroigor.json'},
+    {code: 'ifbizvpn', url:'https://spamigor.ru/trafic/ifbizvpn.json'},
+    {code: 'homeigor', url:'https://spamigor.ru/trafic/homeigor.json'},
+    {code: 'shrekislove', url:'https://spamigor.ru/trafic/shrekislove.json'},
+    {code: 'vpn_codegap', url:'https://spamigor.ru/trafic/vpn_codegap.json'},
+    {code: 'codegap', url:'https://spamigor.ru/trafic/codegap.json'},
+    {code: 'chertolet', url:'https://spamigor.ru/trafic/chertolet.json'}
+];
+
 export default function DedansCharts() {
 
     const [fullData, setFullData] = useState<fullData>();
@@ -71,71 +82,16 @@ export default function DedansCharts() {
         };
         window.addEventListener('resize', handleResize);
         setWidth(window.innerWidth);
-        axios.get('https://spamigor.ru/trafic/spamigor.json')
-            .then((res: any)=>{
-            let ifaceNames: string[] = [];
-            res.data.interfaces.forEach((int: any)=>ifaceNames.push(int.name));
-            setiFaceList(ifaceNames);
-            ffullData = {num: ffullData.num+1, fullData: {
-                ...ffullData.fullData,
-                'spamigor': {interfaces: res.data.interfaces}
-            }};
-            if (ffullData.num>=6) setFullData(ffullData.fullData)
-        });
-        
-        axios.get('https://spamigor.ru/trafic/euroigor.json')
-            .then((res: any)=>{
-                ffullData = {num: ffullData.num+1, fullData: {
-                    ...ffullData.fullData,
-                    'euroigor': {interfaces: res.data.interfaces}
-                }};
-                if (ffullData.num>=6) setFullData(ffullData.fullData)
-        });
-        
-        axios.get('https://spamigor.ru/trafic/ifbizvpn.json')
-            .then((res: any)=>{
-                ffullData = {num: ffullData.num+1, fullData: {
-                    ...ffullData.fullData,
-                    'ifbizvpn': {interfaces: res.data.interfaces}
-                }};
-                if (ffullData.num>=6) setFullData(ffullData.fullData)
-        });
-        
-        axios.get('https://spamigor.ru/trafic/homeigor.json')
-            .then((res: any)=>{
-                ffullData = {num: ffullData.num+1, fullData: {
-                    ...ffullData.fullData,
-                    'homeigor': {interfaces: res.data.interfaces}
-                }};
-                if (ffullData.num>=6) setFullData(ffullData.fullData)
-        });
-        
-        axios.get('https://spamigor.ru/trafic/shrekislove.json')
-            .then((res: any)=>{
-                ffullData = {num: ffullData.num+1, fullData: {
-                    ...ffullData.fullData,
-                    'shrekislove': {interfaces: res.data.interfaces}
-                }};
-                if (ffullData.num>=6) setFullData(ffullData.fullData)
-        });
-        
-        axios.get('https://spamigor.ru/trafic/vpn_codegap.json')
-            .then((res: any)=>{
-                ffullData = {num: ffullData.num+1, fullData: {
-                    ...ffullData.fullData,
-                    'vpn_codegap': {interfaces: res.data.interfaces}
-                }};
-                if (ffullData.num>=6) setFullData(ffullData.fullData)
-        });
-        
-        axios.get('https://spamigor.ru/trafic/chertolet.json')
-            .then((res: any)=>{
-                ffullData = {num: ffullData.num+1, fullData: {
-                    ...ffullData.fullData,
-                    'chertolet': {interfaces: res.data.interfaces}
-                }};
-                if (ffullData.num>=6) setFullData(ffullData.fullData)
-        });
+        for (let urData of domens) {
+            axios.get(urData.url)
+                .then((res: any)=>{
+                    ffullData = {num: ffullData.num+1, fullData: {
+                        ...ffullData.fullData,
+                        [urData.code]: {interfaces: res.data.interfaces}
+                    }};
+                    if (ffullData.num>=domens.length-1) setFullData(ffullData.fullData)
+                })
+        }
     
         return () => {
             window.removeEventListener('resize', handleResize);
@@ -248,6 +204,7 @@ export default function DedansCharts() {
                             <MenuItem value="ifbizvpn">ifbizvpn.ru</MenuItem>
                             <MenuItem value="homeigor">homeigor.ru</MenuItem>
                             <MenuItem value="shrekislove">shrekislove.ru</MenuItem>
+                            <MenuItem value="codegap">codegap.online</MenuItem>
                             <MenuItem value="vpn_codegap">vpn.codegap.online</MenuItem>
                             <MenuItem value="chertolet">chertolet.ru</MenuItem>
                             </Select>
