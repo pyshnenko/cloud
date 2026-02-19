@@ -207,6 +207,7 @@ export default function DedansCharts() {
                             >
                             <MenuItem value="spamigor">spamigor.ru</MenuItem>
                             <MenuItem value="euroigor">euroigor.ru</MenuItem>
+                            <MenuItem value="rele">реле</MenuItem>
                             <MenuItem value="ifbizvpn">ifbizvpn.ru</MenuItem>
                             <MenuItem value="homeigor">homeigor.ru</MenuItem>
                             <MenuItem value="shrekislove">shrekislove.ru</MenuItem>
