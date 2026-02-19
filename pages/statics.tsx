@@ -41,6 +41,7 @@ const values: string[] = ['b', 'kb', 'Mb', 'Gb', 'Tb', 'Pb'];
 const domens: {code: string, url:string}[] = [
     {code: 'spamigor', url:'https://spamigor.ru/trafic/spamigor.json'},
     {code: 'euroigor', url:'https://spamigor.ru/trafic/euroigor.json'},
+    {code: 'rele', url:'https://spamigor.ru/trafic/rele.json'},
     {code: 'ifbizvpn', url:'https://spamigor.ru/trafic/ifbizvpn.json'},
     {code: 'homeigor', url:'https://spamigor.ru/trafic/homeigor.json'},
     {code: 'shrekislove', url:'https://spamigor.ru/trafic/shrekislove.json'},
