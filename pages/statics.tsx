@@ -48,7 +48,8 @@ const domens: {code: string, url:string}[] = [
     {code: 'vpn_codegap', url:'https://spamigor.ru/trafic/vpn_codegap.json'},
     {code: 'codegap', url:'https://spamigor.ru/trafic/codegap.json'},
     {code: 'chertolet', url:'https://spamigor.ru/trafic/chertolet.json'},
-    {code: 'pyshnetdb', url:'https://spamigor.ru/trafic/pyshnetdb.json'}
+    {code: 'pyshnetdb', url:'https://spamigor.ru/trafic/pyshnetdb.json'},
+    {code: 'pyshnet', url:'https://spamigor.ru/trafic/pyshnet.json'}
 ];
 
 export default function DedansCharts() {
