@@ -175,11 +175,38 @@ export default function DashboardContent({ themeMode, setThemeMode }: DashboardC
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <ToggleButtonGroup fullWidth size="small" value={timePreset} exclusive onChange={(_, v) => v && setTimePreset(v)} sx={{ bgcolor: themeMode === 'dark' ? '#334155' : '#f1f5f9' }}>
-              <ToggleButton value="day">День</ToggleButton>
-              <ToggleButton value="week">Неделя</ToggleButton>
-              <ToggleButton value="month">Месяц</ToggleButton>
-              <ToggleButton value="all">Всё</ToggleButton>
+            <ToggleButtonGroup 
+            fullWidth 
+            size="small" 
+            value={timePreset} 
+            exclusive 
+            onChange={(_, v) => v && setTimePreset(v)} 
+            sx={{ 
+                bgcolor: themeMode === 'dark' ? '#1e293b' : '#f1f5f9',
+                borderRadius: '10px',
+                p: '2px',
+                border: themeMode === 'dark' ? '1px solid #334155' : 'none',
+                '& .MuiToggleButton-root': {
+                border: 'none',
+                borderRadius: '8px !important',
+                color: themeMode === 'dark' ? '#94a3b8' : '#475569',
+                textTransform: 'none',
+                fontWeight: 600,
+                '&.Mui-selected': {
+                    bgcolor: themeMode === 'dark' ? '#334155' : '#ffffff',
+                    color: themeMode === 'dark' ? '#00f2fe' : '#4facfe',
+                    boxShadow: themeMode === 'dark' ? '0 2px 8px rgba(0,0,0,0.4)' : '0 2px 4px rgba(0,0,0,0.05)',
+                    '&:hover': {
+                    bgcolor: themeMode === 'dark' ? '#475569' : '#ffffff',
+                    }
+                }
+                }
+            }}
+            >
+            <ToggleButton value="day">День</ToggleButton>
+            <ToggleButton value="week">Неделя</ToggleButton>
+            <ToggleButton value="month">Месяц</ToggleButton>
+            <ToggleButton value="all">Всё</ToggleButton>
             </ToggleButtonGroup>
           </Grid>
         </Grid>
