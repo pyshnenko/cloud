@@ -37,7 +37,7 @@ export default function DedansCharts() {
 
   const fetchData = () => {
     setIsRefreshing(true);
-    axios.get('https://cloud.spamigor.ru/vnstat/vnstat_summary.json')
+    axios.get('https://spamigor.ru/vnstat/vnstat_summary.json')
       .then((response) => {
         setFullData(response.data);
         const servers = Object.keys(response.data);
