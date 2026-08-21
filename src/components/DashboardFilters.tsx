@@ -22,12 +22,13 @@ interface DashboardFiltersProps {
   setTimePreset: (v: string) => void;
 }
 
-// React.memo предотвращает ререндер, если пропсы идентичны
 export default React.memo(function DashboardFilters({
   themeMode, res, setRes, domenList, iface, setIface, ifaceList, range, setRange, timePreset, setTimePreset
 }: DashboardFiltersProps) {
+  const isDark = themeMode === 'dark';
+
   return (
-    <Card sx={{ p: 3, mb: 4, bgcolor: 'background.paper' }}>
+    <Card sx={{ p: 3, mb: 4, backdropFilter: 'blur(16px)', bgcolor: isDark ? 'rgba(30, 41, 59, 0.6)' : 'rgba(255, 255, 255, 0.7)', border: '1px solid', borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)', boxShadow: 'none' }}>
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={12} sm={6} md={3}>
           <FormControl fullWidth size="small">
@@ -37,7 +38,6 @@ export default React.memo(function DashboardFilters({
             </Select>
           </FormControl>
         </Grid>
-        
         <Grid item xs={12} sm={6} md={3}>
           <FormControl fullWidth size="small">
             <InputLabel>Интерфейс</InputLabel>
@@ -46,7 +46,6 @@ export default React.memo(function DashboardFilters({
             </Select>
           </FormControl>
         </Grid>
-        
         <Grid item xs={12} sm={6} md={3}>
           <FormControl fullWidth size="small">
             <InputLabel>Группировка</InputLabel>
@@ -58,30 +57,8 @@ export default React.memo(function DashboardFilters({
             </Select>
           </FormControl>
         </Grid>
-        
         <Grid item xs={12} sm={6} md={3}>
-          <ToggleButtonGroup 
-            fullWidth 
-            size="small" 
-            value={timePreset} 
-            exclusive 
-            onChange={(_, v) => v && setTimePreset(v)} 
-            sx={{ 
-              bgcolor: themeMode === 'dark' ? '#1e293b' : '#f1f5f9',
-              borderRadius: '10px', p: '2px', border: themeMode === 'dark' ? '1px solid #334155' : 'none',
-              '& .MuiToggleButton-root': {
-                border: 'none', borderRadius: '8px !important',
-                color: themeMode === 'dark' ? '#94a3b8' : '#475569',
-                textTransform: 'none', fontWeight: 600,
-                '&.Mui-selected': {
-                  bgcolor: themeMode === 'dark' ? '#334155' : '#ffffff',
-                  color: themeMode === 'dark' ? '#00f2fe' : '#4facfe',
-                  boxShadow: themeMode === 'dark' ? '0 2px 8px rgba(0,0,0,0.4)' : '0 2px 4px rgba(0,0,0,0.05)',
-                  '&:hover': { bgcolor: themeMode === 'dark' ? '#475569' : '#ffffff' }
-                }
-              }
-            }}
-          >
+          <ToggleButtonGroup fullWidth size="small" value={timePreset} exclusive onChange={(_, v) => v && setTimePreset(v)} sx={{ bgcolor: isDark ? 'rgba(15,23,42,0.4)' : '#f1f5f9', borderRadius: '10px', p: '2px', border: isDark ? '1px solid #334155' : 'none', '& .MuiToggleButton-root': { border: 'none', borderRadius: '8px !important', color: isDark ? '#94a3b8' : '#475569', textTransform: 'none', fontWeight: 600, '&.Mui-selected': { bgcolor: isDark ? '#334155' : '#ffffff', color: isDark ? '#00f2fe' : '#4facfe', boxShadow: isDark ? '0 2px 8px rgba(0,0,0,0.4)' : '0 2px 4px rgba(0,0,0,0.05)', '&:hover': { bgcolor: isDark ? '#475569' : '#ffffff' } } } }}>
             <ToggleButton value="day">День</ToggleButton>
             <ToggleButton value="week">Неделя</ToggleButton>
             <ToggleButton value="month">Месяц</ToggleButton>
