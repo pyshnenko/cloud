@@ -2,8 +2,8 @@
   "openapi": "3.0.3",
   "info": {
     "title": "API для облака",
-    "description": "https://cloud.spamigor.ru",
-    "termsOfService": "https://cloud.spamigor.ru",
+    "description": "https://spamigor.ru",
+    "termsOfService": "https://spamigor.ru",
     "contact": {
       "email": "pyshnenko94@yandex.ru"
     },
@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "https://cloud.spamigor.ru/api",
+      "url": "https://spamigor.ru/api",
       "variables": {},
       "description": "Основной"
     },
@@ -27,7 +27,7 @@
       "description": "действия",
       "externalDocs": {
         "description": "Развернуть",
-        "url": "http://cloud.spamigor.ru/api/"
+        "url": "http://spamigor.ru"
       }
     },
     {
@@ -35,7 +35,7 @@
       "description": "Операции с файлами",
       "externalDocs": {
         "description": "Развернуть",
-        "url": "http://cloud.spamigor.ru/api/"
+        "url": "http://spamigor.ru"
       }
     },
     {
@@ -43,72 +43,15 @@
       "description": "Операции с токенами",
       "externalDocs": {
         "description": "Развернуть",
-        "url": "http://cloud.spamigor.ru/api/"
+        "url": "http://spamigor.ru"
       }
+    },
+    {
+      "name": "Мониторинг сети",
+      "description": "Логи и статистика сетевого трафика vnstat"
     }
   ],
   "paths": {
-    "/fs": {
-      "post": {
-        "tags": [
-          "Операции с файлами"
-        ],
-        "summary": "Операции с файловой системой",
-        "operationId": "fs",
-        "description": "Варианты параметра action - mkdir, rm, chmod, ls, tar",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "location": {
-                    "type": "string",
-                    "example": "/"
-                  },
-                  "token": {
-                    "type": "string",
-                    "example": ""
-                  },
-                  "action": {
-                    "type": "string",
-                    "example": "ls"
-                  },
-                  "name": {
-                    "type": "string",
-                    "example": ""
-                  },
-                  "incognit": {
-                    "type": "boolean",
-                    "example": false
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Выполнено"
-          },
-          "401": {
-            "description": "Ошибка запроса"
-          },
-          "404": {
-            "description": "Не найдено"
-          },
-          "500": {
-            "description": "Ошибка сервера"
-          }
-        },
-        "security": [
-          {
-            "B_auth": []
-          }
-        ]
-      }
-    },
     "/login": {
       "post": {
         "tags": [
@@ -123,30 +66,17 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "login": {
-                    "type": "string",
-                    "example": "spamigor"
-                  },
-                  "pass": {
-                    "type": "string",
-                    "example": "12101994a"
-                  },
-                  "email": {
-                    "type": "string",
-                    "example": ""
-                  }
+                  "login": { "type": "string", "example": "spamigor" },
+                  "pass": { "type": "string", "example": "12101994a" },
+                  "email": { "type": "string", "example": "" }
                 }
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Выполнено"
-          },
-          "401": {
-            "description": "Недостаточно прав"
-          }
+          "200": { "description": "Выполнено" },
+          "401": { "description": "Недостаточно прав" }
         }
       }
     },
@@ -162,50 +92,25 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "first_name": {
-                    "type": "string",
-                    "example": "Антон"
-                  },
-                  "last_name": {
-                    "type": "string",
-                    "example": "Пышненко"
-                  },
-                  "login": {
-                    "type": "string",
-                    "example": "spamigor"
-                  },
-                  "email": {
-                    "type": "string",
-                    "example": "pyshnenko94@yandex.ru"
-                  },
-                  "password": {
-                    "type": "string",
-                    "example": "12101994a"
-                  }
-                }
+                "$ref": "#/components/schemas/register"
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Выполнено"
-          },
-          "401": {
-            "description": "Занято"
-          }
+          "200": { "description": "Выполнено" },
+          "401": { "description": "Занято" }
         }
       }
     },
-    "/secure": {
+    "/fs": {
       "post": {
         "tags": [
-          "Секретка"
+          "Операции с файлами"
         ],
-        "summary": "Запрос открытого ключа",
-        "operationId": "simpleTok",
+        "summary": "Операции с файловой системой",
+        "operationId": "fs",
+        "description": "Варианты параметра action - mkdir, rm, chmod, ls, tar",
         "requestBody": {
           "required": true,
           "content": {
@@ -213,62 +118,21 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "act": {
-                    "type": "string",
-                    "example": "ls"
-                  }
+                  "location": { "type": "string", "example": "/" },
+                  "token": { "type": "string", "example": "" },
+                  "action": { "type": "string", "example": "ls" },
+                  "name": { "type": "string", "example": "" },
+                  "incognit": { "type": "boolean", "example": false }
                 }
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Выполнено"
-          },
-          "401": {
-            "description": "Занято"
-          }
-        }
-      }
-    },
-    "/tokenUpd": {
-      "post": {
-        "tags": [
-          "Секретка"
-        ],
-        "summary": "Обновить токен",
-        "operationId": "tokenUpd",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "oldToken": {
-                    "type": "string",
-                    "example": ""
-                  },
-                  "atoken": {
-                    "type": "string",
-                    "example": ""
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Выполнено"
-          },
-          "401": {
-            "description": "Ошибка запроса"
-          },
-          "402": {
-            "description": "Ошибка авторизации"
-          }
+          "200": { "description": "Выполнено" },
+          "401": { "description": "Ошибка запроса" },
+          "404": { "description": "Не найдено" },
+          "500": { "description": "Ошибка сервера" }
         },
         "security": [
           {
@@ -291,40 +155,110 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "location": {
-                    "type": "string",
-                    "example": "/"
-                  },
-                  "fname": {
-                    "type": "string",
-                    "example": "171804004514087898.jpg"
-                  },
-                  "login": {
-                    "type": "string",
-                    "example": ""
-                  },
-                  "url": {
-                    "type": "string",
-                    "example": "https://cs15.pikabu.ru/post_img/2024/06/10/10/171804004514087898.jpg"
-                  }
+                  "location": { "type": "string", "example": "/" },
+                  "fname": { "type": "string", "example": "171804004514087898.jpg" },
+                  "login": { "type": "string", "example": "" },
+                  "url": { "type": "string", "example": "https://cs15.pikabu.ru/post_img/2024/06/10/10/171804004514087898.jpg" }
                 }
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Выполнено"
-          },
-          "401": {
-            "description": "Ошибка запроса"
-          }
+          "200": { "description": "Выполнено" },
+          "401": { "description": "Ошибка запроса" }
         },
         "security": [
           {
             "B_auth": []
           }
         ]
+      }
+    },
+    "/secure": {
+      "post": {
+        "tags": [
+          "Секретка"
+        ],
+        "summary": "Запрос открытого ключа",
+        "operationId": "simpleTok",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "act": { "type": "string", "example": "ls" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Выполнено" },
+          "401": { "description": "Занято" }
+        }
+      }
+    },
+    "/tokenUpd": {
+      "post": {
+        "tags": [
+          "Секретка"
+        ],
+        "summary": "Обновить токен",
+        "operationId": "tokenUpd",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "oldToken": { "type": "string", "example": "" },
+                  "atoken": { "type": "string", "example": "" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Выполнено" },
+          "401": { "description": "Ошибка запроса" },
+          "402": { "description": "Ошибка авторизации" }
+        },
+        "security": [
+          {
+            "B_auth": []
+          }
+        ]
+      }
+    },
+    "/vnstat": {
+      "post": {
+        "tags": [
+          "Мониторинг сети"
+        ],
+        "summary": "Получить сетевую статистику сервера",
+        "description": "Возвращает JSON с логами трафика (интерфейсы, 5-минутки, часы, дни, месяцы) для визуализации в дашборде.",
+        "operationId": "getVnstatTraffic",
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/ServerData"
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Ошибка авторизации" },
+          "500": { "description": "Ошибка выполнения vnstat" }
+        }
       }
     }
   },
@@ -333,26 +267,73 @@
       "register": {
         "type": "object",
         "properties": {
-          "first_name": {
-            "type": "string",
-            "example": "test_name"
-          },
-          "last_name": {
-            "type": "string",
-            "example": "tast_lname"
-          },
-          "password": {
-            "type": "string",
-            "example": "test"
-          },
-          "login": {
-            "type": "string",
-            "example": "Spamigor"
-          },
-          "email": {
-            "type": "string",
-            "example": "Pyshnenko94@yandex.ru"
+          "first_name": { "type": "string", "example": "Антон" },
+          "last_name": { "type": "string", "example": "Пышненко" },
+          "password": { "type": "string", "example": "12101994a" },
+          "login": { "type": "string", "example": "spamigor" },
+          "email": { "type": "string", "example": "pyshnenko94@yandex.ru" }
+        }
+      },
+      "ServerData": {
+        "type": "object",
+        "properties": {
+          "interfaces": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InterfaceData"
+            }
           }
+        }
+      },
+      "InterfaceData": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "example": "eth0" },
+          "updated": {
+            "type": "object",
+            "properties": {
+              "time": {
+                "type": "object",
+                "properties": {
+                  "hour": { "type": "integer", "example": 14 },
+                  "minute": { "type": "integer", "example": 20 }
+                }
+              }
+            }
+          },
+          "traffic": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "object",
+                "properties": {
+                  "rx": { "type": "integer", "example": 1099511627776 },
+                  "tx": { "type": "integer", "example": 2199023255552 }
+                }
+              },
+              "day": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TrafficRow"
+                }
+              }
+            }
+          }
+        }
+      },
+      "TrafficRow": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "object",
+            "properties": {
+              "year": { "type": "integer", "example": 2026 },
+              "month": { "type": "integer", "example": 8 },
+              "day": { "type": "integer", "example": 21 }
+            }
+          },
+          "rx": { "type": "integer", "example": 5368709120 },
+          "tx": { "type": "integer", "example": 8589934592 }
         }
       }
     },

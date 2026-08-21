@@ -65,10 +65,11 @@ export default function PixelPreloader({ renderMode, onComplete }: PixelPreloade
     let startTime = Date.now();
     let stage = 0;
 
-    const INTRO_DURATION = 800;   // Время плавного зажигания пикселей
-    const EXPLOSION_DELAY = 2800; // Момент взрыва
-    const FADE_DELAY = 3800;      // Начало растворения всей сцены
-    const TOTAL_DURATION = 4600;
+    // Изменяем скорость зажигания пикселей с 800мс на более быструю (400мс)
+    const INTRO_DURATION = 400;   // Время плавного зажигания пикселей из темноты
+    const EXPLOSION_DELAY = 2400; // Немного сдвинем взрыв пораньше, чтобы не затягивать заставку
+    const FADE_DELAY = 3400;      
+    const TOTAL_DURATION = 4200;  
 
     let animationFrameId: number;
 
