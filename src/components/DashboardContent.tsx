@@ -38,7 +38,7 @@ export default function DashboardContent({ themeMode, setThemeMode }: DashboardC
 
   const fetchData = () => {
     setIsRefreshing(true);
-    axios.get('https://spamigor.ru')
+    axios.get('https://spamigor.ru/vnstat/vnstat_summary.json')
       .then((response) => {
         setFullData(response.data);
         const servers = Object.keys(response.data);
