@@ -15,22 +15,40 @@ export const valueToHumanable = (bytesData: string | number): string => {
 };
 
 export const generateLabels = (row: any, range: string): string => {
-  const d = `${String(row.date.day).padStart(2, '0')}.${String(row.date.month).padStart(2, '0')}`;
+  if (!row || !row.date) return '';
+  
+  const day = String(row.date.day || 1).padStart(2, '0');
+  const month = String(row.date.month || 1).padStart(2, '0');
+  const year = row.date.year;
+
+  // Если есть часы и минуты (для 5-минуток и часов)
   if (row.time) {
-    return `${d} ${String(row.time.hour).padStart(2, '0')}:${String(row.time.minute).padStart(2, '0')}`;
+    const hour = String(row.time.hour ?? 0).padStart(2, '0');
+    const minute = String(row.time.minute ?? 0).padStart(2, '0');
+    return `${day}.${month} ${hour}:${minute}`;
   }
-  if (range === 'month') return `${String(row.date.month).padStart(2, '0')}.${row.date.year}`;
-  return d;
+
+  if (range === 'month') {
+    return `${month}.${year}`;
+  }
+  
+  return `${day}.${month}.${year}`;
 };
 
 export const generateDates = (row: any): number => {
-  const exDate = new Date(0);
-  if (row.time) {
-    exDate.setHours(row.time.hour);
-    exDate.setMinutes(row.time.minute);
-  }
-  if (row.date?.day) exDate.setDate(row.date.day);
-  if (row.date?.month) exDate.setMonth(row.date.month - 1);
-  if (row.date?.year) exDate.setFullYear(row.date.year);
-  return Number(exDate);
+  if (!row || !row.date) return 0;
+
+  // Безопасно парсим компоненты, предотвращая появление undefined или строк
+  const year = Number(row.date.year);
+  const month = Number(row.date.month || 1) - 1; // Месяцы в JS идут от 0 до 11
+  const day = Number(row.date.day || 1);
+  
+  const hour = row.time ? Number(row.time.hour ?? 0) : 0;
+  const minute = row.time ? Number(row.time.minute ?? 0) : 0;
+
+  const parsedDate = new Date(year, month, day, hour, minute, 0, 0);
+  const timestamp = parsedDate.getTime();
+
+  // Если дата спарсилась криво, возвращаем 0, чтобы точка не ломала цикл
+  return isNaN(timestamp) ? 0 : timestamp;
 };

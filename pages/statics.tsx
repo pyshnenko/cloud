@@ -65,44 +65,47 @@ export default function DedansCharts() {
     }
   }, [res, fullData]);
 
-    useEffect(() => {
+  useEffect(() => {
     if (fullData?.[res]?.interfaces?.[Number(iface)]?.traffic?.[range]) {
-        const rawTraffic = fullData[res].interfaces[Number(iface)].traffic[range];
+      const rawTraffic = fullData[res].interfaces[Number(iface)].traffic[range];
         
-        // Рассчитываем лимит времени на основе пресета
-        let limitTime = 0; // По умолчанию 0 (для пресета 'all' — пропустит всё)
-        const now = Date.now();
+      let limitTime = 0; 
+      const now = Date.now();
 
-        if (timePreset === 'day') limitTime = now - 24 * 60 * 60 * 1000;
-        else if (timePreset === 'week') limitTime = now - 7 * 24 * 60 * 60 * 1000;
-        else if (timePreset === 'month') limitTime = now - 30 * 24 * 60 * 60 * 1000;
-        else if (timePreset === 'year') limitTime = now - 365 * 24 * 60 * 60 * 1000;
+      // Расширяем временные диапазоны, чтобы данные гарантированно попадали в пресеты
+      if (timePreset === 'day') limitTime = now - 36 * 60 * 60 * 1000; // 1.5 суток (для часовых зон)
+      else if (timePreset === 'week') limitTime = now - 8 * 24 * 60 * 60 * 1000; // 8 дней вместо 7
+      else if (timePreset === 'month') limitTime = now - 31 * 24 * 60 * 60 * 1000; // 31 день
+      else if (timePreset === 'year') limitTime = now - 366 * 24 * 60 * 60 * 1000;
 
-        // Сортируем массив данных от старых к новым
-        const sortedTraffic = [...rawTraffic].sort((a, b) => generateDates(a) - generateDates(b));
+      // Сортируем строго от старых точек к новым
+      const sortedTraffic = [...rawTraffic].sort((a, b) => generateDates(a) - generateDates(b));
         
-        const labels: string[] = [];
-        const rxData: number[] = [];
-        const txData: number[] = [];
+      const labels: string[] = [];
+      const rxData: number[] = [];
+      const txData: number[] = [];
 
-        sortedTraffic.forEach((row: any) => {
+      sortedTraffic.forEach((row: any) => {
         const rowTime = generateDates(row);
         
-        // БЕЗОПАСНЫЙ ФИЛЬТР: если выбран пресет 'all', либо точка укладывается в диапазон
-        if (timePreset === 'all' || limitTime === 0 || rowTime >= limitTime) {
+        // Исключаем "битые" даты (0)
+        if (rowTime === 0) return;
+
+        // Если выбран пресет 'all' или точка проходит фильтр по времени
+        if (timePreset === 'all' || rowTime >= limitTime) {
             labels.push(generateLabels(row, range));
             
-            // Переводим байты в Гигабайты (Gb) для плавных осей графика
-            // Если трафик в точках слишком маленький, можно делить просто на 1024 / 1024 (в Mb)
-            rxData.push(row.rx / 1024 / 1024 / 1024); 
-            txData.push(row.tx / 1024 / 1024 / 1024);
-        }
+            // Превращаем байты в Гигабайты. 
+            // Если точки пустые, пишем 0 вместо undefined, чтобы график не прерывался
+            rxData.push((row.rx || 0) / 1024 / 1024 / 1024); 
+            txData.push((row.tx || 0) / 1024 / 1024 / 1024);
+          }
         });
 
         setChartData({
-        labels,
-        datasets: [
-            {
+          labels,
+          datasets: [
+          {
             fill: true,
             label: 'Входящий (rx), Gb',
             data: rxData,
@@ -110,8 +113,8 @@ export default function DedansCharts() {
             backgroundColor: 'rgba(0, 242, 254, 0.04)',
             borderWidth: 3,
             tension: 0.35,
-            },
-            {
+          },
+          {
             fill: true,
             label: 'Исходящий (tx), Gb',
             data: txData,
@@ -119,11 +122,11 @@ export default function DedansCharts() {
             backgroundColor: 'rgba(157, 78, 221, 0.04)',
             borderWidth: 3,
             tension: 0.35,
-            }
+          }
         ]
-        });
+      });
     }
-    }, [fullData, range, iface, timePreset, res]);
+  }, [fullData, range, iface, timePreset, res]);
 
   const activeInterface = fullData?.[res]?.interfaces?.[Number(iface)];
 
