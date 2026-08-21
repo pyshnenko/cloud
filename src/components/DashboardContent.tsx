@@ -19,6 +19,28 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 import KpiCards from './KpiCards';
 import { generateDates, generateLabels, valueToHumanable } from '../utils/vnstatHelpers';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Filler,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Filler,
+  Legend
+);
 
 interface DashboardContentProps {
   themeMode: 'light' | 'dark';
