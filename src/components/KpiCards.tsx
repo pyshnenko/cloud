@@ -11,6 +11,7 @@ import { valueToHumanable } from '../utils/vnstatHelpers';
 
 interface KpiCardsProps {
   activeInterface: any;
+  themeMode: 'light' | 'dark'; // 🌟 Добавьте эту строчку
 }
 
 export default function KpiCards({ activeInterface }: KpiCardsProps) {
