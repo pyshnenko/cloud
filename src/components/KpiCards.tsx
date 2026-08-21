@@ -14,7 +14,7 @@ interface KpiCardsProps {
   themeMode: 'light' | 'dark'; // 🌟 Добавьте эту строчку
 }
 
-export default function KpiCards({ activeInterface }: KpiCardsProps) {
+export default function KpiCards({ activeInterface, themeMode }: KpiCardsProps) {
   const rx = activeInterface?.traffic?.total?.rx || 0;
   const tx = activeInterface?.traffic?.total?.tx || 0;
   const total = rx + tx;
