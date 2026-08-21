@@ -65,34 +65,44 @@ export default function DedansCharts() {
     }
   }, [res, fullData]);
 
-  useEffect(() => {
+    useEffect(() => {
     if (fullData?.[res]?.interfaces?.[Number(iface)]?.traffic?.[range]) {
-      const rawTraffic = fullData[res].interfaces[Number(iface)].traffic[range];
-      
-      let limitTime = Date.now() - 7 * 24 * 60 * 60 * 1000;
-      if (timePreset === 'day') limitTime = Date.now() - 24 * 60 * 60 * 1000;
-      if (timePreset === 'month') limitTime = Date.now() - 30 * 24 * 60 * 60 * 1000;
-      if (timePreset === 'year') limitTime = Date.now() - 365 * 24 * 60 * 60 * 1000;
+        const rawTraffic = fullData[res].interfaces[Number(iface)].traffic[range];
+        
+        // Рассчитываем лимит времени на основе пресета
+        let limitTime = 0; // По умолчанию 0 (для пресета 'all' — пропустит всё)
+        const now = Date.now();
 
-      const sortedTraffic = [...rawTraffic].sort((a, b) => generateDates(a) - generateDates(b));
-      
-      const labels: string[] = [];
-      const rxData: number[] = [];
-      const txData: number[] = [];
+        if (timePreset === 'day') limitTime = now - 24 * 60 * 60 * 1000;
+        else if (timePreset === 'week') limitTime = now - 7 * 24 * 60 * 60 * 1000;
+        else if (timePreset === 'month') limitTime = now - 30 * 24 * 60 * 60 * 1000;
+        else if (timePreset === 'year') limitTime = now - 365 * 24 * 60 * 60 * 1000;
 
-      sortedTraffic.forEach((row: any) => {
+        // Сортируем массив данных от старых к новым
+        const sortedTraffic = [...rawTraffic].sort((a, b) => generateDates(a) - generateDates(b));
+        
+        const labels: string[] = [];
+        const rxData: number[] = [];
+        const txData: number[] = [];
+
+        sortedTraffic.forEach((row: any) => {
         const rowTime = generateDates(row);
-        if (timePreset === 'all' || rowTime >= limitTime) {
-          labels.push(generateLabels(row, range));
-          rxData.push(row.rx / 1024 / 1024 / 1024); // Перевод в Gb для красоты осей
-          txData.push(row.tx / 1024 / 1024 / 1024);
+        
+        // БЕЗОПАСНЫЙ ФИЛЬТР: если выбран пресет 'all', либо точка укладывается в диапазон
+        if (timePreset === 'all' || limitTime === 0 || rowTime >= limitTime) {
+            labels.push(generateLabels(row, range));
+            
+            // Переводим байты в Гигабайты (Gb) для плавных осей графика
+            // Если трафик в точках слишком маленький, можно делить просто на 1024 / 1024 (в Mb)
+            rxData.push(row.rx / 1024 / 1024 / 1024); 
+            txData.push(row.tx / 1024 / 1024 / 1024);
         }
-      });
+        });
 
-      setChartData({
+        setChartData({
         labels,
         datasets: [
-          {
+            {
             fill: true,
             label: 'Входящий (rx), Gb',
             data: rxData,
@@ -100,8 +110,8 @@ export default function DedansCharts() {
             backgroundColor: 'rgba(0, 242, 254, 0.04)',
             borderWidth: 3,
             tension: 0.35,
-          },
-          {
+            },
+            {
             fill: true,
             label: 'Исходящий (tx), Gb',
             data: txData,
@@ -109,11 +119,11 @@ export default function DedansCharts() {
             backgroundColor: 'rgba(157, 78, 221, 0.04)',
             borderWidth: 3,
             tension: 0.35,
-          }
+            }
         ]
-      });
+        });
     }
-  }, [fullData, range, iface, timePreset, res]);
+    }, [fullData, range, iface, timePreset, res]);
 
   const activeInterface = fullData?.[res]?.interfaces?.[Number(iface)];
 
