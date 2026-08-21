@@ -1,317 +1,218 @@
-import React, { useEffect, useState, useRef, createContext, useContext } from 'react';
-import Button from '@mui/material/Button';
-import { Line, Bar } from 'react-chartjs-2';
+import React, { useEffect, useState } from 'react';
+import { Line } from 'react-chartjs-2';
 import Box from '@mui/material/Box';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Filler,
-  Legend,
-} from 'chart.js';
+import Card from '@mui/material/Card';
+import Grid from '@mui/material/Grid';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend } from 'chart.js';
 import axios from 'axios';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import SyncIcon from '@mui/icons-material/Sync';
 
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Filler,
-    Legend
-  );
+
+import KpiCards from '../src/components/KpiCards';
+import { generateDates, generateLabels, valueToHumanable } from '../src/utils/vnstatHelpers';
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend);
 
 interface fullData {
-    [key: string]: {interfaces: any}
+  [key: string]: { interfaces: any[] }
 }
 
-const values: string[] = ['b', 'kb', 'Mb', 'Gb', 'Tb', 'Pb'];
-
-const domens: {code: string, url:string}[] = [
-    {code: 'spamigor', url:'https://spamigor.ru/trafic/spamigor.json'},
-    {code: 'euroigor', url:'https://spamigor.ru/trafic/euroigor.json'},
-    {code: 'rele', url:'https://spamigor.ru/trafic/rele.json'},
-    {code: 'ifbizvpn', url:'https://spamigor.ru/trafic/ifbizvpn.json'},
-    {code: 'homeigor', url:'https://spamigor.ru/trafic/homeigor.json'},
-    {code: 'shrekislove', url:'https://spamigor.ru/trafic/shrekislove.json'},
-    {code: 'vpn_codegap', url:'https://spamigor.ru/trafic/vpn_codegap.json'},
-    {code: 'codegap', url:'https://spamigor.ru/trafic/codegap.json'},
-    {code: 'chertolet', url:'https://spamigor.ru/trafic/chertolet.json'},
-    {code: 'pyshnetdb', url:'https://spamigor.ru/trafic/pyshnetdb.json'},
-    {code: 'pyshnet', url:'https://spamigor.ru/trafic/pyshnet.json'}
-];
-
 export default function DedansCharts() {
+  const [fullData, setFullData] = useState<fullData>();
+  const [domenList, setDomenList] = useState<string[]>([]);
+  const [ifaceList, setiFaceList] = useState<string[]>([]);
+  const [iface, setiFace] = useState<string>("0");
+  const [res, setRes] = useState<string>(''); 
+  const [range, setRange] = useState<string>('day');
+  const [timePreset, setTimePreset] = useState<string>('week');
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [chartData, setChartData] = useState({ labels: [] as string[], datasets: [] as any[] });
 
-    const [fullData, setFullData] = useState<fullData>();
-    const [ width, setWidth ] = useState<number>(0);
-    const [ifaceList, setiFaceList] = useState<string[]>([]);
-    const [iface, setiFace] = useState<string>("0");
-    const [sTime, setSTime] = useState<number>(Number((new Date(0)).setHours(0)));
-    const [eTime, setETime] = useState<number>(Number((new Date()).setHours(23)));  
-    const [res, setRes] = useState<string>('spamigor'); 
-    const [ data, setData ] = useState({
-        labels: [],
-        datasets: [{
-          fill: false,
-          label: 'Посуточный график',
-          data: [0,0,0,0,0],
-          backgroundColor: [
-            'rgb(153, 102, 255)'
-          ],
-          borderColor: [
-            'rgb(153, 102, 255)'
-          ],
-          borderWidth: 1
-        }]
+  const fetchData = () => {
+    setIsRefreshing(true);
+    axios.get('https://spamigor.ru')
+      .then((response) => {
+        setFullData(response.data);
+        const servers = Object.keys(response.data);
+        setDomenList(servers);
+        if (servers.length > 0 && !res) {
+          setRes(servers.includes('spamigor') ? 'spamigor' : servers[0]);
+        }
+      })
+      .catch(err => console.error("Ошибка загрузки данных:", err))
+      .finally(() => setTimeout(() => setIsRefreshing(false), 500));
+  };
+
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(fetchData, 120000); // Автообновление каждые 2 минуты
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (fullData?.[res]?.interfaces) {
+      const names: string[] = fullData[res].interfaces.map((int: any) => int.name);
+      setiFaceList(names);
+      const defaultIdx = names.findIndex(name => name.startsWith('e') || name.startsWith('w'));
+      setiFace(defaultIdx !== -1 ? String(defaultIdx) : "0");
+    }
+  }, [res, fullData]);
+
+  useEffect(() => {
+    if (fullData?.[res]?.interfaces?.[Number(iface)]?.traffic?.[range]) {
+      const rawTraffic = fullData[res].interfaces[Number(iface)].traffic[range];
+      
+      let limitTime = Date.now() - 7 * 24 * 60 * 60 * 1000;
+      if (timePreset === 'day') limitTime = Date.now() - 24 * 60 * 60 * 1000;
+      if (timePreset === 'month') limitTime = Date.now() - 30 * 24 * 60 * 60 * 1000;
+      if (timePreset === 'year') limitTime = Date.now() - 365 * 24 * 60 * 60 * 1000;
+
+      const sortedTraffic = [...rawTraffic].sort((a, b) => generateDates(a) - generateDates(b));
+      
+      const labels: string[] = [];
+      const rxData: number[] = [];
+      const txData: number[] = [];
+
+      sortedTraffic.forEach((row: any) => {
+        const rowTime = generateDates(row);
+        if (timePreset === 'all' || rowTime >= limitTime) {
+          labels.push(generateLabels(row, range));
+          rxData.push(row.rx / 1024 / 1024 / 1024); // Перевод в Gb для красоты осей
+          txData.push(row.tx / 1024 / 1024 / 1024);
+        }
       });
-    const [range, setRange] = useState<string>('day');
 
-    useEffect(()=>{
-        let ffullData: {num: number, fullData: fullData} = {num: 0, fullData: {}};
-        const handleResize = (event: any) => {
-            setWidth(event.target.innerWidth);
-        };
-        window.addEventListener('resize', handleResize);
-        setWidth(window.innerWidth);
-        for (let urData of domens) {
-            axios.get(urData.url)
-                .then((res: any)=>{
-                    if (urData.code === 'spamigor') {                        
-                        let ifaceNames: string[] = [];
-                        res.data.interfaces.forEach((int: any)=>ifaceNames.push(int.name));
-                        setiFaceList(ifaceNames);
-                    }
-                    ffullData = {num: ffullData.num+1, fullData: {
-                        ...ffullData.fullData,
-                        [urData.code]: {interfaces: res.data.interfaces}
-                    }};
-                    if (ffullData.num>=domens.length-1) setFullData(ffullData.fullData)
-                })
-        }
-    
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
-    useEffect(()=>{
-        if (fullData && fullData.hasOwnProperty(res)) {
-            let ifaceNames: string[] = [];
-            fullData[res].interfaces.forEach((int: any)=>ifaceNames.push(int.name));
-            setiFaceList(ifaceNames);
-            ifaceNames.forEach((data: string, index: number)=>{
-                if (data[0]==='e') {
-                    setiFace(String(index));
-            }})
-        }
-    }, [res])
-
-    useEffect(()=>{
-        if (fullData){
-            //console.log(fullData?[res].interfaces[Number(iface||0)]);
-        }
-    }, [iface])
-
-    useEffect(()=>{
-        if (fullData) //setData(fullData.interfaces[Number(iface)].traffic[range]);
-            setData({
-                labels: fullData[res].interfaces[Number(iface)].traffic[range].map(
-                    (row: {rx: number, time?: {hour: number, minute: number}, date:{year: number, month: number, day: number}}) => {
-                    const rowTime = generateDates(row);
-                    if ((sTime <= rowTime) && (eTime >= rowTime)) {return generateLabels(row)}
-                }).filter(Boolean),
-                datasets: [{
-                  fill: false,
-                  label: 'rx, Mb' ,
-                  data: fullData[res].interfaces[Number(iface)].traffic[range].map(
-                    (row: {rx: number, time?: {hour: number, minute: number}, date:{year: number, month: number, day: number}}) => {
-                        const rowTime = generateDates(row);
-                        if ((sTime <= rowTime) && (eTime >= rowTime)) {return row.rx/1024/1024}
-                    }).filter(Boolean),
-                  borderColor: ['rgb(53, 162, 235)'],
-                  backgroundColor: ['rgba(53, 162, 235, 0.5)'],
-                  borderWidth: 1
-                },{
-                  fill: false,
-                  label: 'tx, Mb',
-                  data: fullData[res].interfaces[Number(iface)].traffic[range].map(
-                    (row: {tx: number, time?: {hour: number, minute: number}, date:{year: number, month: number, day: number}}) => {
-                        const rowTime = generateDates(row);
-                        if ((sTime <= rowTime) && (eTime >= rowTime)) return row.tx/1024/1024
-                    }).filter(Boolean),
-                  borderColor: ['rgb(162, 53, 235)'],
-                  backgroundColor: ['rgba(162, 53, 235, 0.5)'],
-                  borderWidth: 1
-                }]
-            })
-    }, [fullData, range, iface, sTime, eTime, res])
-
-    const valueToHumanable = (data: string|number) => {
-        let mass = Number(data);
-
-        if (mass) {
-            if (mass>1024) {
-                let d:{num: number, mn: number} = del1024({num: mass, mn: 0})
-                return `${d.num.toFixed(3)} ${values[d.mn]}`
-            }
-        }
-        else return 0
+      setChartData({
+        labels,
+        datasets: [
+          {
+            fill: true,
+            label: 'Входящий (rx), Gb',
+            data: rxData,
+            borderColor: '#00f2fe',
+            backgroundColor: 'rgba(0, 242, 254, 0.04)',
+            borderWidth: 3,
+            tension: 0.35,
+          },
+          {
+            fill: true,
+            label: 'Исходящий (tx), Gb',
+            data: txData,
+            borderColor: '#9d4edd',
+            backgroundColor: 'rgba(157, 78, 221, 0.04)',
+            borderWidth: 3,
+            tension: 0.35,
+          }
+        ]
+      });
     }
+  }, [fullData, range, iface, timePreset, res]);
 
-    const del1024: any = ({num, mn}: {num: number, mn: number}) =>{    
-        if (num>1024) return del1024({num: (num/1024), mn: mn+1});
-        else return {num, mn}
-    }
+  const activeInterface = fullData?.[res]?.interfaces?.[Number(iface)];
 
-    const generateLabels = (inpDats: {date: {year: number, month?: number, day?: number}, time?: {hour: number, minute: number}}) =>{
-        let exString: string = '';
-        if (inpDats?.time) exString+=`${inpDats.time.hour}:${inpDats.time.minute} `;
-        if (inpDats.date?.day) exString+=`${inpDats.date?.day}.`
-        if (inpDats.date?.month) exString+=`${inpDats.date?.month}.`
-        if (inpDats.date.year) exString+=`${inpDats.date.year}`
-        return exString
-    }
-
-    const generateDates = (inpDats: {date: {year: number, month?: number, day?: number}, time?: {hour: number, minute: number}}) =>{
-        let exDate = new Date(0);
-        if (inpDats?.time) {exDate.setHours(inpDats?.time.hour); exDate.setMinutes(inpDats?.time.minute)}
-        if (inpDats.date?.day) exDate.setDate(inpDats.date?.day)
-        if (inpDats.date?.month) exDate.setMonth(inpDats.date?.month-1)
-        if (inpDats.date.year) exDate.setFullYear(inpDats.date.year)
-        return Number(exDate)
-    }
-
-    return (
+  return (
+    <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1400, margin: '0 auto', bgcolor: '#f8fafc', minHeight: '100vh' }}>
+      {/* ХЕДЕР */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
         <Box>
-            {ifaceList.length!==0&&<Box sx={{display: 'flex', flexDirection: 'column'}}>
-                <Box sx={{display: 'flex', flexDirection: width>400?'row':'column'}}>
-                    <Box sx={{padding: 2, width: width>400?'33%':'100%'}}>
-                        <FormControl fullWidth>
-                            <InputLabel id="res">Ресурс</InputLabel>
-                            <Select
-                                labelId="res"
-                                id="res"
-                                value={res}
-                                label="Ресурс"
-                                onChange={(event: SelectChangeEvent)=>setRes((event.target.value||0) as string)}
-                            >
-                            <MenuItem value="spamigor">spamigor.ru</MenuItem>
-                            <MenuItem value="euroigor">euroigor.ru</MenuItem>
-                            <MenuItem value="rele">реле</MenuItem>
-                            <MenuItem value="ifbizvpn">ifbizvpn.ru</MenuItem>
-                            <MenuItem value="homeigor">homeigor.ru</MenuItem>
-                            <MenuItem value="shrekislove">shrekislove.ru</MenuItem>
-                            <MenuItem value="codegap">codegap.online</MenuItem>
-                            <MenuItem value="vpn_codegap">vpn.codegap.online</MenuItem>
-                            <MenuItem value="chertolet">chertolet.ru</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-                    <Box sx={{padding: 2, width: width>400?'33%':'100%'}}>
-                        <FormControl fullWidth>
-                            <InputLabel id="iFaceType">Интерфейс</InputLabel>
-                            <Select
-                                labelId="iFaceType"
-                                id="iFaceType"
-                                value={iface}
-                                label="Интерфейс"
-                                onChange={(event: SelectChangeEvent)=>setiFace((event.target.value||0) as string)}
-                            >
-                                <MenuItem value="">
-                                    <em>Нет</em>
-                                </MenuItem>
-                                {ifaceList.map((item: string, index: number)=>{
-                                    return <MenuItem key={'iface: '+item} value={index}>{item}</MenuItem>
-                                })}
-                            </Select>
-                        </FormControl>
-                    </Box>
-                    <Box sx={{padding: 2, width: width>400?'33%':'100%'}}>
-                        <FormControl fullWidth>
-                            <InputLabel id="iFacePeriod">Период</InputLabel>
-                            <Select
-                                labelId="iFacePeriod"
-                                id="iFacePeriod"
-                                value={range}
-                                label="Период"
-                                onChange={(event: SelectChangeEvent)=>setRange(event.target.value)}
-                            >
-                                <MenuItem value="fiveminute">5 минут</MenuItem>
-                                <MenuItem value="hour">Часы</MenuItem>
-                                <MenuItem value="day">Дни</MenuItem>
-                                <MenuItem value="month">Месяцы</MenuItem>
-                                <MenuItem value="year">Года</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-                </Box>
-                <Box sx={{display: 'flex', justifyContent: 'space-evenly', flexDirection: width>400?'row':'column'}}>
-                    <Box sx={{display: 'flex', flexDirection: width>800?'row':'column', alignItems: 'center'}}>
-                        <Typography>Начало</Typography>
-                        <Box sx={{display: 'flex', flexDirection: 'row', width: '100%'}}>
-                            <TextField fullWidth type='time' onChange={({target}: any)=>{
-                                let time = new Date(sTime);
-                                time.setHours(Number(target.value.slice(0,2)))                            
-                                time.setMinutes(Number(target.value.slice(-2)))
-                                setSTime(Number(time))
-                            }}></TextField>
-                            <TextField fullWidth type='date' onChange={({target}: any)=>
-                                {
-                                    let time = new Date(sTime);
-                                    time.setDate(Number(target.value.slice(-2)))
-                                    time.setMonth(Number(target.value.slice(5,7))-1)
-                                    time.setFullYear(Number(target.value.slice(0,4)))
-                                    setSTime(Number(time))
-                                }}>
-                            </TextField>
-                        </Box>
-                    </Box>
-                    <Box sx={{display: 'flex', flexDirection: width>800?'row':'column', alignItems: 'center'}}>
-                        <Typography>Конец</Typography>
-                        <Box sx={{display: 'flex', flexDirection: 'row', width: '100%'}}>
-                            <TextField fullWidth type='time' onChange={({target}: any)=>{
-                                let time = new Date(eTime);
-                                time.setHours(Number(target.value.slice(0,2)))                            
-                                time.setMinutes(Number(target.value.slice(-2)))
-                                setETime(Number(time))
-                            }}></TextField>
-                            <TextField fullWidth type='date' onChange={({target}: any)=>
-                                {
-                                    let time = new Date(eTime);
-                                    time.setDate(Number(target.value.slice(-2)))
-                                    time.setMonth(Number(target.value.slice(5,7))-1)
-                                    time.setFullYear(Number(target.value.slice(0,4)))
-                                    console.log(time)
-                                    setETime(Number(time))
-                                }}>
-                            </TextField>
-                        </Box>
-                    </Box>
-                </Box>
-            </Box>}
-            <Box sx={{padding: width>1000?'0 14%':0}}><Line data={data} /></Box>
-            {fullData?
-                <Box>
-                    <Typography>{`Последнее обновление в ${fullData[res].interfaces[Number(iface)].updated.time.hour}:${fullData[res].interfaces[Number(iface)].updated.time.minute} ${fullData[res].interfaces[Number(iface)].updated.date.day}.${fullData[res].interfaces[Number(iface)].updated.date.month}.${fullData[res].interfaces[Number(iface)].updated.date.year}`}</Typography>
-                    <Box sx={{display: 'flex'}}>
-                        <Typography>{`Суммарное`}</Typography>
-                        <Typography>{`: rx: ${valueToHumanable(fullData[res].interfaces[Number(iface)].traffic.total.rx)}`}</Typography>
-                        <Typography>{`,    tx: ${valueToHumanable(fullData[res].interfaces[Number(iface)].traffic.total.tx)}`}</Typography>
-                    </Box>
-                </Box>
-            :null}
+          <Typography variant="h4" sx={{ fontWeight: 800, color: '#1e293b' }}>Дашборд Сети</Typography>
+          {activeInterface?.updated && (
+            <Typography variant="body2" sx={{ color: '#64748b', mt: 0.5 }}>
+              Обновлено: {activeInterface.updated.time.hour}:{String(activeInterface.updated.time.minute).padStart(2, '0')}
+            </Typography>
+          )}
         </Box>
-    )
+        <ToggleButton value="sync" selected={isRefreshing} onClick={fetchData} sx={{ borderRadius: '12px', bgcolor: '#fff' }}>
+          <SyncIcon sx={{ animation: isRefreshing ? 'spin 1s linear infinite' : 'none', color: '#00f2fe' }} />
+          <style>{`@keyframes spin { 100% { transform:rotate(360deg); } }`}</style>
+        </ToggleButton>
+      </Box>
+
+      {/* КАРТОЧКИ СТАТИСТИКИ */}
+      <KpiCards activeInterface={activeInterface} />
+
+      {/* УПРАВЛЕНИЕ И СЕЛЕКТОРЫ */}
+      <Card sx={{ p: 3, borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: 'none', mb: 4, bgcolor: '#fff' }}>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} sm={6} md={3}>
+            <FormControl fullWidth size="small">
+              <InputLabel>Сервер</InputLabel>
+              <Select value={res} label="Сервер" onChange={(e) => setRes(e.target.value)}>
+                {domenList.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <FormControl fullWidth size="small">
+              <InputLabel>Интерфейс</InputLabel>
+              <Select value={iface} label="Интерфейс" onChange={(e) => setiFace(e.target.value)}>
+                {ifaceList.map((n, i) => <MenuItem key={n} value={i}>{n}</MenuItem>)}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <FormControl fullWidth size="small">
+              <InputLabel>Группировка</InputLabel>
+              <Select value={range} label="Группировка" onChange={(e) => setRange(e.target.value)}>
+                <MenuItem value="fiveminute">5 минут</MenuItem>
+                <MenuItem value="hour">Часы</MenuItem>
+                <MenuItem value="day">Дни</MenuItem>
+                <MenuItem value="month">Месяцы</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <ToggleButtonGroup
+              fullWidth
+              size="small"
+              value={timePreset}
+              exclusive
+              onChange={(_, v) => v && setTimePreset(v)}
+              sx={{ bgcolor: '#f1f5f9' }}
+            >
+              <ToggleButton value="day">День</ToggleButton>
+              <ToggleButton value="week">Неделя</ToggleButton>
+              <ToggleButton value="month">Месяц</ToggleButton>
+              <ToggleButton value="all">Всё</ToggleButton>
+            </ToggleButtonGroup>
+          </Grid>
+        </Grid>
+      </Card>
+
+      {/* ГРАФИК */}
+      <Card sx={{ p: { xs: 1, md: 3 }, borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: 'none', bgcolor: '#fff' }}>
+        {chartData.labels.length > 0 ? (
+          <Box sx={{ width: '100%', height: { xs: 300, md: 450 } }}>
+            <Line
+              data={chartData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { position: 'top' as const },
+                  tooltip: {
+                    callbacks: {
+                      label: (ctx: any) => {
+                        const bytes = ctx.parsed.y * 1024 * 1024 * 1024;
+                        return `${ctx.dataset.label.split(',')[0]}: ${valueToHumanable(bytes)}`;
+                      }
+                    }
+                  }
+                }
+              }}
+            />
+          </Box>
+        ) : (
+          <Typography sx={{ p: 4, textAlign: 'center', color: '#64748b' }}>Нет точек за выбранный период</Typography>
+        )}
+      </Card>
+    </Box>
+  );
 }
