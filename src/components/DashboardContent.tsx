@@ -70,7 +70,7 @@ export default function DashboardContent({ renderMode, themeSetting, setThemeSet
     let limitTime = 0; const now = Date.now();
     
     if (timePreset === 'day') limitTime = now - 36 * 60 * 60 * 1000;
-    else if (timePreset === 'week') limitTime = now - 8 * 24 * 60 * 60 * 1000;
+    else if (timePreset === 'week') limitTime = now - 9 * 24 * 60 * 60 * 1000;
     else if (timePreset === 'month') limitTime = now - 31 * 24 * 60 * 60 * 1000;
     else if (timePreset === 'year') limitTime = now - 366 * 24 * 60 * 60 * 1000;
 

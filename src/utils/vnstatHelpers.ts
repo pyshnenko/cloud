@@ -1,17 +1,42 @@
-const values = ['b', 'kb', 'Mb', 'Gb', 'Tb', 'Pb'];
+// utils/vnstatHelpers.ts
 
-const del1024 = ({ num, mn }: { num: number; mn: number }): { num: number; mn: number } => {
-  if (num > 1024 && mn < values.length - 1) {
-    return del1024({ num: num / 1024, mn: mn + 1 });
+const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+
+// 🌟 Важно: Функция должна быть экспортирована именно как именованный экспорт (export const)
+export const valueToHumanable = (bytesData: string | number): string => {
+  let num = Number(bytesData);
+  if (!num || isNaN(num)) return '0 B';
+  
+  let unitIndex = 0;
+  while (num >= 1024 && unitIndex < units.length - 1) {
+    num /= 1024;
+    unitIndex++;
   }
-  return { num, mn };
+  
+  return `${num.toFixed(2)} ${units[unitIndex]}`;
 };
 
-export const valueToHumanable = (bytesData: string | number): string => {
-  const mass = Number(bytesData);
-  if (!mass) return '0 b';
-  const d = del1024({ num: mass, mn: 0 });
-  return `${d.num.toFixed(2)} ${values[d.mn]}`;
+export const generateDates = (row: any): number => {
+  if (!row || !row.date) return 0;
+
+  const year = Number(row.date.year);
+  const month = Number(row.date.month || 1) - 1; // 0-11
+  const day = Number(row.date.day || 1);
+  
+  let hour = 0;
+  let minute = 0;
+
+  if (row.time) {
+    hour = Number(row.time.hour ?? 0);
+    minute = Number(row.time.minute ?? 0);
+  } else if (row.hour !== undefined) {
+    hour = Number(row.hour);
+  }
+
+  const parsedDate = new Date(year, month, day, hour, minute, 0, 0);
+  const timestamp = parsedDate.getTime();
+
+  return isNaN(timestamp) ? 0 : timestamp;
 };
 
 export const generateLabels = (row: any, range: string): string => {
@@ -21,11 +46,20 @@ export const generateLabels = (row: any, range: string): string => {
   const month = String(row.date.month || 1).padStart(2, '0');
   const year = row.date.year;
 
-  // Если есть часы и минуты (для 5-минуток и часов)
+  let hour: string | null = null;
+  let minute: string | null = null;
+
   if (row.time) {
-    const hour = String(row.time.hour ?? 0).padStart(2, '0');
-    const minute = String(row.time.minute ?? 0).padStart(2, '0');
-    return `${day}.${month} ${hour}:${minute}`;
+    hour = String(row.time.hour ?? 0).padStart(2, '0');
+    minute = String(row.time.minute ?? 0).padStart(2, '0');
+  } else if (row.hour !== undefined) {
+    hour = String(row.hour).padStart(2, '0');
+  }
+
+  if (hour !== null) {
+    return minute !== null 
+      ? `${day}.${month} ${hour}:${minute}` 
+      : `${day}.${month} ${hour}:00`;
   }
 
   if (range === 'month') {
@@ -33,22 +67,4 @@ export const generateLabels = (row: any, range: string): string => {
   }
   
   return `${day}.${month}.${year}`;
-};
-
-export const generateDates = (row: any): number => {
-  if (!row || !row.date) return 0;
-
-  // Безопасно парсим компоненты, предотвращая появление undefined или строк
-  const year = Number(row.date.year);
-  const month = Number(row.date.month || 1) - 1; // Месяцы в JS идут от 0 до 11
-  const day = Number(row.date.day || 1);
-  
-  const hour = row.time ? Number(row.time.hour ?? 0) : 0;
-  const minute = row.time ? Number(row.time.minute ?? 0) : 0;
-
-  const parsedDate = new Date(year, month, day, hour, minute, 0, 0);
-  const timestamp = parsedDate.getTime();
-
-  // Если дата спарсилась криво, возвращаем 0, чтобы точка не ломала цикл
-  return isNaN(timestamp) ? 0 : timestamp;
 };

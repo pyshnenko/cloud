@@ -6,7 +6,8 @@ interface PixelPreloaderProps {
   onComplete: () => void;
 }
 
-export default function PixelPreloader({ renderMode, onComplete }: PixelPreloaderProps) {
+export default React.memo(function PixelPreloader({ renderMode, onComplete }: PixelPreloaderProps) {
+  console.log(renderMode)
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export default function PixelPreloader({ renderMode, onComplete }: PixelPreloade
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
 
-    const count = 2500;
+    const count = 3500;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(count * 3);
     const velocities = new Float32Array(count * 3);
@@ -122,39 +123,57 @@ export default function PixelPreloader({ renderMode, onComplete }: PixelPreloade
       renderer.render(scene, camera);
     };
 
-    animate();
-
+    animate();    
+    
     const handleResize = () => {
-      const w = window.innerWidth; const h = window.innerHeight;
-      camera.aspect = w / h; camera.updateProjectionMatrix();
+      const w = window.innerWidth; 
+      const h = window.innerHeight;
+      camera.aspect = w / h; 
+      camera.updateProjectionMatrix();
       renderer.setSize(w, h);
     };
     window.addEventListener('resize', handleResize);
 
+    // Сохраняем ссылку на элемент DOM в область видимости эффекта для безопасного удаления
+    const currentContainer = containerRef.current;
+    const currentDomElement = renderer.domElement;
+
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
-      if (containerRef.current && renderer.domElement) containerRef.current.removeChild(renderer.domElement);
-      geometry.dispose(); material.dispose(); renderer.dispose();
+      
+      // Безопасное удаление холста Three.js
+      if (currentContainer && currentDomElement && currentContainer.contains(currentDomElement)) {
+        currentContainer.removeChild(currentDomElement);
+      }
+      
+      // Освобождаем память WebGL
+      geometry.dispose(); 
+      material.dispose(); 
+      renderer.dispose();
     };
   }, [onComplete, renderMode]);
+
+  const isDark = renderMode === 'dark';
 
   return (
     <div 
       ref={containerRef} 
       style={{
-        position: 'absolute',
+        position: 'fixed', // Заменяем на fixed, чтобы прелоадер гарантированно перекрывал всё окно
         top: 0,
         left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#0f172a',
-        zIndex: 9999,
+        width: '100vw',
+        height: '100vh',
+        // 🌟 ДИНАМИЧЕСКИЙ ЦВЕТ: подстраиваем под текущую тему
+        backgroundColor: isDark ? '#0f172a' : '#f8fafc',
+        zIndex: 99999,
         overflow: 'hidden',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         animation: 'fadeInPreloader 0.6s ease-out forwards',
+        transition: 'background-color 0.3s ease',
       }}
     >
       <style>{`
@@ -165,4 +184,4 @@ export default function PixelPreloader({ renderMode, onComplete }: PixelPreloade
       `}</style>
     </div>
   );
-}
+});

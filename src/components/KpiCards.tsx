@@ -24,10 +24,10 @@ interface StatCardProps {
   themeMode: 'light' | 'dark';
 }
 
-// 🎰 ЭФФЕКТ 3: УМНЫЙ СЧЕТЧИК С ПЛАВНЫМ ПРИРАЩЕНИЕМ ЦИФР
+// 🎰 ИСПРАВЛЕННЫЙ СЧЕТЧИК С ОЧИСТКОЙ КАДРОВ
 function AnimatedValue({ value }: { value: number }) {
-  const [displayValue, setDisplayValue] = useState(0);
-  const prevValueRef = useRef(0);
+  const [displayValue, setDisplayValue] = useState(value);
+  const prevValueRef = useRef(value);
 
   useEffect(() => {
     const start = prevValueRef.current;
@@ -36,6 +36,7 @@ function AnimatedValue({ value }: { value: number }) {
 
     const duration = 800; // Длительность анимации в мс
     const startTime = performance.now();
+    let animationFrameId: number;
 
     const animate = (now: number) => {
       const elapsed = now - startTime;
@@ -45,16 +46,22 @@ function AnimatedValue({ value }: { value: number }) {
       const easeProgress = 1 - Math.pow(1 - progress, 3);
       const current = start + (end - start) * easeProgress;
       
-      setDisplayValue(Math.floor(current));
+      // Не округляем через Math.floor, чтобы сохранить точность долей байта для утилиты
+      setDisplayValue(current);
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
       } else {
         prevValueRef.current = end;
       }
     };
 
-    requestAnimationFrame(animate);
+    animationFrameId = requestAnimationFrame(animate);
+
+    // 🌟 Защита от Race Condition: отменяем старый кадр, если прилетели новые данные
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
   }, [value]);
 
   return <>{valueToHumanable(displayValue)}</>;
@@ -69,7 +76,7 @@ function StatCard({ title, targetValue, lightBg, darkBg, neonColor, icon, themeM
         sx={{
           borderRadius: '16px',
           boxShadow: 'none',
-          backdropFilter: 'blur(16px)', // ✨ ЭФФЕКТ 2: Стеклянный бэкграунд
+          backdropFilter: 'blur(16px)',
           background: isDark
             ? `linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(${darkBg}, 0.5) 100%)`
             : `linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(${lightBg}, 0.6) 100%)`,
@@ -91,7 +98,7 @@ function StatCard({ title, targetValue, lightBg, darkBg, neonColor, icon, themeM
             <Typography variant="caption" sx={{ color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
               {title}
             </Typography>
-            <Typography variant="h5" sx={{fontWeight: 800, color: isDark ? '#e2e8f0' : '#0f172a', mt: 0.5 }}>
+            <Typography variant="h5" sx={{ fontWeight: 800, color: isDark ? '#e2e8f0' : '#0f172a', mt: 0.5 }}>
               <AnimatedValue value={targetValue} />
             </Typography>
           </Box>
@@ -108,9 +115,11 @@ export default React.memo(function KpiCards({ activeInterface, themeMode }: KpiC
 
   return (
     <Grid container spacing={3} sx={{ mb: 4 }}>
-      <StatCard title="Скачано (RX)" targetValue={rx} lightBg="240, 253, 250" darkBg="15, 45, 43" neonColor="0, 242, 254" icon={<ArrowDownwardIcon />} themeMode={themeMode} />
-      <StatCard title="Отдано (TX)" targetValue={tx} lightBg="250, 245, 255" darkBg="45, 18, 77" neonColor="157, 78, 221" icon={<ArrowUpwardIcon />} themeMode={themeMode} />
-      <StatCard title="Всего прогнано" targetValue={total} lightBg="248, 250, 252" darkBg="17, 24, 39" neonColor="100, 116, 139" icon={<StorageIcon />} themeMode={themeMode} />
+      <Grid container item spacing={3}>
+        <StatCard title="Скачано (RX)" targetValue={rx} lightBg="240, 253, 250" darkBg="15, 45, 43" neonColor="0, 242, 254" icon={<ArrowDownwardIcon />} themeMode={themeMode} />
+        <StatCard title="Отдано (TX)" targetValue={tx} lightBg="250, 245, 255" darkBg="45, 18, 77" neonColor="157, 78, 221" icon={<ArrowUpwardIcon />} themeMode={themeMode} />
+        <StatCard title="Всего прогнано" targetValue={total} lightBg="248, 250, 252" darkBg="17, 24, 39" neonColor="100, 116, 139" icon={<StorageIcon />} themeMode={themeMode} />
+      </Grid>
     </Grid>
   );
 });
